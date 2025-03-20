@@ -1,9 +1,8 @@
 package org.example.Backend.Models;
 
-import org.example.Backend.Models.Interface.TypeData;
+import java.util.List;
 
 public class TableMetaData {
     private int countColumn;
-    private String[] names;
-    private TypeData[] types;
+    private List<ColumnStruct> columnStructList;
 }

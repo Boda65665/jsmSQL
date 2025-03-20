@@ -1,6 +1,6 @@
 package org.example.Backend.TableStorageManager.TableCreater;
 
-import org.example.Backend.Models.TableStruct;
+import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 
 public abstract class TableCrate {
@@ -10,5 +10,5 @@ public abstract class TableCrate {
         this.pathProvider = pathProvider;
     }
 
-    public abstract void create(String tableName, TableStruct struct);
+    public abstract void create(String tableName, TableMetaData tableMetaData);
 }

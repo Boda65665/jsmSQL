@@ -1,14 +1,14 @@
 package org.example.Backend.TableStorageManager.BinaryConverter;
 
-import org.example.Backend.Models.TableStruct;
+import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TabularData;
 
-public interface BinaryConverterInterface {
+public interface TableBinaryConverterInterface {
     TabularData fromByteToTabularData(byte[] dataBinary);
 
     byte[] fromTabularDataToByte(TabularData tabularData);
 
-    TableStruct fromByteToTableStruct(String string);
+    TableMetaData fromByteToTableStruct(byte[] dataBinary);
 
-    byte[] fromTableStructToBinary(TableStruct tableStruct);
+    byte[] fromTableStructToBinary(TableMetaData tableStruct);
 }
