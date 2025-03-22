@@ -4,7 +4,7 @@ import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 
 public abstract class TableCrate {
-    private final TablePathProvider pathProvider;
+    protected final TablePathProvider pathProvider;
 
     protected TableCrate(TablePathProvider pathProvider) {
         this.pathProvider = pathProvider;

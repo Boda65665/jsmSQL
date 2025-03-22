@@ -3,9 +3,9 @@ package org.example.Backend.TableStorageManager.TableReader;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 
 public abstract class TableReader {
-    private final TablePathProvider pathProvider;
+    protected final TablePathProvider pathProvider;
 
-    public TableReader(TablePathProvider pathProvider) {
+    protected TableReader(TablePathProvider pathProvider) {
         this.pathProvider = pathProvider;
     }
 

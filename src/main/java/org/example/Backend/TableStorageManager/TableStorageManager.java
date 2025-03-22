@@ -5,7 +5,7 @@
 //import org.example.Backend.TableStorageManager.TableCreater.TableCrate;
 //import org.example.Backend.TableStorageManager.TableDeleater.TableDeleater;
 //import org.example.Backend.TableStorageManager.TableReader.TableReader;
-//import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
+//import org.example.Backend.TableStorageManager.TableWriter.PrimitiveType.TableWriter;
 //
 //public class TableStorageManager {
 //    private final TableCrate tableCrate;
