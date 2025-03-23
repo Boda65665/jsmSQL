@@ -12,9 +12,11 @@ public class CleanerTable {
         this.tablePathProvider = tablePathProvider;
     }
 
-    public void clear(String nameTable) throws IOException {
+    public void clear(String nameTable) {
         String path = tablePathProvider.getTablePath(nameTable);
         try (FileWriter writer = new FileWriter(path, false)) {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
