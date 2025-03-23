@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.TableWriter.PrimitiveType;
+package org.example.Backend.TableStorageManager.TableWriter;
 
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 
