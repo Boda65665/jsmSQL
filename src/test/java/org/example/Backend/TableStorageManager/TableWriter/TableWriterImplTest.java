@@ -1,7 +1,8 @@
 package org.example.Backend.TableStorageManager.TableWriter;
 
+import org.example.Backend.Exception.NotFoundTable;
 import org.example.Backend.TableStorageManager.TH.CleanerTable;
-import org.example.Backend.TableStorageManager.TablePathProvider.DatabaseTablePathProvider;
+import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,14 +11,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TableWriterImplTest {
-    private final DatabaseTablePathProvider tablePathProvider = new DatabaseTablePathProvider();
-    private TableWriter tableWriter = new TableWriterImpl(tablePathProvider);
+    private final TablePathProviderImpl tablePathProvider = new TablePathProviderImpl();
+    private final TableWriter tableWriter = new TableWriterImpl(tablePathProvider);
     private final CleanerTable cleanerTable = new CleanerTable(tablePathProvider);
     private final String NAME_TABLE = "test_table";
 
@@ -50,4 +50,27 @@ class TableWriterImplTest {
             throw new RuntimeException(e);
         }
     }
+
+    @Test
+    void writeWithNullOrEmptyData(){
+        assertThrows(IllegalArgumentException.class, () -> tableWriter.write("test_table", null, 0));
+        assertThrows(IllegalArgumentException.class, () -> tableWriter.write("test_table", new byte[]{}, 0));
+    }
+
+    @Test
+    void writeWithNegativePosition(){
+        assertThrows(IllegalArgumentException.class, () -> tableWriter.write("test_table", new byte[]{0}, -1));
+    }
+
+    @Test
+    void writeWithNullOrEmptyNameTable() {
+        assertThrows(IllegalArgumentException.class, () -> tableWriter.write(null, new byte[]{0}, 0));
+        assertThrows(IllegalArgumentException.class, () -> tableWriter.write("", new byte[]{0}, 0));
+    }
+
+    @Test
+    void writeInNotExistingTable() {
+        assertThrows(NotFoundTable.class, () -> tableWriter.write("not_exist", new byte[]{0}, 0));
+    }
 }
+

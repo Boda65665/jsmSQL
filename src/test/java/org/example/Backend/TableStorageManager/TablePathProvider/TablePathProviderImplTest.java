@@ -4,17 +4,17 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DatabaseTablePathProviderTest {
+class TablePathProviderImplTest {
     @Test
     void getTablePath_shouldReturnNullIfFileDoesNotExist() {
-        DatabaseTablePathProvider provider = new DatabaseTablePathProvider();
+        TablePathProviderImpl provider = new TablePathProviderImpl();
         String result = provider.getTablePath("non_existent_table");
         assertNull(result);
     }
 
     @Test
     void getTablePath_shouldReturnCorrectPathIfFileExists() {
-        DatabaseTablePathProvider provider = new DatabaseTablePathProvider();
+        TablePathProviderImpl provider = new TablePathProviderImpl();
         String tableName = "test_table";
 
         String result = provider.getTablePath(tableName);

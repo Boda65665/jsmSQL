@@ -2,7 +2,7 @@ package org.example.Backend.TableStorageManager.TablePathProvider;
 
 import java.io.File;
 
-public class DatabaseTablePathProvider extends TablePathProvider {
+public class TablePathProviderImpl extends TablePathProvider {
     private final String FOLDERS_WITH_TABLES = "tables";
 
     @Override
