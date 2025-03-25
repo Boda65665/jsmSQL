@@ -7,6 +7,7 @@ public class BytesConverterFactory {
         return switch (typeData){
             case INT -> new BytesToIntegerConverters();
             case VARCHAR -> new BytesToStringConverters();
+            case TABLE_METADATA -> new BytesToMetaDataConverters();
             default -> null;
         };
     }
