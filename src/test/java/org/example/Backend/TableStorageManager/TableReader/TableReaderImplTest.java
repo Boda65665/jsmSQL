@@ -1,7 +1,7 @@
 package org.example.Backend.TableStorageManager.TableReader;
 
 import org.example.Backend.Exception.NotFoundTable;
-import org.example.Backend.TableStorageManager.TH.CleanerTable;
+import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderImpl;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +20,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class TableReaderImplTest {
     private final TablePathProvider tablePathProvider = new TablePathProviderImpl();
     private final TableReader tableReader = new TableReaderImpl(tablePathProvider);
-    private final CleanerTable cleanerTable = new CleanerTable(tablePathProvider);
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(tablePathProvider);
     private final String NAME_TABLE = "test_table";
 
     @BeforeEach
     void setUp() {
-        cleanerTable.clear(NAME_TABLE);
+        testHelperTSM.clear(NAME_TABLE);
     }
 
     @ParameterizedTest
