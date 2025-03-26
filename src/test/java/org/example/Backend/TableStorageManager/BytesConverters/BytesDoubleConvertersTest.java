@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BytesToDoubleConvertersTest {
+public class BytesDoubleConvertersTest {
 
-    private final BytesToDoubleConverters converter = new BytesToDoubleConverters();
+    private final BytesDoubleConverters converter = new BytesDoubleConverters();
 
     @ParameterizedTest
     @MethodSource("provideBytesForToData")
@@ -35,7 +35,6 @@ public class BytesToDoubleConvertersTest {
     void nullOrEmptyArrayToData(){
         assertThrows(IllegalArgumentException.class, () -> converter.toData(null));
         assertThrows(IllegalArgumentException.class, () -> converter.toData(new byte[]{}));
-
     }
 
     @ParameterizedTest

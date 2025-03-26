@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BytesToMetaDataConverters implements BytesConverters<TableMetaData> {
+public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
     private final BytesConverterFactory bytesConverterFactory = new BytesConverterFactory();
     private final BytesConverters<String> stringBytesConverters =
             (BytesConverters<String>) bytesConverterFactory.getBytesConverters(TypeData.VARCHAR);

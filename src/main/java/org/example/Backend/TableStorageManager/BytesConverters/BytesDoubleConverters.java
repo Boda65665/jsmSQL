@@ -2,7 +2,7 @@ package org.example.Backend.TableStorageManager.BytesConverters;
 
 import java.nio.ByteBuffer;
 
-public class BytesToDoubleConverters implements BytesConverters<Double>{
+public class BytesDoubleConverters implements BytesConverters<Double>{
 
     @Override
     public Double toData(byte[] bytes) {

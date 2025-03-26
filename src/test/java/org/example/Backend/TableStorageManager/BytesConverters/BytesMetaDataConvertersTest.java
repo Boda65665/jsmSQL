@@ -11,10 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesToMetaDataConvertersTest {
-    private final BytesToMetaDataConverters metaDatConverters = new BytesToMetaDataConverters();
+class BytesMetaDataConvertersTest {
+    private final BytesMetaDataConverters metaDatConverters = new BytesMetaDataConverters();
     private final BytesConverterFactory bytesConverterFactory = new BytesConverterFactory();
-    private final BytesToIntegerConverters integerConverters = (BytesToIntegerConverters) bytesConverterFactory.getBytesConverters(TypeData.INT);
+    private final BytesIntegerConverters integerConverters = (BytesIntegerConverters) bytesConverterFactory.getBytesConverters(TypeData.INT);
 
     @Test
     void countColumnToBytes() {

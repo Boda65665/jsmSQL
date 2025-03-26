@@ -2,41 +2,41 @@ package org.example.Backend.TableStorageManager.BytesConverters;
 
 import java.nio.ByteBuffer;
 
-public class BytesToIntegerConverters implements BytesConverters<Integer> {
+public class BytesLongConverters implements BytesConverters<Long> {
 
     @Override
-    public Integer toData(byte[] bytes) {
+    public Long toData(byte[] bytes) {
         if (bytes == null || bytes.length == 0) throw new IllegalArgumentException("bytes is null or empty");
-        if (bytes.length < 4) bytes = padWithZero(bytes);
+        if (bytes.length < 8) bytes = padWithZero(bytes);
         return getData(bytes);
     }
 
-    private Integer getData(byte[] bytes) {
-        return ByteBuffer.wrap(bytes).getInt();
+    private Long getData(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getLong();
     }
 
     private byte[] padWithZero(byte[] bytes) {
-        byte[] paddedArray = new byte[4];
-        System.arraycopy(bytes, 0, paddedArray, 4 - bytes.length, bytes.length);
+        byte[] paddedArray = new byte[8];
+        System.arraycopy(bytes, 0, paddedArray, 8 - bytes.length, bytes.length);
         return paddedArray;
     }
 
     @Override
-    public byte[] toBytes(Integer number) {
+    public byte[] toBytes(Long number) {
         if (number == null) throw new NullPointerException("data is null");
         return getBytes(number);
     }
 
-    private byte[] getBytes(Integer number) {
+    private byte[] getBytes(Long number) {
         if(number < 0) return getBytesWithNegativeNumber(number);
         return getBytesWithPositiveNumber(number);
     }
 
-    private byte[] getBytesWithNegativeNumber(Integer number) {
-        return ByteBuffer.allocate(4).putInt(number).array();
+    private byte[] getBytesWithNegativeNumber(Long number) {
+        return ByteBuffer.allocate(8).putLong(number).array();
     }
 
-    private byte[] getBytesWithPositiveNumber(Integer number) {
+    private byte[] getBytesWithPositiveNumber(Long number) {
         int length = getLength(number);
         byte[] byteArray = new byte[length];
 
@@ -47,7 +47,7 @@ public class BytesToIntegerConverters implements BytesConverters<Integer> {
         return byteArray;
     }
 
-    private int getLength(Integer data) {
+    private int getLength(Long data) {
         if (data == 0) return 1;
         return (int)(Math.log(data) / Math.log(256)) + 1;
     }

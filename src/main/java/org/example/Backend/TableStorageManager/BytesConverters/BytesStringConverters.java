@@ -3,7 +3,7 @@ package org.example.Backend.TableStorageManager.BytesConverters;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-public class BytesToStringConverters implements BytesConverters<String> {
+public class BytesStringConverters implements BytesConverters<String> {
     private final Charset charset = StandardCharsets.UTF_8;
 
     @Override

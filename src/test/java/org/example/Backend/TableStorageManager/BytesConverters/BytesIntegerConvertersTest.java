@@ -8,8 +8,8 @@ import java.nio.ByteBuffer;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BytesToIntegerConvertersTest {
-    private final BytesConverters<Integer> bytesConverters = new BytesToIntegerConverters();
+public class BytesIntegerConvertersTest {
+    private final BytesConverters<Integer> bytesConverters = new BytesIntegerConverters();
 
     @ParameterizedTest
     @MethodSource("provideTestData")

@@ -1,6 +1,6 @@
 package org.example.Backend.TableStorageManager.BytesConverters;
 
-public class BytesToBooleanConverters implements BytesConverters<Boolean> {
+public class BytesBooleanConverters implements BytesConverters<Boolean> {
 
     @Override
     public Boolean toData(byte[] bytes) {

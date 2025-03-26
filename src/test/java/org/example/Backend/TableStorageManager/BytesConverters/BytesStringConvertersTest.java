@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesToStringConvertersTest {
-    private final BytesToStringConverters converter = new BytesToStringConverters();
+class BytesStringConvertersTest {
+    private final BytesStringConverters converter = new BytesStringConverters();
     private final Charset charset = StandardCharsets.UTF_8;
 
     @ParameterizedTest

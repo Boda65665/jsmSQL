@@ -3,8 +3,8 @@ package org.example.Backend.TableStorageManager.BytesConverters;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesToBooleanConvertersTest {
-    BytesToBooleanConverters booleanConverters = new BytesToBooleanConverters();
+class BytesBooleanConvertersTest {
+    BytesBooleanConverters booleanConverters = new BytesBooleanConverters();
 
     @Test
     void toData() {

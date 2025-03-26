@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesToLongConvertersTest {
-    private final BytesToLongConverters bytesConverters = new BytesToLongConverters();
+class BytesLongConvertersTest {
+    private final BytesLongConverters bytesConverters = new BytesLongConverters();
 
     @ParameterizedTest
     @MethodSource("provideTestData")
