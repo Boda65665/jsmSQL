@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BytesToLongConvertersTest {
     private final BytesToLongConverters bytesConverters = new BytesToLongConverters();
+
     @ParameterizedTest
     @MethodSource("provideTestData")
     public void toBytes(Long input, byte[] expectedOutput) {
