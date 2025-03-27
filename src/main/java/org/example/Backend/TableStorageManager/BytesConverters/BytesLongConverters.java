@@ -7,6 +7,7 @@ public class BytesLongConverters implements BytesConverters<Long> {
     @Override
     public Long toData(byte[] bytes) {
         if (bytes == null || bytes.length == 0) throw new IllegalArgumentException("bytes is null or empty");
+
         if (bytes.length < 8) bytes = padWithZero(bytes);
         return getData(bytes);
     }
@@ -24,10 +25,7 @@ public class BytesLongConverters implements BytesConverters<Long> {
     @Override
     public byte[] toBytes(Long number) {
         if (number == null) throw new NullPointerException("data is null");
-        return getBytes(number);
-    }
 
-    private byte[] getBytes(Long number) {
         if(number < 0) return getBytesWithNegativeNumber(number);
         return getBytesWithPositiveNumber(number);
     }
@@ -41,10 +39,19 @@ public class BytesLongConverters implements BytesConverters<Long> {
         byte[] byteArray = new byte[length];
 
         for (int i = length - 1; i >= 0; i--) {
-            byteArray[i] = (byte)(number & 0xFF);
-            number >>= 8;
+            byteArray[i] = extractLowByte(number);
+            number = shiftByOneByte(number);
         }
         return byteArray;
+    }
+
+    private byte extractLowByte(Long number) {
+        return (byte)(number & 0xFF);
+    }
+
+    private Long shiftByOneByte(Long number) {
+        number >>= 8;
+        return number;
     }
 
     private int getLength(Long data) {

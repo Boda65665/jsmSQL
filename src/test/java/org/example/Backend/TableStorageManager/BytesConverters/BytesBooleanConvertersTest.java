@@ -16,7 +16,6 @@ class BytesBooleanConvertersTest {
     void nullOrEmptyArrayToData(){
         assertThrows(IllegalArgumentException.class, () -> booleanConverters.toData(null));
         assertThrows(IllegalArgumentException.class, () -> booleanConverters.toData(new byte[]{}));
-
     }
 
     @Test

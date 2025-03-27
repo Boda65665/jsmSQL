@@ -19,7 +19,6 @@ class BytesConverterFactoryTest {
         assertInstanceOf(expectedClass, bytesConverterFactory.getBytesConverters(typeData));
     }
 
-
     public static Stream<Arguments> caseForGetBytesConverters() {
         return Stream.of(
             Arguments.of(TypeData.INT, BytesIntegerConverters.class),
@@ -28,7 +27,8 @@ class BytesConverterFactoryTest {
             Arguments.of(TypeData.VARCHAR, BytesStringConverters.class),
             Arguments.of(TypeData.DATE, BytesDateConverters.class),
             Arguments.of(TypeData.TABLE_METADATA, BytesMetaDataConverters.class),
-            Arguments.of(TypeData.BOOLEAN, BytesBooleanConverters.class)
+            Arguments.of(TypeData.BOOLEAN, BytesBooleanConverters.class),
+            Arguments.of(TypeData.TABULAR_DATA, BytesTabularDataConverters.class)
         );
     }
 }

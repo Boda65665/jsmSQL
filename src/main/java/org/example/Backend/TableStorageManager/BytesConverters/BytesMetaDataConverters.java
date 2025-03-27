@@ -18,22 +18,32 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
 
     @Override
     public TableMetaData toData(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) throw new IllegalArgumentException("bytes is null or empty");
+
         TableMetaData tableMetaData = new TableMetaData();
         ArrayList<ColumnStruct> columnStructs = new ArrayList<>();
 
-        int lengthColumn = getIntFromBytes(Arrays.copyOf(bytes, 2));
-        int indexByte = LENGTH_INDICATOR_BYTE_COUNT;
-        for (int i = 0; i < lengthColumn; i++) {
-            int lengthName = getLengthName(bytes, indexByte);
-            indexByte += LENGTH_INDICATOR_BYTE_COUNT;
-            String name = getName(bytes, indexByte, lengthName);
-            indexByte += lengthName;
-            TypeData typeData = getType(bytes, indexByte);
-            columnStructs.add(new ColumnStruct(name, typeData));
-            indexByte++;
+        int countColumn = getIntFromBytes(Arrays.copyOf(bytes, LENGTH_INDICATOR_BYTE_COUNT));
+        Integer indexByte = LENGTH_INDICATOR_BYTE_COUNT;
+        for (int i = 0; i < countColumn; i++) {
+            indexByte = addColumn(columnStructs, bytes, indexByte);
         }
         tableMetaData.setColumnStructList(columnStructs);
         return tableMetaData;
+    }
+
+    private Integer addColumn(ArrayList<ColumnStruct> columnStructs, byte[] bytes, Integer indexByte) {
+        int lengthName = getLengthName(bytes, indexByte);
+        indexByte += LENGTH_INDICATOR_BYTE_COUNT;
+
+        String name = getName(bytes, indexByte, lengthName);
+        indexByte += lengthName;
+
+        TypeData typeData = getType(bytes, indexByte);
+
+        columnStructs.add(new ColumnStruct(name, typeData));
+        indexByte++;
+        return indexByte;
     }
 
     private int getLengthName(byte[] bytes, int indexByte) {
@@ -59,6 +69,8 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
 
     @Override
     public byte[] toBytes(TableMetaData data) {
+        if (data == null) throw new NullPointerException("data is null");
+
         List<ColumnStruct> columnStructList = data.getColumnStructList();
         byte[] countColumn = getBytesFromInt(columnStructList.size());
         byte[] columnStruct = getBytesFromColumnStruct(columnStructList);
@@ -75,7 +87,7 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
         for (ColumnStruct columnStruct : columnsStructList) {
             byte[] columnNameBytes = stringBytesConverters.toBytes(columnStruct.getColumnName());
             byte[] columnNameLenBytes = getBytesFromInt(columnNameBytes.length);
-            byte[] columnTypeByte = integerBytesConverters.toBytes(columnStruct.getType().ordinal());
+            byte[] columnTypeByte = getBytesFromInt(columnStruct.getType().ordinal());
 
             columnsStructByte.add(columnNameLenBytes);
             columnsStructByte.add(columnNameBytes);

@@ -1,5 +1,6 @@
 package org.example.Backend.TableStorageManager.BytesConverters;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,7 +17,7 @@ class BytesStringConvertersTest {
     @MethodSource("testCaseForToData")
     void toData(String inputString) {
         byte[] bytes = converter.toBytes(inputString);
-        assertArrayEquals(bytes, inputString.getBytes(charset));
+        assertArrayEquals(inputString.getBytes(charset), bytes);
     }
 
     private static Stream<Arguments> testCaseForToData() {
@@ -46,5 +47,16 @@ class BytesStringConvertersTest {
                 Arguments.of("特殊文字"),
                 Arguments.of("\uD83D\uDE00")
         );
+    }
+
+    @Test
+    void nullOrEmptyArrayToData() {
+        assertThrows(IllegalArgumentException.class, () -> converter.toData(null));
+        assertThrows(IllegalArgumentException.class, () -> converter.toData(new byte[]{}));
+    }
+
+    @Test
+    void nullToBytes() {
+        assertThrows(NullPointerException.class, () -> converter.toBytes(null));
     }
 }

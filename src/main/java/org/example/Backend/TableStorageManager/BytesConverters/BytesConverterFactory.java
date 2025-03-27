@@ -13,6 +13,7 @@ public class BytesConverterFactory {
             case DOUBLE -> new BytesDoubleConverters();
             case DATE -> new BytesDateConverters();
             case TABLE_METADATA -> new BytesMetaDataConverters();
+            case TABULAR_DATA -> new BytesTabularDataConverters();
         };
     }
 }

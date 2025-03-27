@@ -7,5 +7,6 @@ public enum TypeData {
     DATE,
     LONG,
     BOOLEAN,
-    TABLE_METADATA
+    TABLE_METADATA,
+    TABULAR_DATA
 }
