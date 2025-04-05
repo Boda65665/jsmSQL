@@ -74,7 +74,7 @@ class NodeRemoverTest {
                 """;
     }
 
-    private static String getExpectedResultWhenDeletingAndBorrowingFromRightBrother() {
+    private static String getExpectedResultWhenDeletingAndBorrowingFromRightBrother(){
         return """
                 Level 0: 40\s
                 Level 1: 20\s
