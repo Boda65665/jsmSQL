@@ -41,17 +41,18 @@ public class NodeRemover {
     }
 
     private void balanceLeaf(Node node) {
-        if (canBorrowFromNeighbor(node)) borrowFromNeighbor(node);
+        if (canBorrowFromBrother(node)) borrowFromBrother(node);
+        else if (canCombineParentWithChild(node))combineChildWithParent(node);
     }
 
-    private boolean canBorrowFromNeighbor(Node node) {
-        Node leftNeighbor = getLeftNeighbor(node);
-        Node rightNeighbor = getRightNeighbor(node);
+    private boolean canBorrowFromBrother(Node node) {
+        Node leftBrother = getLeftBrother(node);
+        Node rightBrother = getRightBrother(node);
 
-        return canBorrow(leftNeighbor) || canBorrow(rightNeighbor);
+        return canBorrow(leftBrother) || canBorrow(rightBrother);
     }
 
-    private Node getLeftNeighbor(Node node) {
+    private Node getLeftBrother(Node node) {
         Node parent = node.getParent();
         int indexDeletedChild = getIndexNodeInParent(node);
 
@@ -69,7 +70,7 @@ public class NodeRemover {
         return -1;
     }
 
-    private Node getRightNeighbor(Node node) {
+    private Node getRightBrother(Node node) {
         Node parent = node.getParent();
         int indexDeletedChild = getIndexNodeInParent(node);
 
@@ -81,7 +82,7 @@ public class NodeRemover {
         return node!=null && node.sizeKeyValuePair() > getMinimSizeKey();
     }
 
-    private void borrowFromNeighbor(Node node) {
+    private void borrowFromBrother(Node node) {
         int indexDeletedChild = getIndexNodeInParent(node);
         Node parent = node.getParent();
         Node donorBrother = getDonorBrotherForBorrow(node);
@@ -93,23 +94,23 @@ public class NodeRemover {
     }
 
     private Node getDonorBrotherForBorrow(Node node) {
-        if (isBorrowFromLeftNeighbor(node)) return getLeftNeighbor(node);
-        return getRightNeighbor(node);
+        if (isCanBorrowFromLeftBrother(node)) return getLeftBrother(node);
+        return getRightBrother(node);
     }
 
-    private boolean isBorrowFromLeftNeighbor(Node node) {
-        Node leftNeighbor = getLeftNeighbor(node);
-        return canBorrow(leftNeighbor);
+    private boolean isCanBorrowFromLeftBrother(Node node) {
+        Node leftBrother = getLeftBrother(node);
+        return canBorrow(leftBrother);
     }
 
     private KeyValuePair getBrotherDonorKeyValuePairForBorrow(Node node) {
         Node donnorNode = getDonorBrotherForBorrow(node);
-        if (isBorrowFromLeftNeighbor(node)) return donnorNode.getKeyValuePair(donnorNode.sizeKeyValuePair()-1);
+        if (isCanBorrowFromLeftBrother(node)) return donnorNode.getKeyValuePair(donnorNode.sizeKeyValuePair()-1);
         else return donnorNode.getKeyValuePair(0);
     }
 
     private Integer getIndexParentKeyReplacementForBorrow(Node node, int indexDeletedChild) {
-        if (isBorrowFromLeftNeighbor(node)) return indexDeletedChild - 1;
+        if (isCanBorrowFromLeftBrother(node)) return indexDeletedChild - 1;
         return indexDeletedChild;
     }
 
@@ -117,5 +118,44 @@ public class NodeRemover {
         donorBrother.deleteKeyValuePairByKey(brotherDonorKeyValuePair.getKey());
         parent.setKeyValuePair(indexParentKeyReplacement, brotherDonorKeyValuePair);
         node.addKeyValuePair(parentDonorKeyValuePair);
+    }
+
+
+    private boolean canCombineParentWithChild(Node node) {
+        Node leftChild = getLeftBrother(node);
+        Node rightChild = getRightBrother(node);
+        return leftChild != null || rightChild != null;
+    }
+
+    private void combineChildWithParent(Node node) {
+        int indexDonorParentKeyForCombineWithChild = getIndexDonorParentKeyForCombineWithChild(node);
+        int indexChildWithWhomFatherCombined = getIndexChildWithWhomFatherCombined(node);
+
+        combine(node,indexDonorParentKeyForCombineWithChild, indexChildWithWhomFatherCombined);
+    }
+
+    private int getIndexDonorParentKeyForCombineWithChild(Node node) {
+        int indexNodeInParent = getIndexNodeInParent(node);
+
+        if (isCanCombineWithLeft(node)) return indexNodeInParent - 1;
+        return indexNodeInParent;
+    }
+
+    private int getIndexChildWithWhomFatherCombined(Node node) {
+        int indexNodeInParent = getIndexNodeInParent(node);
+        if (isCanCombineWithLeft(node)) return indexNodeInParent - 1;
+        else return indexNodeInParent + 1;
+    }
+
+    private boolean isCanCombineWithLeft(Node node) {
+        return getLeftBrother(node) != null;
+    }
+
+    private void combine(Node node,int indexDonorParentKeyForCombineWithChild, int indexChildWithWhomFatherCombined) {
+        Node parent = node.getParent();
+        Node childCombine = parent.getChild(indexChildWithWhomFatherCombined);
+        childCombine.addKeyValuePair(parent.getKeyValuePair(indexDonorParentKeyForCombineWithChild));
+        parent.deleteKeyValuePairByIndex(indexDonorParentKeyForCombineWithChild);
+        parent.deleteChild(node.getKey(0));
     }
 }

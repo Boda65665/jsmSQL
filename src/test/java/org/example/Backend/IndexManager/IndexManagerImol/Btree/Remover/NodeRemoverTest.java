@@ -4,7 +4,6 @@ import org.example.Backend.IndexManager.IndexManagerImol.Btree.Node;
 import org.example.Backend.IndexManager.IndexManagerImol.Btree.NodeInserter;
 import org.example.Backend.IndexManager.IndexManagerImol.Btree.NodeRemover;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -84,6 +83,47 @@ class NodeRemoverTest {
                 Level 2: 50\s
                 Level 2: 80\s
                 Level 2: 91\s
+                Level 2: 110 120\s
+                """;
+    }
+
+    @ParameterizedTest
+    @MethodSource("caseForRemoveFromLeafWithCombine")
+    @DisplayName("remove key with balancing due to combination")
+    void removeFromLeafWithCombine(Node node, int deleteKey, String expected) {
+        nodeRemover.remove(node, deleteKey);
+        assertEquals(expected, node.printTree());
+    }
+
+    public static Stream<Arguments> caseForRemoveFromLeafWithCombine() {
+        return Stream.of(
+            Arguments.of(testHelper.generateNodeForDeleteFromLeaf(), 70, getExpectedResultFromCombineParentWithLeftBrother()),
+            Arguments.of(testHelper.generateNodeForDeleteFromLeaf(), 50, getExpectedResultFromCombineParentWithRightBrother())
+        );
+    }
+
+    private static String getExpectedResultFromCombineParentWithLeftBrother() {
+        return """
+                Level 0: 40\s
+                Level 1: 20\s
+                Level 2: 10\s
+                Level 2: 30\s
+                Level 1: 80 100\s
+                Level 2: 50 60\s
+                Level 2: 90\s
+                Level 2: 110 120\s
+                """;
+    }
+
+    private static String getExpectedResultFromCombineParentWithRightBrother() {
+        return """
+                Level 0: 40\s
+                Level 1: 20\s
+                Level 2: 10\s
+                Level 2: 30\s
+                Level 1: 80 100\s
+                Level 2: 60 70\s
+                Level 2: 90\s
                 Level 2: 110 120\s
                 """;
     }

@@ -12,7 +12,7 @@ public class RemoversTH {
         return node;
     }
 
-    private void insertToNode(int count, int step, Node node) {
+    public void insertToNode(int count, int step, Node node) {
         for (int i = 1; i <= count; i++) {
             nodeInserter.insertNode(node, i * step, -1);
         }
