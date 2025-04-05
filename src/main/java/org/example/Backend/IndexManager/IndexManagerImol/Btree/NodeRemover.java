@@ -92,12 +92,6 @@ public class NodeRemover {
         borrow(donorBrother, brotherDonorKeyValuePair, parent, indexParentKeyReplacement, node, parentDonorKeyValuePair);
     }
 
-    private void borrow(Node donorBrother, KeyValuePair brotherDonorKeyValuePair, Node parent, Integer indexParentKeyReplacement, Node node, KeyValuePair parentDonorKeyValuePair) {
-        donorBrother.deleteKeyValuePairByKey(brotherDonorKeyValuePair.getKey());
-        parent.setKeyValuePair(indexParentKeyReplacement, brotherDonorKeyValuePair);
-        node.addKeyValuePair(parentDonorKeyValuePair);
-    }
-
     private Node getDonorBrotherForBorrow(Node node) {
         if (isBorrowFromLeftNeighbor(node)) return getLeftNeighbor(node);
         return getRightNeighbor(node);
@@ -117,5 +111,11 @@ public class NodeRemover {
     private Integer getIndexParentKeyReplacementForBorrow(Node node, int indexDeletedChild) {
         if (isBorrowFromLeftNeighbor(node)) return indexDeletedChild - 1;
         return indexDeletedChild;
+    }
+
+    private void borrow(Node donorBrother, KeyValuePair brotherDonorKeyValuePair, Node parent, Integer indexParentKeyReplacement, Node node, KeyValuePair parentDonorKeyValuePair) {
+        donorBrother.deleteKeyValuePairByKey(brotherDonorKeyValuePair.getKey());
+        parent.setKeyValuePair(indexParentKeyReplacement, brotherDonorKeyValuePair);
+        node.addKeyValuePair(parentDonorKeyValuePair);
     }
 }

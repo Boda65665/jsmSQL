@@ -27,11 +27,9 @@ class NodeRemoverTest {
     }
 
     public static Stream<Arguments> caseForRemoveFromLeafWithBrothersBorrow() {
-        Node nodeWithEnoughKeysOnLeftBrother = testHelper.generateNodeForDeleteFromLeaf();
-        insertKeyInLeftBrother(nodeWithEnoughKeysOnLeftBrother);
+        Node nodeWithEnoughKeysOnLeftBrother = getNodeWithEnoughKeysOnLeftBrother();
 
-        Node nodeWithEnoughKeysOnRightBrother = testHelper.generateNodeForDeleteFromLeaf();
-        insertKeyInRightBrother(nodeWithEnoughKeysOnRightBrother);
+        Node nodeWithEnoughKeysOnRightBrother = getNodeWithEnoughKeysOnRightBrother();
 
         int deleteKey = 70;
         return Stream.of(
@@ -42,12 +40,24 @@ class NodeRemoverTest {
         );
     }
 
-    private static void insertKeyInLeftBrother(Node leftBrother) {
-        inserter.insertNode(leftBrother, 51, -1);
+    private static Node getNodeWithEnoughKeysOnLeftBrother() {
+        Node node = testHelper.generateNodeForDeleteFromLeaf();
+        insertKeyInLeftBrother(node);
+        return node;
     }
 
-    private static void insertKeyInRightBrother(Node rightBrother) {
-        inserter.insertNode(rightBrother, 91, -1);
+    private static void insertKeyInLeftBrother(Node node) {
+        inserter.insertNode(node, 51, -1);
+    }
+
+    private static Node getNodeWithEnoughKeysOnRightBrother() {
+        Node node = testHelper.generateNodeForDeleteFromLeaf();
+        insertKeyInRightBrother(node);
+        return node;
+    }
+
+    private static void insertKeyInRightBrother(Node node) {
+        inserter.insertNode(node, 91, -1);
     }
 
     private static String getExpectedResultWhenDeletingAndBorrowingFromLeftBrother() {
