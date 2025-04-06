@@ -153,4 +153,14 @@ public class Node {
     public void setKeyValuePair(int index, KeyValuePair keyPredecessor) {
         keyValuePairs.set(index, keyPredecessor);
     }
+
+    public int getIndexKey(int key) {
+        int indexKey = 0;
+        for (int i = 0; i < keyValuePairs.size(); i++) {
+            if (keyValuePairs.get(i).getKey() == key) {
+                indexKey = i;
+            }
+        }
+        return indexKey;
+    }
 }
