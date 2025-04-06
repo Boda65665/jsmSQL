@@ -160,6 +160,7 @@ public class NodeRemover {
 
     private void balanceNodeInternal(Node node, int key) {
         if (canReplacePredecessor(node, key)) replaceDeleteKeyValueOnPredecessorKeyValue(node, key);
+        else combinePredecessor(node, key);
     }
 
     private boolean canReplacePredecessor(Node node, int key) {
@@ -171,7 +172,7 @@ public class NodeRemover {
     }
 
     private boolean canReplaceOnPredecessor(Node predecessor) {
-        return predecessor != null && predecessor.sizeKeyValuePair() > getMinimSizeKey();
+        return predecessor.sizeKeyValuePair() > getMinimSizeKey();
     }
 
     private Node getLeftPredecessor(Node node, int key) {
@@ -199,10 +200,17 @@ public class NodeRemover {
         return getRightPredecessor(node, key);
     }
 
-
     private int getIndexKeyPredecessor(Node node, int key) {
         Node leftPredecessor = getLeftPredecessor(node, key);
         if (canReplaceOnPredecessor(leftPredecessor)) return leftPredecessor.sizeKeyValuePair()-1;
         return 0;
+    }
+
+    private void combinePredecessor(Node node, int key) {
+        Node leftPredecessor = getLeftPredecessor(node, key);
+        Node rightPredecessor = getRightPredecessor(node, key);
+
+        leftPredecessor.addKeyValuePair(rightPredecessor.getKeyValuePair(0));
+        node.deleteChild(rightPredecessor.getKey(0));
     }
 }

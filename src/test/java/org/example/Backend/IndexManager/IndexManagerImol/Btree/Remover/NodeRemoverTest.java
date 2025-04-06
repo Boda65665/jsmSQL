@@ -41,7 +41,7 @@ class NodeRemoverTest {
     }
 
     private static Node getNodeWithEnoughKeysOnLeftBrother() {
-        Node node = testHelper.generateNodeForDeleteFromLeaf();
+        Node node = testHelper.generateNodeForDelete();
         insertKeyInLeftBrother(node);
         return node;
     }
@@ -51,7 +51,7 @@ class NodeRemoverTest {
     }
 
     private static Node getNodeWithEnoughKeysOnRightBrother() {
-        Node node = testHelper.generateNodeForDeleteFromLeaf();
+        Node node = testHelper.generateNodeForDelete();
         insertKeyInRightBrother(node);
         return node;
     }
@@ -98,8 +98,8 @@ class NodeRemoverTest {
 
     public static Stream<Arguments> caseForRemoveFromLeafWithCombine() {
         return Stream.of(
-            Arguments.of(testHelper.generateNodeForDeleteFromLeaf(), 70, getExpectedResultFromCombineParentWithLeftBrother()),
-            Arguments.of(testHelper.generateNodeForDeleteFromLeaf(), 50, getExpectedResultFromCombineParentWithRightBrother())
+            Arguments.of(testHelper.generateNodeForDelete(), 70, getExpectedResultFromCombineParentWithLeftBrother()),
+            Arguments.of(testHelper.generateNodeForDelete(), 50, getExpectedResultFromCombineParentWithRightBrother())
         );
     }
 
@@ -149,7 +149,7 @@ class NodeRemoverTest {
     }
 
     private static Node getNodeForReplaceLeftPredecessor() {
-        Node node = testHelper.generateNodeForDeleteFromLeaf();
+        Node node = testHelper.generateNodeForDelete();
         inserter.insertNode(node, 15, -1);
         return node;
     }
@@ -169,7 +169,7 @@ class NodeRemoverTest {
     }
 
     private static Object getNodeForReplaceRightPredecessor() {
-        Node node = testHelper.generateNodeForDeleteFromLeaf();
+        Node node = testHelper.generateNodeForDelete();
         inserter.insertNode(node, 31, -1);
         return node;
     }
@@ -180,6 +180,34 @@ class NodeRemoverTest {
                 Level 1: 30\s
                 Level 2: 10\s
                 Level 2: 31\s
+                Level 1: 60 80 100\s
+                Level 2: 50\s
+                Level 2: 70\s
+                Level 2: 90\s
+                Level 2: 110 120\s
+                """;
+    }
+
+    @Test
+    @DisplayName("remove key from node internal with balance with the help combine child")
+    public void removeFromNodeInternalWithCombineChild() {
+        Node node = generateTestDataForRemoveFromNodeInternalWithCombineChild();
+        nodeRemover.remove(node, 20);
+        assertEquals(getExceptedResultForCombinePredecessor(), node.printTree());
+    }
+
+    private Node generateTestDataForRemoveFromNodeInternalWithCombineChild() {
+        Node node = testHelper.generateNodeForDelete();
+        testHelper.insertToNode(20, 3,1, node);
+        return node;
+    }
+
+    private static String getExceptedResultForCombinePredecessor() {
+        return """
+                Level 0: 40\s
+                Level 1: 22\s
+                Level 2: 10 21\s
+                Level 2: 23 30\s
                 Level 1: 60 80 100\s
                 Level 2: 50\s
                 Level 2: 70\s
