@@ -143,18 +143,18 @@ class NodeRemoverTest {
         int deleteKey = 20;
 
         return Stream.of(
-            Arguments.of(getNodeForReplaceLeftPredecessor(), deleteKey, getExceptedResultForReplaceLeftPredecessor()),
-            Arguments.of(getNodeForReplaceRightPredecessor(), deleteKey, getExceptedResultForReplaceRightPredecessor())
+            Arguments.of(getNodeForReplaceOnPredecessor(), deleteKey, getExceptedResultForReplaceOnPredecessor()),
+            Arguments.of(getNodeForReplaceOnSuccessor(), deleteKey, getExceptedResultForReplaceOnSuccessor())
         );
     }
 
-    private static Node getNodeForReplaceLeftPredecessor() {
+    private static Node getNodeForReplaceOnPredecessor() {
         Node node = testHelper.generateNodeForDelete();
         inserter.insertNode(node, 15, -1);
         return node;
     }
 
-    private static String getExceptedResultForReplaceLeftPredecessor() {
+    private static String getExceptedResultForReplaceOnPredecessor() {
         return """
                 Level 0: 40\s
                 Level 1: 15\s
@@ -168,13 +168,13 @@ class NodeRemoverTest {
                 """;
     }
 
-    private static Object getNodeForReplaceRightPredecessor() {
+    private static Object getNodeForReplaceOnSuccessor() {
         Node node = testHelper.generateNodeForDelete();
         inserter.insertNode(node, 31, -1);
         return node;
     }
 
-    private static String getExceptedResultForReplaceRightPredecessor() {
+    private static String getExceptedResultForReplaceOnSuccessor() {
         return """
                 Level 0: 40\s
                 Level 1: 30\s

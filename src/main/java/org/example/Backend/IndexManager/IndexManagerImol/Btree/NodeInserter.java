@@ -15,7 +15,7 @@ public class NodeInserter {
         valid(root, key);
         this.root = root;
 
-        Node leaf = getLeaf(key);
+        Node leaf = getLeaf(root, key);
         insert(leaf, key, value);
 
         balanceIfRequired(key);
@@ -27,8 +27,8 @@ public class NodeInserter {
         if(key < 0) throw new IllegalArgumentException("key is negative");
     }
 
-    private Node getLeaf(int key) {
-        Node current = root;
+    public Node getLeaf(Node node, int key) {
+        Node current = node;
         if (current.isEmptyChild()) return current;
 
         while (!current.isLeaf()) {
@@ -52,7 +52,7 @@ public class NodeInserter {
     }
 
     private void balanceIfRequired(int key) {
-        Node leaf = getLeaf(key);
+        Node leaf = getLeaf(root, key);
 
         if (isRequiredBalancing(leaf)) balance(leaf);
     }

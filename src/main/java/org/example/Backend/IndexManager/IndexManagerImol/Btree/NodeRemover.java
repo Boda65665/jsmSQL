@@ -3,9 +3,11 @@ package org.example.Backend.IndexManager.IndexManagerImol.Btree;
 public class NodeRemover {
     private final NodeGetter nodeGetter = new NodeGetter();
     private final int treeOrder;
+    private final NodeInserter nodeInserter;
 
     public NodeRemover(int treeOrder) {
         this.treeOrder = treeOrder;
+        this.nodeInserter = new NodeInserter(treeOrder);
     }
 
     public void remove(Node node, int key) {
@@ -41,7 +43,7 @@ public class NodeRemover {
 
     private void balanceLeaf(Node node) {
         if (canBorrowFromBrother(node)) borrowFromBrother(node);
-        else if (canCombineParentWithChild(node))combineChildWithParent(node);
+        else if (canCombineParentWithChild(node)) combineChildWithParent(node);
     }
 
     private boolean canBorrowFromBrother(Node node) {
@@ -130,7 +132,7 @@ public class NodeRemover {
         int indexDonorParentKeyForCombineWithChild = getIndexDonorParentKeyForCombineWithChild(node);
         int indexChildWithWhomFatherCombined = getIndexChildWithWhomFatherCombined(node);
 
-        combine(node,indexDonorParentKeyForCombineWithChild, indexChildWithWhomFatherCombined);
+        combineChildWithParent(node,indexDonorParentKeyForCombineWithChild, indexChildWithWhomFatherCombined);
     }
 
     private int getIndexDonorParentKeyForCombineWithChild(Node node) {
@@ -150,67 +152,72 @@ public class NodeRemover {
         return getLeftBrother(node) != null;
     }
 
-    private void combine(Node node,int indexDonorParentKeyForCombineWithChild, int indexChildWithWhomFatherCombined) {
+    private void combineChildWithParent(Node node,int indexDonorParentKeyForCombineWithChild, int indexChildWithWhomFatherCombined) {
         Node parent = node.getParent();
         Node childCombine = parent.getChild(indexChildWithWhomFatherCombined);
+
         childCombine.addKeyValuePair(parent.getKeyValuePair(indexDonorParentKeyForCombineWithChild));
         parent.deleteKeyValuePairByIndex(indexDonorParentKeyForCombineWithChild);
         parent.deleteChild(node.getKey(0));
     }
 
     private void balanceNodeInternal(Node node, int key) {
-        if (canReplacePredecessor(node, key)) replaceDeleteKeyValueOnPredecessorKeyValue(node, key);
-        else combinePredecessor(node, key);
+        if (canReplaceOnPredecessorOrSuccessor(node, key)) replaceOnPredecessorOrSuccessor(node, key);
+        else if(canCombinePredecessorWithSuccessor(node)) combinePredecessorWithSuccessor(node, key);
     }
 
-    private boolean canReplacePredecessor(Node node, int key) {
-        Node leftPredecessor = getLeftPredecessor(node, key);
-        if (canReplaceOnPredecessor(leftPredecessor)) return true;
+    private boolean canReplaceOnPredecessorOrSuccessor(Node node, int key) {
+        Node leftSuccessor = getNodePredecessor(node, key);
+        if (canReplaceOn(leftSuccessor)) return true;
 
-        Node rightPredecessor = getRightPredecessor(node, key);
-        return canReplaceOnPredecessor(rightPredecessor);
+        Node rightSuccessor = getNodeSuccessor(node, key);
+        return canReplaceOn(rightSuccessor);
     }
 
-    private boolean canReplaceOnPredecessor(Node predecessor) {
-        return predecessor.sizeKeyValuePair() > getMinimSizeKey();
+    private Node getNodePredecessor(Node node, int key) {
+        int nodeKey = node.getIndexKey(key);
+        return nodeInserter.getLeaf(node.getChild(nodeKey), key);
     }
 
-    private Node getLeftPredecessor(Node node, int key) {
-        int leftPredecessorIndex = node.getIndexKey(key);
-        return node.getChild(leftPredecessorIndex);
+    private Node getNodeSuccessor(Node node, int key) {
+        int nodeKey = node.getIndexKey(key);
+        return nodeInserter.getLeaf(node.getChild(nodeKey + 1), key);
     }
 
-    private Node getRightPredecessor(Node node, int key) {
-        int rightPredecessorIndex = node.getIndexKey(key) + 1;
-        return node.getChild(rightPredecessorIndex);
+    private boolean canReplaceOn(Node successor) {
+        return successor.sizeKeyValuePair() > getMinimSizeKey();
     }
 
-    private void replaceDeleteKeyValueOnPredecessorKeyValue(Node node, int key) {
-        Node predecessor = getPredecessor(node, key);
+    private void replaceOnPredecessorOrSuccessor(Node node, int key) {
+        Node successor = getSuccessor(node, key);
         int indexDeletKey = node.getIndexKey(key);
 
-        int indexKeyPredecessor = getIndexKeyPredecessor(node, key);
-        node.setKeyValuePair(indexDeletKey, predecessor.getKeyValuePair(indexKeyPredecessor));
-        predecessor.deleteKeyValuePairByIndex(indexKeyPredecessor);
+        int indexKeySuccessor = getIndexKeySuccessor(node, key);
+        node.setKeyValuePair(indexDeletKey, successor.getKeyValuePair(indexKeySuccessor));
+        successor.deleteKeyValuePairByIndex(indexKeySuccessor);
     }
 
-    private Node getPredecessor(Node node, int key) {
-        Node leftPredecessor = getLeftPredecessor(node, key);
-        if (canReplaceOnPredecessor(leftPredecessor)) return leftPredecessor;
-        return getRightPredecessor(node, key);
+    private Node getSuccessor(Node node, int key) {
+        Node leftSuccessor = getNodePredecessor(node, key);
+        if (canReplaceOn(leftSuccessor)) return leftSuccessor;
+        return getNodeSuccessor(node, key);
     }
 
-    private int getIndexKeyPredecessor(Node node, int key) {
-        Node leftPredecessor = getLeftPredecessor(node, key);
-        if (canReplaceOnPredecessor(leftPredecessor)) return leftPredecessor.sizeKeyValuePair()-1;
+    private int getIndexKeySuccessor(Node node, int key) {
+        Node leftSuccessor = getNodePredecessor(node, key);
+        if (canReplaceOn(leftSuccessor)) return leftSuccessor.sizeKeyValuePair()-1;
         return 0;
     }
 
-    private void combinePredecessor(Node node, int key) {
-        Node leftPredecessor = getLeftPredecessor(node, key);
-        Node rightPredecessor = getRightPredecessor(node, key);
+    private boolean canCombinePredecessorWithSuccessor(Node node) {
+        return node.sizeKeyValuePair() > getMinimSizeKey();
+    }
 
-        leftPredecessor.addKeyValuePair(rightPredecessor.getKeyValuePair(0));
-        node.deleteChild(rightPredecessor.getKey(0));
+    private void combinePredecessorWithSuccessor(Node node, int key) {
+        Node leftSuccessor = getNodePredecessor(node, key);
+        Node rightSuccessor = getNodeSuccessor(node, key);
+
+        leftSuccessor.addKeyValuePair(rightSuccessor.getKeyValuePair(0));
+        node.deleteChild(rightSuccessor.getKey(0));
     }
 }
