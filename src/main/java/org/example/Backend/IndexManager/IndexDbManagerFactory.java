@@ -1,7 +1,5 @@
 package org.example.Backend.IndexManager;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class IndexDbManagerFactory {
@@ -13,11 +11,5 @@ public class IndexDbManagerFactory {
 
     public synchronized void putIndexManager(String tableName, IndexDbManager manager) {
         indexManagersMap.put(tableName, manager);
-    }
-
-    public synchronized void closeAll() {
-        for (Map.Entry<String, IndexDbManager> entry : indexManagersMap.entrySet()) {
-            entry.getValue().close();
-        }
     }
 }
