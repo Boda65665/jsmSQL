@@ -17,6 +17,8 @@ public class TableWriterImpl extends TableWriter {
         String path = tablePathProvider.getTablePath(tableName);
 
         try (RandomAccessFile file = new RandomAccessFile(path, "rw")) {
+            if (offset == -1) offset = (int) file.length();
+
             file.seek(offset);
             file.write(data);
         } catch (IOException e) {
@@ -26,7 +28,7 @@ public class TableWriterImpl extends TableWriter {
 
     private void valid(byte[] data, int offset, String tableName) {
         if (data == null || data.length == 0) throw new IllegalArgumentException("data is null or empty");
-        if (offset < 0) throw new IllegalArgumentException("offset is negative");
+        if (offset < -1) throw new IllegalArgumentException("offset is negative");
         if (tableName == null || tableName.trim().isEmpty()) throw new IllegalArgumentException("tableName is null or empty");
 
         String path = tablePathProvider.getTablePath(tableName);

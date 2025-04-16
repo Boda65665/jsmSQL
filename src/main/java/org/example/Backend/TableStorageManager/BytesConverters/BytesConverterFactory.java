@@ -4,7 +4,7 @@ import org.example.Backend.Models.TypeData;
 
 public class BytesConverterFactory {
 
-    public BytesConverters<?> getBytesConverters(TypeData typeData) {
+    public static BytesConverters<?> getBytesConverters(TypeData typeData) {
         return switch (typeData){
             case INT -> new BytesIntegerConverters();
             case LONG -> new BytesLongConverters();
@@ -13,7 +13,7 @@ public class BytesConverterFactory {
             case DOUBLE -> new BytesDoubleConverters();
             case DATE -> new BytesDateConverters();
             case TABLE_METADATA -> new BytesMetaDataConverters();
-            case TABULAR_DATA -> new BytesTabularDataConverters();
+            case COLUMN -> new BytesColumnConverter();
         };
     }
 }

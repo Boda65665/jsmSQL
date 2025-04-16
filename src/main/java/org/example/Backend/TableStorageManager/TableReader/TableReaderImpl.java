@@ -17,6 +17,8 @@ public class TableReaderImpl extends TableReader {
 
         String path = tablePathProvider.getTablePath(tableName);
         try (RandomAccessFile file = new RandomAccessFile(path, "r")) {
+            if (offset == -1) offset = (int) file.length();
+
             file.seek(offset);
             byte[] data = new byte[length];
             file.read(data);
