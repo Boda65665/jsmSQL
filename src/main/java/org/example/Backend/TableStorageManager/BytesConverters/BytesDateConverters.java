@@ -4,8 +4,7 @@ import org.example.Backend.Models.TypeData;
 import java.util.Date;
 
 public class BytesDateConverters implements BytesConverters<Date> {
-    private final BytesConverterFactory bytesConverterFactory = new BytesConverterFactory();
-    private final BytesConverters<Long> longBytesConverters = (BytesConverters<Long>) bytesConverterFactory.getBytesConverters(TypeData.LONG);
+    private final BytesConverters<Long> longBytesConverters = (BytesConverters<Long>) BytesConverterFactory.getBytesConverters(TypeData.LONG);
 
     @Override
     public Date toData(byte[] bytes) {

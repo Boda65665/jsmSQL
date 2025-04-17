@@ -45,6 +45,11 @@ public class BytesLongConverters implements BytesConverters<Long> {
         return byteArray;
     }
 
+    private int getLength(Long data) {
+        if (data == 0) return 1;
+        return (int)(Math.log(data) / Math.log(256)) + 1;
+    }
+
     private byte extractLowByte(Long number) {
         return (byte)(number & 0xFF);
     }
@@ -52,10 +57,5 @@ public class BytesLongConverters implements BytesConverters<Long> {
     private Long shiftByOneByte(Long number) {
         number >>= 8;
         return number;
-    }
-
-    private int getLength(Long data) {
-        if (data == 0) return 1;
-        return (int)(Math.log(data) / Math.log(256)) + 1;
     }
 }

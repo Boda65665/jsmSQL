@@ -1,9 +1,7 @@
 package org.example.Backend.TableStorageManager.BytesConverters;
 
 import org.example.Backend.Models.Column;
-import org.example.Backend.Models.TabularData;
 import org.example.Backend.Models.TypeData;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,12 +9,11 @@ import java.util.Arrays;
 public class BytesColumnConverter implements BytesConverters<Column> {
     private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
     private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
-    private final BytesConverterFactory bytesConverterFactory = new BytesConverterFactory();
 
     @Override
     public Column toData(byte[] bytes) {
         int indexByte = 0;
-        int lenDataBytes = getIntFromBytes(Arrays.copyOfRange(bytes, indexByte, indexByte + LENGTH_INDICATOR_BYTE_COUNT));
+        int lenDataBytes = getLenData(bytes, indexByte);
         indexByte += LENGTH_INDICATOR_BYTE_COUNT;
 
         TypeData typeData = getTypeFromBytes(bytes, indexByte, lenDataBytes);
@@ -24,17 +21,10 @@ public class BytesColumnConverter implements BytesConverters<Column> {
         return new Column(data, typeData);
     }
 
-    private Object getObjectFromBytes(byte[] bytes, TypeData typeData, int indexByte, int lenDataBytes) {
-        BytesConverters bytesConverters = bytesConverterFactory.getBytesConverters(typeData);
-        return bytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + lenDataBytes));
+    private int getLenData(byte[] bytes, int indexByte) {
+        byte[] lenData = Arrays.copyOfRange(bytes, indexByte, indexByte + LENGTH_INDICATOR_BYTE_COUNT);
+        return getIntFromBytes(lenData);
     }
-
-    private TypeData getTypeFromBytes(byte[] bytes, int indexByte, int lenDataBytes) {
-        int indexType = lenDataBytes + indexByte;
-        byte[] typeBytes = Arrays.copyOfRange(bytes, indexType, indexType + LENGTH_TYPE_INDICATOR_BYTE_COUNT);
-        return TypeData.values()[getIntFromBytes(typeBytes)];
-    }
-
 
     private int getIntFromBytes(byte[] bytes) {
         ByteBuffer buffer = ByteBuffer.allocate(4);
@@ -44,17 +34,35 @@ public class BytesColumnConverter implements BytesConverters<Column> {
         return buffer.getInt();
     }
 
+    private TypeData getTypeFromBytes(byte[] bytes, int indexByte, int lenDataBytes) {
+        int indexType = lenDataBytes + indexByte;
+        byte[] typeBytes = Arrays.copyOfRange(bytes, indexType, indexType + LENGTH_TYPE_INDICATOR_BYTE_COUNT);
+        return TypeData.values()[getIntFromBytes(typeBytes)];
+    }
+
+    private Object getObjectFromBytes(byte[] bytes, TypeData typeData, int indexByte, int lenDataBytes) {
+        BytesConverters bytesConverters = BytesConverterFactory.getBytesConverters(typeData);
+        return bytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + lenDataBytes));
+    }
+
     @Override
     public byte[] toBytes(Column column) {
+        ArrayList<byte[]> bytesList = getListBytesFromColumn(column);
+        int totalLength = getTotalLength(bytesList);
+
+        return combineArrays(bytesList, totalLength);
+    }
+
+    private ArrayList<byte[]> getListBytesFromColumn(Column column) {
         ArrayList<byte[]> bytesList = new ArrayList<>();
-        int totalLength = 0;
-        BytesConverters bytesConverters = bytesConverterFactory.getBytesConverters(column.getTypeData());
+        BytesConverters bytesConverters = BytesConverterFactory.getBytesConverters(column.getTypeData());
+
         byte[] dataBytes = bytesConverters.toBytes(column.getData());
         byte[] lenDataBytes = getBytesFromInt(dataBytes.length);
         byte[] typeDataBytes = getBytesFromInt(column.getTypeData().ordinal());
+
         addToBytesList(bytesList, dataBytes, lenDataBytes, typeDataBytes);
-        totalLength += lenDataBytes.length + dataBytes.length + typeDataBytes.length;
-        return combineArrays(bytesList, totalLength);
+        return bytesList;
     }
 
     private byte[] getBytesFromInt(int number) {
@@ -72,14 +80,19 @@ public class BytesColumnConverter implements BytesConverters<Column> {
         bytesList.add(typeDataBytes);
     }
 
-    private byte[] combineArrays(ArrayList<byte[]> bytesList, int totalLength) {
-        byte[] bytes = new byte[totalLength];
-        int currentIndex = 0;
-
-        for (byte[] array : bytesList) {
-            System.arraycopy(array, 0, bytes, currentIndex, array.length);
-            currentIndex += array.length;
+    private int getTotalLength(ArrayList<byte[]> bytesList) {
+        int totalLength = 0;
+        for (byte[] bytes : bytesList) {
+            totalLength += bytes.length;
         }
-        return bytes;
+        return totalLength;
+    }
+
+    private byte[] combineArrays(ArrayList<byte[]> bytesList, int totalLength) {
+        ByteBuffer buffer = ByteBuffer.allocate(totalLength);
+        for (byte[] array : bytesList) {
+            buffer.put(array);
+        }
+        return buffer.array();
     }
 }

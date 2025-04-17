@@ -10,10 +10,7 @@ import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvid
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class TableCrateImplTest {

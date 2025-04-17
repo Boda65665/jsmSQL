@@ -1,6 +1,7 @@
 package org.example.Backend.TableStorageManager;
 
 import org.example.Backend.DbManager.DbManager;
+import org.example.Backend.DbManager.DbManagerCloser;
 import org.example.Backend.DbManager.DbManagerFactory;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.TabularData;
@@ -26,6 +27,7 @@ class TableStorageManagerTest {
     private static final TableStorageManager tableStorageManager = new TableStorageManager();
     private static final DbManagerFactory dbManagerFactory = DbManagerFactory.getDbManagerFactory();
     private static final String basePath = System.getProperty("user.dir") + File.separator + "db";
+    private static final DbManagerCloser dbManagerCloser = new DbManagerCloser();
     private static final DbManager freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace");
     private final TablePathProvider tablePathProvider = TablePathProviderFactory.getTablePathProvider();
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(tablePathProvider);
@@ -39,7 +41,7 @@ class TableStorageManagerTest {
 
     @AfterAll
     static void tearDown() {
-        dbManagerFactory.closeAll();
+        dbManagerCloser.closeAll();
     }
 
     @Test

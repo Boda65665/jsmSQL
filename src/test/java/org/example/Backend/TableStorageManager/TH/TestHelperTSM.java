@@ -1,7 +1,6 @@
 package org.example.Backend.TableStorageManager.TH;
 
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -16,7 +15,7 @@ public class TestHelperTSM {
 
     public void clear(String nameTable) {
         String path = tablePathProvider.getTablePath(nameTable);
-        try (FileWriter writer = new FileWriter(path, false)) {
+        try (FileWriter ignored = new FileWriter(path, false)) {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -10,12 +10,11 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BytesConverterFactoryTest {
-    private final BytesConverterFactory bytesConverterFactory = new BytesConverterFactory();
 
     @ParameterizedTest
     @MethodSource("caseForGetBytesConverters")
     void getBytesConverters(TypeData typeData, Class<?> expectedClass) {
-        assertInstanceOf(expectedClass, bytesConverterFactory.getBytesConverters(typeData));
+        assertInstanceOf(expectedClass, BytesConverterFactory.getBytesConverters(typeData));
     }
 
     public static Stream<Arguments> caseForGetBytesConverters() {

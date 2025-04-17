@@ -1,7 +1,5 @@
 package org.example.Backend.TableStorageManager.TablePathProvider;
 
-import java.io.File;
-
 public class TablePathProviderImpl extends TablePathProvider {
     private final String FOLDERS_WITH_TABLES = "tables";
 

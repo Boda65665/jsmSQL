@@ -12,9 +12,6 @@ public class BytesIntegerConverters implements BytesConverters<Integer> {
         return getData(bytes);
     }
 
-    private Integer getData(byte[] bytes) {
-        return ByteBuffer.wrap(bytes).getInt();
-    }
 
     private byte[] padWithZero(byte[] bytes) {
         byte[] paddedArray = new byte[4];
@@ -22,11 +19,15 @@ public class BytesIntegerConverters implements BytesConverters<Integer> {
         return paddedArray;
     }
 
+    private Integer getData(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getInt();
+    }
+
     @Override
     public byte[] toBytes(Integer number) {
         if (number == null) throw new NullPointerException("data is null");
 
-        if(number < 0) return getBytesWithNegativeNumber(number);
+        if (number < 0) return getBytesWithNegativeNumber(number);
         return getBytesWithPositiveNumber(number);
     }
 
@@ -45,17 +46,18 @@ public class BytesIntegerConverters implements BytesConverters<Integer> {
         return byteArray;
     }
 
+    private int getLengthByte(Integer data) {
+        if (data == 0) return 1;
+        return (int) (Math.log(data) / Math.log(256)) + 1;
+    }
+
+    private byte extractLowByte(Integer number) {
+        return (byte) (number & 0xFF);
+    }
+
     private Integer shiftByOneByte(Integer number) {
         number >>= 8;
         return number;
     }
-
-    private byte extractLowByte(Integer number) {
-        return (byte)(number & 0xFF);
-    }
-
-    private int getLengthByte(Integer data) {
-        if (data == 0) return 1;
-        return (int)(Math.log(data) / Math.log(256)) + 1;
-    }
 }
+

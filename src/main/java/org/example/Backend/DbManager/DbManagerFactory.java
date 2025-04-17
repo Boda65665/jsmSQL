@@ -1,5 +1,7 @@
 package org.example.Backend.DbManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DbManagerFactory {
@@ -23,7 +25,7 @@ public class DbManagerFactory {
         indexManagersMap.put(nameDb, dbManager);
     }
 
-    public void closeAll(){
-        for (DbManager dbManager : indexManagersMap.values()) dbManager.close();
+    public synchronized List<DbManager> getDbManagers() {
+        return new ArrayList<>(indexManagersMap.values());
     }
 }

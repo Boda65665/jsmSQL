@@ -41,7 +41,7 @@ public class BytesDoubleConvertersTest {
     @MethodSource("provideDoublesForToBytes")
     void toBytes(Double inputData, byte[] expectedBytes) {
         if (inputData == null) {
-            assertThrows(NullPointerException.class, () -> converter.toBytes(inputData));
+            assertThrows(NullPointerException.class, () -> converter.toBytes(null));
         } else {
             assertArrayEquals(expectedBytes, converter.toBytes(inputData));
         }
