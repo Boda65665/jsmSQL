@@ -31,13 +31,11 @@ class BytesMetaDataConvertersTest {
     }
 
     private TableMetaData generateTestDataForToBytes() {
-        TableMetaData tableMetaData = new TableMetaData();
         List<ColumnStruct> columnStructs = new ArrayList<>();
 
         columnStructs.add(new ColumnStruct("first", TypeData.VARCHAR));
         columnStructs.add(new ColumnStruct("second", TypeData.DOUBLE));
-        tableMetaData.setColumnStructList(columnStructs);
-        return tableMetaData;
+        return new TableMetaData(columnStructs);
     }
 
     private int byteArrayToInt(byte[] byteArray) {

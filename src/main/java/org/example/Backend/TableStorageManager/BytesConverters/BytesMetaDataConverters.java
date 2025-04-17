@@ -20,7 +20,6 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
     public TableMetaData toData(byte[] bytes) {
         if (bytes == null || bytes.length == 0) throw new IllegalArgumentException("bytes is null or empty");
 
-        TableMetaData tableMetaData = new TableMetaData();
         ArrayList<ColumnStruct> columnStructs = new ArrayList<>();
 
         int countColumn = getIntFromBytes(Arrays.copyOf(bytes, LENGTH_INDICATOR_BYTE_COUNT));
@@ -28,8 +27,7 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
         for (int i = 0; i < countColumn; i++) {
             indexByte = addColumn(columnStructs, bytes, indexByte);
         }
-        tableMetaData.setColumnStructList(columnStructs);
-        return tableMetaData;
+        return new TableMetaData(columnStructs);
     }
 
     private Integer addColumn(ArrayList<ColumnStruct> columnStructs, byte[] bytes, Integer indexByte) {

@@ -16,25 +16,26 @@ public class TableStorageManager {
     private final DbManagerFactory dbManagerFactory = DbManagerFactory.getDbManagerFactory();
     private final TableWriter tableWriter = TableWriterFactory.getTableWriter();
     private final DbManager<Integer, Integer> freeSpace;
+    private final String basePath = System.getProperty("user.dir") + File.separator + "db";
 
     public TableStorageManager() {
-        String basePath = System.getProperty("user.dir") + File.separator + "db";
         freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace");
     }
 
     public void save(String tableName, TabularData data) {
         for (Column column : data.getColumns()) {
-            save(tableName, column);
+            int offset = save(tableName, column);
+            DbManager dbIndexManager = dbManagerFactory.getDbManager(basePath, tableName);
         }
     }
 
-    private void save(String tableName, Column data) {
+    private int save(String tableName, Column data) {
         BytesConverters<Object> bytesConverters = (BytesConverters<Object>) BytesConverterFactory.getBytesConverters(TypeData.COLUMN);
         byte[] bytesData = bytesConverters.toBytes(data);
-        save(tableName, bytesData);
+        return save(tableName, bytesData);
     }
 
-    private void save(String tableName, byte[] bytesData) {
+    private int save(String tableName, byte[] bytesData) {
         int len = bytesData.length;
         Integer countFreeBytes = getMoreSuitablePlace(len);
         byte[] bytesDataForSave = bytesData;
@@ -44,6 +45,7 @@ public class TableStorageManager {
         else offset = getOffset(countFreeBytes, len);
         if (countFreeBytes != null && countFreeBytes < len) bytesDataForSave = Arrays.copyOf(bytesDataForSave, countFreeBytes);
         tableWriter.write(tableName, bytesDataForSave, offset);
+        return offset;
     }
 
     private Integer getMoreSuitablePlace(int length) {
