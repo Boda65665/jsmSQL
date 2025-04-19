@@ -1,5 +1,6 @@
-package org.example.Backend.TableStorageManager.BytesConverters;
+package org.example.Backend.BytesConverters;
 
+import org.example.Backend.DataToBytesConverters.BytesBooleanConverters;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

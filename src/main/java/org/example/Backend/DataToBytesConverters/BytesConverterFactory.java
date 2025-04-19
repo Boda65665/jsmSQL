@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.BytesConverters;
+package org.example.Backend.DataToBytesConverters;
 
 import org.example.Backend.Models.TypeData;
 

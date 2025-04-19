@@ -2,8 +2,8 @@ package org.example.Backend.TableStorageManager.TableCreater;
 
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TypeData;
-import org.example.Backend.TableStorageManager.BytesConverters.BytesConverterFactory;
-import org.example.Backend.TableStorageManager.BytesConverters.BytesConverters;
+import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.BytesConverters;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
 import java.io.File;

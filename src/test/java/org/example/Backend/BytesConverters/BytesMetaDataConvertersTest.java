@@ -1,5 +1,6 @@
-package org.example.Backend.TableStorageManager.BytesConverters;
+package org.example.Backend.BytesConverters;
 
+import org.example.Backend.DataToBytesConverters.BytesMetaDataConverters;
 import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TypeData;

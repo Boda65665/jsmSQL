@@ -1,5 +1,6 @@
-package org.example.Backend.TableStorageManager.BytesConverters;
+package org.example.Backend.BytesConverters;
 
+import org.example.Backend.DataToBytesConverters.BytesColumnConverter;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.TypeData;
 import org.junit.jupiter.api.Test;

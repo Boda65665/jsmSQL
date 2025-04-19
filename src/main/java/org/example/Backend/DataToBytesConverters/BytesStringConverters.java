@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.BytesConverters;
+package org.example.Backend.DataToBytesConverters;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

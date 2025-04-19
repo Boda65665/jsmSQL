@@ -1,5 +1,6 @@
-package org.example.Backend.TableStorageManager.BytesConverters;
+package org.example.Backend.BytesConverters;
 
+import org.example.Backend.DataToBytesConverters.*;
 import org.example.Backend.Models.TypeData;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
