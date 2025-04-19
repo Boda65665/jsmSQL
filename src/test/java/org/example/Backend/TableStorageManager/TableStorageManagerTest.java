@@ -9,8 +9,8 @@ import org.example.Backend.Models.TypeData;
 import org.example.Backend.TableStorageManager.BytesConverters.BytesColumnConverter;
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverterFactory;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderFactory;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,8 +29,8 @@ class TableStorageManagerTest {
     private static final String basePath = System.getProperty("user.dir") + File.separator + "db";
     private static final DbManagerCloser dbManagerCloser = new DbManagerCloser();
     private static final DbManager freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace");
-    private final TablePathProvider tablePathProvider = TablePathProviderFactory.getTablePathProvider();
-    private final TestHelperTSM testHelperTSM = new TestHelperTSM(tablePathProvider);
+    private static final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl();
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(tableOperationFactory.getTablePathProvider());
     private static final String NAME_TABLE = "test_table";
 
     @BeforeEach

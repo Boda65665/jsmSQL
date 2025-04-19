@@ -2,8 +2,9 @@ package org.example.Backend.TableStorageManager.TableReader;
 
 import org.example.Backend.Exception.NotFoundTable;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderFactory;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
+import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TableReaderImplTest {
-    private final TablePathProvider tablePathProvider = TablePathProviderFactory.getTablePathProvider();
+    private final TableOperationFactoryImpl tableOperationFactory = new TableOperationFactoryImpl();
+    private final TablePathProvider tablePathProvider = tableOperationFactory.getTablePathProvider();
     private final TableReader tableReader = new TableReaderImpl(tablePathProvider);
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(tablePathProvider);
     private final String NAME_TABLE = "test_table";

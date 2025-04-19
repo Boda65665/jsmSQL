@@ -2,6 +2,8 @@ package org.example.Backend.TableStorageManager.TableReader;
 
 import org.example.Backend.Exception.NotFoundTable;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -34,6 +36,6 @@ public class TableReaderImpl extends TableReader {
         if (length < 0) throw new IllegalArgumentException("length is negative");
 
         String path = tablePathProvider.getTablePath(tableName);
-        if (path == null) throw new NotFoundTable();
+        if (!new File(path).exists()) throw new NotFoundTable();
     }
 }

@@ -6,8 +6,9 @@ import org.example.Backend.Models.TypeData;
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverterFactory;
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverters;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderFactory;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriterImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TableCraterImplTest {
-    private final TablePathProvider pathProvider = TablePathProviderFactory.getTablePathProvider();
+    private final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl();
+    private final TablePathProvider pathProvider = tableOperationFactory.getTablePathProvider();
     private final TableCraterImpl tableCrate = new TableCraterImpl(pathProvider, new TableWriterImpl(pathProvider));
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(pathProvider);
     private final BytesConverters<TableMetaData> tableMetaDataBytesConverters =

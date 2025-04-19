@@ -2,6 +2,8 @@ package org.example.Backend.TableStorageManager.TableWriter;
 
 import org.example.Backend.Exception.NotFoundTable;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
@@ -32,6 +34,6 @@ public class TableWriterImpl extends TableWriter {
         if (tableName == null || tableName.trim().isEmpty()) throw new IllegalArgumentException("tableName is null or empty");
 
         String path = tablePathProvider.getTablePath(tableName);
-        if (path == null) throw new NotFoundTable();
+        if (!new File(path).exists()) throw new NotFoundTable();
     }
 }

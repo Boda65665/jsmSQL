@@ -8,8 +8,6 @@ import org.example.Backend.TableStorageManager.BytesConverters.BytesConverters;
 import org.example.Backend.TableStorageManager.TableCreater.TableCrater;
 import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
 import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderFactory;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
 
 import java.io.File;
@@ -17,7 +15,7 @@ import java.util.Arrays;
 
 public class TableStorageManager {
     private final DbManagerFactory dbManagerFactory = DbManagerFactory.getDbManagerFactory();
-    private final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl(TablePathProviderFactory.getTablePathProvider());
+    private final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl();
     private final TableWriter tableWriter = tableOperationFactory.getTableWriter();
     private final DbManager<Integer, Integer> freeSpace;
     private final String basePath = System.getProperty("user.dir") + File.separator + "db";
