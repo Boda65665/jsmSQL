@@ -6,22 +6,31 @@ import org.example.Backend.TableStorageManager.BytesConverters.BytesConverterFac
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverters;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
-import org.example.Backend.TableStorageManager.TableWriter.TableWriterFactory;
 import java.io.File;
 import java.io.IOException;
 
-public class TableCrateImpl extends TableCrate{
+public class TableCraterImpl extends TableCrater {
+    private final TableWriter tableWriter;
 
-    public TableCrateImpl(TablePathProvider pathProvider) {
+    public TableCraterImpl(TablePathProvider pathProvider, TableWriter tableWriter) {
         super(pathProvider);
+        this.tableWriter = tableWriter;
     }
 
     @Override
     public void create(String tableName, TableMetaData tableMetaData) {
+        valid(tableName, tableMetaData);
+
         String pathToTable = pathProvider.getTablePath(tableName);
         if (crateTable(pathToTable)) {
             addMetaDataTable(tableName, tableMetaData);
         }
+    }
+
+    private void valid(String tableName, TableMetaData tableMetaData) {
+        if (tableName == null) throw new NullPointerException("tableName is null");
+        if (tableName.trim().isEmpty()) throw new IllegalArgumentException("tableName is empty");
+        if (tableMetaData == null) throw new NullPointerException("tableMetaData is null");
     }
 
     private boolean crateTable(String pathToTable) {
@@ -49,7 +58,6 @@ public class TableCrateImpl extends TableCrate{
     }
 
     private void write(String tableName, byte[] byteTableMetaData) {
-        TableWriter tableWriter = TableWriterFactory.getTableWriter();
         tableWriter.write(tableName, byteTableMetaData, 0);
     }
 }

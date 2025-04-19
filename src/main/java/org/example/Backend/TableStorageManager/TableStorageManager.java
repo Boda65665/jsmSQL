@@ -2,24 +2,32 @@ package org.example.Backend.TableStorageManager;
 
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.DbManager.DbManagerFactory;
-import org.example.Backend.Models.Column;
-import org.example.Backend.Models.TabularData;
-import org.example.Backend.Models.TypeData;
+import org.example.Backend.Models.*;
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverterFactory;
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverters;
+import org.example.Backend.TableStorageManager.TableCreater.TableCrater;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
+import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
+import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
+import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderFactory;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
-import org.example.Backend.TableStorageManager.TableWriter.TableWriterFactory;
+
 import java.io.File;
 import java.util.Arrays;
 
 public class TableStorageManager {
     private final DbManagerFactory dbManagerFactory = DbManagerFactory.getDbManagerFactory();
-    private final TableWriter tableWriter = TableWriterFactory.getTableWriter();
+    private final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl(TablePathProviderFactory.getTablePathProvider());
+    private final TableWriter tableWriter = tableOperationFactory.getTableWriter();
     private final DbManager<Integer, Integer> freeSpace;
     private final String basePath = System.getProperty("user.dir") + File.separator + "db";
 
     public TableStorageManager() {
         freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace");
+    }
+
+    public void createTable(String tableName, TableMetaData tableMetaData) {
+        TableCrater tableCrater = tableOperationFactory.getTableCrater();
     }
 
     public void save(String tableName, TabularData data) {

@@ -7,15 +7,17 @@ import org.example.Backend.TableStorageManager.BytesConverters.BytesConverterFac
 import org.example.Backend.TableStorageManager.BytesConverters.BytesConverters;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderImpl;
+import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProviderFactory;
+import org.example.Backend.TableStorageManager.TableWriter.TableWriterImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class TableCrateImplTest {
-    private final TablePathProvider pathProvider = new TablePathProviderImpl();
-    private final TableCrateImpl tableCrate = new TableCrateImpl(pathProvider);
+class TableCraterImplTest {
+    private final TablePathProvider pathProvider = TablePathProviderFactory.getTablePathProvider();
+    private final TableCraterImpl tableCrate = new TableCraterImpl(pathProvider, new TableWriterImpl(pathProvider));
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(pathProvider);
     private final BytesConverters<TableMetaData> tableMetaDataBytesConverters =
             (BytesConverters<TableMetaData>) BytesConverterFactory.getBytesConverters(TypeData.TABLE_METADATA);
@@ -43,5 +45,13 @@ class TableCrateImplTest {
         columnStructList.add(new ColumnStruct("third", TypeData.DATE));
 
         return new TableMetaData(columnStructList);
+    }
+
+    @Test
+    void validCreate(){
+        assertThrows(NullPointerException.class, () -> tableCrate.create(null, generateTestData()));
+        assertThrows(IllegalArgumentException.class, () -> tableCrate.create("", generateTestData()));
+        assertThrows(IllegalArgumentException.class, () -> tableCrate.create("    ", generateTestData()));
+        assertThrows(NullPointerException.class, () -> tableCrate.create(NAME_TABLE, null));
     }
 }

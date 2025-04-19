@@ -7,7 +7,7 @@ import java.io.RandomAccessFile;
 
 public class TableReaderImpl extends TableReader {
 
-    protected TableReaderImpl(TablePathProvider pathProvider) {
+    public TableReaderImpl(TablePathProvider pathProvider) {
         super(pathProvider);
     }
 

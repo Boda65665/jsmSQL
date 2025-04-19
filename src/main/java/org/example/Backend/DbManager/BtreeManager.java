@@ -31,16 +31,22 @@ public class BtreeManager {
         db.commit();
     }
 
-    public Integer get(Integer key) {
+    public Integer get(int key) {
+        if (key < 0) throw new IllegalArgumentException("key is negative");
+
         return bTree.get(key);
     }
 
-    public void insert(Integer key, Integer value) {
+    public void insert(int key, int value) {
+        if (key < 0) throw new IllegalArgumentException("key is negative");
+
         bTree.put(key, value);
         commit();
     }
 
-    public void delete(Integer key) {
+    public void delete(int key) {
+        if (key < 0) throw new IllegalArgumentException("key is negative");
+
         bTree.remove(key);
         commit();
     }
@@ -50,6 +56,8 @@ public class BtreeManager {
     }
 
     public Integer higherKey(int key){
+        if (key < 0) throw new IllegalArgumentException("key is negative");
+
         return bTree.higherKey(key);
     }
 

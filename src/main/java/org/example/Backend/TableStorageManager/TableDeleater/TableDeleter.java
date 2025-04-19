@@ -2,10 +2,10 @@ package org.example.Backend.TableStorageManager.TableDeleater;
 
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 
-public abstract class TableDeleater {
+public abstract class TableDeleter {
     protected final TablePathProvider pathProvider;
 
-    protected TableDeleater(TablePathProvider pathProvider) {
+    protected TableDeleter(TablePathProvider pathProvider) {
         this.pathProvider = pathProvider;
     }
 

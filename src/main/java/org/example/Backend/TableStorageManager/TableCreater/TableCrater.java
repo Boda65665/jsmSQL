@@ -3,10 +3,10 @@ package org.example.Backend.TableStorageManager.TableCreater;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 
-public abstract class TableCrate {
+public abstract class TableCrater {
     protected final TablePathProvider pathProvider;
 
-    protected TableCrate(TablePathProvider pathProvider) {
+    protected TableCrater(TablePathProvider pathProvider) {
         this.pathProvider = pathProvider;
     }
 

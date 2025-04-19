@@ -11,8 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BytesDateConvertersTest {
     private final BytesDateConverters converter = new BytesDateConverters();
-    private static final BytesConverterFactory bytesConverterFactory = new BytesConverterFactory();
-    private final static BytesConverters<Long> longBytesConverters = (BytesConverters<Long>) bytesConverterFactory.getBytesConverters(TypeData.LONG);
+    private final static BytesConverters<Long> longBytesConverters = (BytesConverters<Long>) BytesConverterFactory.getBytesConverters(TypeData.LONG);
 
     @Test
     void nullToBytes() {
