@@ -14,17 +14,15 @@ import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperat
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TableStorageManagerTest {
     private static final BytesColumnConverter bytesColumnConverters =
             (BytesColumnConverter) BytesConverterFactory.getBytesConverters(TypeData.COLUMN);
-    private static final TableStorageManager tableStorageManager = new TableStorageManager();
+    private static final TableStorageManager tableStorageManager = new TableStorageManager(new TableOperationFactoryImpl());
     private static final DbManagerFactory dbManagerFactory = DbManagerFactory.getDbManagerFactory();
     private static final String basePath = System.getProperty("user.dir") + File.separator + "db";
     private static final DbManagerCloser dbManagerCloser = new DbManagerCloser();
@@ -42,6 +40,20 @@ class TableStorageManagerTest {
     @AfterAll
     static void tearDown() {
         dbManagerCloser.closeAll();
+    }
+
+    @Test
+    void validCreateTable() {
+        assertThrows(IllegalArgumentException.class, () -> tableStorageManager.createTable(null, null));
+        assertThrows(IllegalArgumentException.class, () -> tableStorageManager.createTable("", null));
+        assertThrows(NullPointerException.class, () -> tableStorageManager.createTable("not_emtpy_and_null", null));
+    }
+
+    @Test
+    void validSave() {
+        assertThrows(IllegalArgumentException.class, () -> tableStorageManager.save(null, null));
+        assertThrows(IllegalArgumentException.class, () -> tableStorageManager.save("", null));
+        assertThrows(NullPointerException.class, () -> tableStorageManager.save("not_emtpy_and_null", null));
     }
 
     @Test
@@ -92,7 +104,7 @@ class TableStorageManagerTest {
         tableStorageManager.save(NAME_TABLE, tabularData);
     }
 
-
+//
 //    @Test
 //    public void saveWithFreeSpaceLessThanNecessary(){
 //        TabularData tabularData = generateTestDataForSave();

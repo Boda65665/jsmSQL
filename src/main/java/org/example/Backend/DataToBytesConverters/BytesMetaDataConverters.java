@@ -27,7 +27,8 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
         for (int i = 0; i < countColumn; i++) {
             indexByte = addColumn(columnStructs, bytes, indexByte);
         }
-        return new TableMetaData(columnStructs);
+        String nameColumnPrimaryKey = getNameColumnPrimaryKey(bytes, indexByte);
+        return new TableMetaData(columnStructs, nameColumnPrimaryKey);
     }
 
     private int getCountColumn(byte[] bytes) {
@@ -44,7 +45,8 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
         TypeData typeData = getType(bytes, indexByte);
 
         columnStructs.add(new ColumnStruct(name, typeData));
-        return ++indexByte;
+        indexByte+=2;
+        return indexByte;
     }
 
     private int getLengthName(byte[] bytes, int indexByte) {
@@ -56,7 +58,7 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
     }
 
     private TypeData getType(byte[] bytes, int indexByte) {
-        int typeId = integerBytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + 1));
+        int typeId = integerBytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + 2));
         return TypeData.values()[typeId];
     }
 
@@ -68,6 +70,13 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
         return buffer.getInt();
     }
 
+    private String getNameColumnPrimaryKey(byte[] bytes, int indexByte) {
+        int lengthNamePrimaryKey = getLengthName(bytes, indexByte);
+        indexByte += LENGTH_INDICATOR_BYTE_COUNT;
+
+        return getName(bytes, indexByte, lengthNamePrimaryKey);
+    }
+
     @Override
     public byte[] toBytes(TableMetaData data) {
         if (data == null) throw new NullPointerException("data is null");
@@ -75,11 +84,23 @@ public class BytesMetaDataConverters implements BytesConverters<TableMetaData> {
         List<ColumnStruct> columnStructList = data.getColumnStructList();
         byte[] countColumn = getBytesFromInt(columnStructList.size());
         byte[] columnStruct = getBytesFromColumnStruct(columnStructList);
-        byte[] tableMetadata = new byte[columnStruct.length + LENGTH_INDICATOR_BYTE_COUNT];
+        byte[] namePrimaryKey = getBytesFromNameColumnPrimaryKey(data.getNameColumnPrimaryKey());
 
+        byte[] tableMetadata = new byte[columnStruct.length + namePrimaryKey.length + LENGTH_INDICATOR_BYTE_COUNT];
         System.arraycopy(countColumn, 0, tableMetadata, 0, LENGTH_INDICATOR_BYTE_COUNT);
         System.arraycopy(columnStruct, 0, tableMetadata, LENGTH_INDICATOR_BYTE_COUNT, columnStruct.length);
+        System.arraycopy(namePrimaryKey, 0, tableMetadata, LENGTH_INDICATOR_BYTE_COUNT + columnStruct.length, namePrimaryKey.length);
         return tableMetadata;
+    }
+
+    private byte[] getBytesFromNameColumnPrimaryKey(String nameColumnPrimaryKey) {
+        byte[] nameColumnPrimaryKeyBytes = stringBytesConverters.toBytes(nameColumnPrimaryKey);
+        byte[] length = getBytesFromInt(nameColumnPrimaryKeyBytes.length);
+
+        byte[] result = new byte[nameColumnPrimaryKeyBytes.length + length.length];
+        System.arraycopy(length, 0, result, 0, length.length);
+        System.arraycopy(nameColumnPrimaryKeyBytes, 0, result, length.length, nameColumnPrimaryKeyBytes.length);
+        return result;
     }
 
     private byte[] getBytesFromInt(int number) {

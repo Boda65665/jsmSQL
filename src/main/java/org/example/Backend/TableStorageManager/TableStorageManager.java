@@ -7,7 +7,6 @@ import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.BytesConverters;
 import org.example.Backend.TableStorageManager.TableCreater.TableCrater;
 import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
-import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
 
 import java.io.File;
@@ -15,30 +14,42 @@ import java.util.Arrays;
 
 public class TableStorageManager {
     private final DbManagerFactory dbManagerFactory = DbManagerFactory.getDbManagerFactory();
-    private final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl();
-    private final TableWriter tableWriter = tableOperationFactory.getTableWriter();
-    private final DbManager<Integer, Integer> freeSpace;
     private final String basePath = System.getProperty("user.dir") + File.separator + "db";
+    private final TableOperationFactory tableOperationFactory;
+    private final TableWriter tableWriter;
+    private final DbManager<Integer, Integer> freeSpace;
 
-    public TableStorageManager() {
+    public TableStorageManager(TableOperationFactory tableOperationFactory) {
+        this.tableOperationFactory = tableOperationFactory;
+        tableWriter = tableOperationFactory.getTableWriter();
         freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace");
     }
 
     public void createTable(String tableName, TableMetaData tableMetaData) {
+        validCreateTable(tableName, tableMetaData);
         TableCrater tableCrater = tableOperationFactory.getTableCrater();
+        tableCrater.create(tableName, tableMetaData);
+    }
+
+    private void validCreateTable(String tableName, TableMetaData tableMetaData) {
+        if (tableName == null || tableName.isEmpty()) throw new IllegalArgumentException("Table name cannot be null or empty");
+        if (tableMetaData == null) throw new NullPointerException("TableMetaData cannot be null");
     }
 
     public void save(String tableName, TabularData data) {
-        for (Column column : data.getColumns()) {
-            int offset = save(tableName, column);
-            DbManager dbIndexManager = dbManagerFactory.getDbManager(basePath, tableName);
-        }
-    }
+        validSave(tableName, data);
 
-    private int save(String tableName, Column data) {
         BytesConverters<Object> bytesConverters = (BytesConverters<Object>) BytesConverterFactory.getBytesConverters(TypeData.COLUMN);
         byte[] bytesData = bytesConverters.toBytes(data);
-        return save(tableName, bytesData);
+        int offSet = save(tableName, bytesData);
+
+        DbManager dbIndexManager = dbManagerFactory.getDbManager(basePath, tableName);
+        dbIndexManager.put(1, offSet);
+    }
+
+    private void validSave(String tableName, TabularData data) {
+        if (tableName == null || tableName.isEmpty()) throw new IllegalArgumentException("Table name cannot be null or empty");
+        if (data == null) throw new NullPointerException("Table data cannot be null");
     }
 
     private int save(String tableName, byte[] bytesData) {

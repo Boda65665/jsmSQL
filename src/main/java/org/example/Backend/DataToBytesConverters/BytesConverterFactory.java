@@ -5,7 +5,7 @@ import org.example.Backend.Models.TypeData;
 public class BytesConverterFactory {
 
     public static BytesConverters<?> getBytesConverters(TypeData typeData) {
-        return switch (typeData){
+        return  switch (typeData){
             case INT -> new BytesIntegerConverters();
             case LONG -> new BytesLongConverters();
             case VARCHAR -> new BytesStringConverters();
@@ -14,6 +14,7 @@ public class BytesConverterFactory {
             case DATE -> new BytesDateConverters();
             case TABLE_METADATA -> new BytesMetaDataConverters();
             case COLUMN -> new BytesColumnConverter();
+            case TABULAR_DATA -> null;
         };
     }
 }

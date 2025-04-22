@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,6 +24,21 @@ class TableWriterImplTest {
     @BeforeEach
     void setUp() {
         testHelperTSM.clear(NAME_TABLE);
+    }
+
+    @ParameterizedTest
+    @MethodSource("testCaseForWriteList")
+    void writeList(int offset, List<Byte> data) {
+        tableWriter.write(NAME_TABLE, data, offset);
+        assertEquals(data, testHelperTSM.readList(NAME_TABLE, offset, data.size()));
+    }
+
+    public static Stream<Arguments> testCaseForWriteList() {
+        List<Byte> bytes = new ArrayList<>(Arrays.asList((byte) 1, (byte) 2, (byte) 3));
+        return Stream.of(
+                Arguments.of(0, bytes),
+                Arguments.of(3123, bytes)
+        );
     }
 
     @ParameterizedTest
@@ -39,7 +57,7 @@ class TableWriterImplTest {
 
     @Test
     void writeWithNullOrEmptyData(){
-        assertThrows(IllegalArgumentException.class, () -> tableWriter.write("test_table", null, 0));
+        assertThrows(IllegalArgumentException.class, () -> tableWriter.write("test_table", (byte[]) null, 0));
         assertThrows(IllegalArgumentException.class, () -> tableWriter.write("test_table", new byte[]{}, 0));
     }
 

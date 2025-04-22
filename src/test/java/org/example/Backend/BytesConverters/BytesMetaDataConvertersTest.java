@@ -26,7 +26,7 @@ class BytesMetaDataConvertersTest {
 
         columnStructs.add(new ColumnStruct("first", TypeData.VARCHAR));
         columnStructs.add(new ColumnStruct("second", TypeData.DOUBLE));
-        return new TableMetaData(columnStructs);
+        return new TableMetaData(columnStructs, "primaryKey");
     }
 
     @Test

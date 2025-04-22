@@ -46,7 +46,7 @@ class TableCraterImplTest {
         columnStructList.add(new ColumnStruct("second", TypeData.VARCHAR));
         columnStructList.add(new ColumnStruct("third", TypeData.DATE));
 
-        return new TableMetaData(columnStructList);
+        return new TableMetaData(columnStructList, "test");
     }
 
     @Test

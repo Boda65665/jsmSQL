@@ -6,11 +6,27 @@ import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvid
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
 
 public class TableWriterImpl extends TableWriter {
 
     public TableWriterImpl(TablePathProvider tablePathProvider) {
         super(tablePathProvider);
+    }
+
+    @Override
+    public void write(String tableName, List<Byte> byteList, int offset) {
+        byte[] bytes = listByteToArray(byteList);
+
+        write(tableName, bytes, offset);
+    }
+
+    private byte[] listByteToArray(List<Byte> byteList) {
+        byte[] bytes = new byte[byteList.size()];
+        for (int i = 0; i < byteList.size(); i++) {
+            bytes[i] = byteList.get(i);
+        }
+        return bytes;
     }
 
     @Override

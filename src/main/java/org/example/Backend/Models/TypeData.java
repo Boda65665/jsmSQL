@@ -8,5 +8,6 @@ public enum TypeData {
     LONG,
     BOOLEAN,
     TABLE_METADATA,
-    COLUMN
+    COLUMN,
+    TABULAR_DATA
 }

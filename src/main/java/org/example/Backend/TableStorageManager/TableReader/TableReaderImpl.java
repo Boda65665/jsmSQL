@@ -6,11 +6,27 @@ import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvid
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TableReaderImpl extends TableReader {
 
     public TableReaderImpl(TablePathProvider pathProvider) {
         super(pathProvider);
+    }
+
+    @Override
+    public List<Byte> readList(String tableName, int offset, int length) {
+        byte[] result = read(tableName, offset, length);
+        return toList(result);
+    }
+
+    private List<Byte> toList(byte[] data) {
+        List<Byte> result = new ArrayList<>();
+        for (byte b : data) {
+            result.add(b);
+        }
+        return result;
     }
 
     @Override

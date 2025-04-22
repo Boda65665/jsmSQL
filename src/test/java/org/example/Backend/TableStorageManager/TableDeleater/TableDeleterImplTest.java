@@ -29,7 +29,7 @@ class TableDeleterImplTest {
     void delete() {
         String pathTable = tablePathProvider.getTablePath(NAME_TABLE);
 
-        tableCrater.create(NAME_TABLE, new TableMetaData(new ArrayList<>()));
+        tableCrater.create(NAME_TABLE, new TableMetaData(new ArrayList<>(), "test"));
         assertTrue(new File(pathTable).exists());
 
         tableDeleter.delete(NAME_TABLE);
