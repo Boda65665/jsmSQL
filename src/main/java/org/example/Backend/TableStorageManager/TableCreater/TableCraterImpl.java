@@ -3,7 +3,7 @@ package org.example.Backend.TableStorageManager.TableCreater;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TypeData;
 import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.BytesConverters;
+import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
 import java.io.File;
@@ -52,8 +52,8 @@ public class TableCraterImpl extends TableCrater {
     }
 
     private byte[] getBytesFromMetaData(TableMetaData tableMetaData) {
-        BytesConverters<TableMetaData> tableMetaDataBytesConverters
-                = (BytesConverters<TableMetaData>) BytesConverterFactory.getBytesConverters(TypeData.TABLE_METADATA);
+        ArrayByteConverter<TableMetaData> tableMetaDataBytesConverters
+                = (ArrayByteConverter<TableMetaData>) BytesConverterFactory.getBytesConverters(TypeData.TABLE_METADATA);
         return tableMetaDataBytesConverters.toBytes(tableMetaData);
     }
 

@@ -4,7 +4,7 @@ import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TypeData;
 import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.BytesConverters;
+import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
 import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
@@ -21,8 +21,8 @@ class TableCraterImplTest {
     private final TablePathProvider pathProvider = tableOperationFactory.getTablePathProvider();
     private final TableCraterImpl tableCrate = new TableCraterImpl(pathProvider, new TableWriterImpl(pathProvider));
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(pathProvider);
-    private final BytesConverters<TableMetaData> tableMetaDataBytesConverters =
-            (BytesConverters<TableMetaData>) BytesConverterFactory.getBytesConverters(TypeData.TABLE_METADATA);
+    private final ArrayByteConverter<TableMetaData> tableMetaDataBytesConverters =
+            (ArrayByteConverter<TableMetaData>) BytesConverterFactory.getBytesConverters(TypeData.TABLE_METADATA);
     private final String NAME_TABLE = "test_table";
 
     @BeforeEach

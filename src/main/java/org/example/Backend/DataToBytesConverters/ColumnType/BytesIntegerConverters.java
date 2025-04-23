@@ -1,8 +1,10 @@
-package org.example.Backend.DataToBytesConverters;
+package org.example.Backend.DataToBytesConverters.ColumnType;
+
+import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
 
 import java.nio.ByteBuffer;
 
-public class BytesIntegerConverters implements BytesConverters<Integer> {
+public class BytesIntegerConverters implements ArrayByteConverter<Integer> {
 
     @Override
     public Integer toData(byte[] bytes) {

@@ -32,8 +32,8 @@ public class TableWriterImpl extends TableWriter {
     @Override
     public void write(String tableName, byte[] data, int offset) {
         valid(data, offset, tableName);
-        String path = tablePathProvider.getTablePath(tableName);
 
+        String path = tablePathProvider.getTablePath(tableName);
         try (RandomAccessFile file = new RandomAccessFile(path, "rw")) {
             if (offset == -1) offset = (int) file.length();
 

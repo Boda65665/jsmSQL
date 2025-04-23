@@ -1,7 +1,6 @@
 package org.example.Backend.TableStorageManager.TableDeleater;
 
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
-
 import java.io.File;
 
 public class TableDeleterImpl extends TableDeleter {

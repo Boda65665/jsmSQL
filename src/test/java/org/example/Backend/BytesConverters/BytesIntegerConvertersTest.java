@@ -1,7 +1,7 @@
 package org.example.Backend.BytesConverters;
 
-import org.example.Backend.DataToBytesConverters.BytesConverters;
-import org.example.Backend.DataToBytesConverters.BytesIntegerConverters;
+import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.DataToBytesConverters.ColumnType.BytesIntegerConverters;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BytesIntegerConvertersTest {
-    private final BytesConverters<Integer> bytesConverters = new BytesIntegerConverters();
+    private final ArrayByteConverter<Integer> bytesConverters = new BytesIntegerConverters();
 
     @ParameterizedTest
     @MethodSource("provideTestData")

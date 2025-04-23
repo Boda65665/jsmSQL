@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -25,22 +23,6 @@ class TableReaderImplTest {
     @BeforeEach
     void setUp() {
         testHelperTSM.clear(NAME_TABLE);
-    }
-
-    @ParameterizedTest
-    @MethodSource("testCaseForReadList")
-    void read(int offset, List<Byte> data) {
-        testHelperTSM.writeList(offset, data, NAME_TABLE);
-
-        assertEquals(data, tableReader.readList(NAME_TABLE, offset, data.size()));
-    }
-
-    public static Stream<Arguments> testCaseForReadList() {
-
-        return Stream.of(
-                Arguments.of(0, Arrays.asList((byte) 1, (byte) 2, (byte) 3)),
-                Arguments.of(10,Arrays.asList((byte) 1, (byte) 2))
-        );
     }
 
     @ParameterizedTest

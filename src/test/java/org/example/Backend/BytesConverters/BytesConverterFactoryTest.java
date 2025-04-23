@@ -1,6 +1,8 @@
 package org.example.Backend.BytesConverters;
 
 import org.example.Backend.DataToBytesConverters.*;
+import org.example.Backend.DataToBytesConverters.ColumnType.*;
+import org.example.Backend.DataToBytesConverters.TableParts.BytesMetaDataConverters;
 import org.example.Backend.Models.TypeData;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -59,19 +59,6 @@ public class TestHelperTSM {
         return result;
     }
 
-    public void writeList(int offset, List<Byte> data, String nameTable) {
-        byte[] bytes = toArray(data);
-        write(offset, bytes, nameTable);
-    }
-
-    private byte[] toArray(List<Byte> data) {
-        byte[] result = new byte[data.size()];
-        for (int i = 0; i < data.size(); i++) {
-            result[i] = data.get(i);
-        }
-        return result;
-    }
-
     public void write(int offset, byte[] data, String nameTable) {
         String path = tablePathProvider.getTablePath(nameTable);
 

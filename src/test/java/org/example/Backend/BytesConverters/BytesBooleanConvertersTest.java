@@ -1,6 +1,6 @@
 package org.example.Backend.BytesConverters;
 
-import org.example.Backend.DataToBytesConverters.BytesBooleanConverters;
+import org.example.Backend.DataToBytesConverters.ColumnType.BytesBooleanConverters;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
