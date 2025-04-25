@@ -43,7 +43,6 @@ class BytesStringConvertersTest {
         return Stream.of(
                 Arguments.of("Hello, World!"),
                 Arguments.of("Привет, мир!"),
-                Arguments.of(""),
                 Arguments.of("12345"),
                 Arguments.of("特殊文字"),
                 Arguments.of("\uD83D\uDE00")

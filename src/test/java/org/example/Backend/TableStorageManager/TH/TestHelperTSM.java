@@ -69,4 +69,12 @@ public class TestHelperTSM {
             throw new RuntimeException(e);
         }
     }
+
+    public byte[] toArray(List<Byte> byteList) {
+        byte[] bytes = new byte[byteList.size()];
+        for (int i = 0; i < byteList.size(); i++) {
+            bytes[i] = byteList.get(i);
+        }
+        return bytes;
+    }
 }

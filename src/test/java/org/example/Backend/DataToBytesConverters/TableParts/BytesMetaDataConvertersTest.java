@@ -1,11 +1,11 @@
 package org.example.Backend.DataToBytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.TableParts.TH.TestHelperConverterTableParts;
 import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.TableMetaData;
-import org.example.Backend.Models.TypeData;
+import org.example.Backend.Models.ColumnType;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BytesMetaDataConvertersTest {
     private final BytesMetaDataConverters metaDatConverters = new BytesMetaDataConverters();
-    private final ArrayByteConverter<String> stingBytesConverter = (ArrayByteConverter<String>) BytesConverterFactory.getBytesConverters(TypeData.VARCHAR);
-
+    private final ColumnTypeBytesConverter<String> stingBytesConverter = (ColumnTypeBytesConverter<String>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.VARCHAR);
+    private final ColumnTypeBytesConverter<Boolean> booleanConverter = (ColumnTypeBytesConverter<Boolean>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.BOOLEAN);
     private final TestHelperConverterTableParts testHelperConverterTableParts = new TestHelperConverterTableParts();
 
     @Test
@@ -35,8 +35,14 @@ class BytesMetaDataConvertersTest {
             addBytesLengthColumnName(result, bytesName.length);
             addBytesColumnName(result, bytesName);
             addBytesTypeColumn(result, columnStruct.getType());
+            addBytesIsPrimaryKey(result, columnStruct.isPrimary());
         }
         return result;
+    }
+
+    private void addBytesIsPrimaryKey(ArrayList<Byte> result, boolean primary) {
+        byte[] bytesIsPrimary = booleanConverter.toBytes(primary);
+        testHelperConverterTableParts.addArrayToList(result, bytesIsPrimary);
     }
 
     private void addBytesLengthColumnName(ArrayList<Byte> result, int length) {
@@ -48,24 +54,24 @@ class BytesMetaDataConvertersTest {
         testHelperConverterTableParts.addArrayToList(result, bytesName);
     }
 
-    private void addBytesTypeColumn(ArrayList<Byte> result, TypeData typeData) {
-        result.addAll(testHelperConverterTableParts.getBytesFromInt(typeData.ordinal()));
+    private void addBytesTypeColumn(ArrayList<Byte> result, ColumnType columnType) {
+        result.addAll(testHelperConverterTableParts.getBytesFromInt(columnType.ordinal()));
     }
 
     private TableMetaData generateTestDataForToConvertToBytes() {
         ArrayList<ColumnStruct> columnStructs = new ArrayList<>();
 
-        columnStructs.add(new ColumnStruct("fourth", TypeData.INT));
-        columnStructs.add(new ColumnStruct("fifth", TypeData.LONG));
-        columnStructs.add(new ColumnStruct("second", TypeData.DOUBLE));
-        columnStructs.add(new ColumnStruct("sixth", TypeData.BOOLEAN));
-        columnStructs.add(new ColumnStruct("first", TypeData.VARCHAR));
-        columnStructs.add(new ColumnStruct("third", TypeData.DATE));
+        columnStructs.add(new ColumnStruct("fourth", ColumnType.INT, true));
+        columnStructs.add(new ColumnStruct("fifth", ColumnType.LONG, false));
+        columnStructs.add(new ColumnStruct("second", ColumnType.DOUBLE, false));
+        columnStructs.add(new ColumnStruct("sixth", ColumnType.BOOLEAN, false));
+        columnStructs.add(new ColumnStruct("first", ColumnType.VARCHAR, true));
+        columnStructs.add(new ColumnStruct("third", ColumnType.DATE, true));
         return new TableMetaData(columnStructs, null);
     }
 
     @Test
-    void toData() {
+    void  toData() {
         TableMetaData tmd = generateTestDataForToConvertToBytes();
         ArrayList<Byte> testData = toBytes(tmd.getColumnStructList());
 

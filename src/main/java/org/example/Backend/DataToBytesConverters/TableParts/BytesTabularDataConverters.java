@@ -1,17 +1,17 @@
 package org.example.Backend.DataToBytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
-import org.example.Backend.DataToBytesConverters.Interface.ByteCollectionConverter;
+import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.TabularData;
-import org.example.Backend.Models.TypeData;
+import org.example.Backend.Models.ColumnType;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BytesTabularDataConverters implements ByteCollectionConverter<TabularData> {
+public class BytesTabularDataConverters implements TablePartTypeConverter<TabularData> {
     private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
     private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
 
@@ -26,13 +26,12 @@ public class BytesTabularDataConverters implements ByteCollectionConverter<Tabul
             int lenDataBytes = getLenData(bytes, indexByte);
             indexByte += LENGTH_INDICATOR_BYTE_COUNT;
 
-            TypeData typeData = getTypeFromBytes(bytes, indexByte, lenDataBytes);
-            Object data = getObjectFromBytes(bytes, typeData, indexByte, lenDataBytes);
-
+            ColumnType columnType = getTypeFromBytes(bytes, indexByte, lenDataBytes);
+            Object data = getObjectFromBytes(bytes, columnType, indexByte, lenDataBytes);
             indexByte += LENGTH_TYPE_INDICATOR_BYTE_COUNT;
             indexByte += lenDataBytes;
 
-            columns.add(new Column(data, typeData));
+            columns.add(new Column(data, columnType));
         }
         return new TabularData(columns);
     }
@@ -55,14 +54,14 @@ public class BytesTabularDataConverters implements ByteCollectionConverter<Tabul
         return buffer.getInt();
     }
 
-    private TypeData getTypeFromBytes(byte[] bytes, int indexByte, int lenDataBytes) {
+    private ColumnType getTypeFromBytes(byte[] bytes, int indexByte, int lenDataBytes) {
         int indexType = lenDataBytes + indexByte;
         byte[] typeBytes = Arrays.copyOfRange(bytes, indexType, indexType + LENGTH_TYPE_INDICATOR_BYTE_COUNT);
-        return TypeData.values()[getIntFromBytes(typeBytes)];
+        return ColumnType.values()[getIntFromBytes(typeBytes)];
     }
 
-    private Object getObjectFromBytes(byte[] bytes, TypeData typeData, int indexByte, int lenDataBytes) {
-        ArrayByteConverter bytesConverters = BytesConverterFactory.getBytesConverters(typeData);
+    private Object getObjectFromBytes(byte[] bytes, ColumnType columnType, int indexByte, int lenDataBytes) {
+        ColumnTypeBytesConverter bytesConverters = ColumnTypeBytesConverterFactory.getBytesConverters(columnType);
         return bytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + lenDataBytes));
     }
 
@@ -84,11 +83,11 @@ public class BytesTabularDataConverters implements ByteCollectionConverter<Tabul
     }
 
     private ArrayList<Byte> getListByteFromColumn(Column column) {
-        ArrayByteConverter bytesConverters = BytesConverterFactory.getBytesConverters(column.getTypeData());
+        ColumnTypeBytesConverter bytesConverters = ColumnTypeBytesConverterFactory.getBytesConverters(column.getColumnType());
 
         byte[] dataBytes = bytesConverters.toBytes(column.getData());
         List<Byte> lenDataBytes = getBytesFromInt(dataBytes.length);
-        List<Byte> typeDataBytes = getBytesFromInt(column.getTypeData().ordinal());
+        List<Byte> typeDataBytes = getBytesFromInt(column.getColumnType().ordinal());
 
         ArrayList<Byte> bytesList = new ArrayList<>(lenDataBytes);
         addArrayToList(bytesList, dataBytes);

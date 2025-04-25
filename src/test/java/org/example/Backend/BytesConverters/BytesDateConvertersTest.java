@@ -1,9 +1,9 @@
 package org.example.Backend.BytesConverters;
 
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.ColumnType.BytesDateConverters;
-import org.example.Backend.Models.TypeData;
+import org.example.Backend.Models.ColumnType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BytesDateConvertersTest {
     private final BytesDateConverters converter = new BytesDateConverters();
-    private final static ArrayByteConverter<Long> longBytesConverters = (ArrayByteConverter<Long>) BytesConverterFactory.getBytesConverters(TypeData.LONG);
+    private final static ColumnTypeBytesConverter<Long> longBytesConverters = (ColumnTypeBytesConverter<Long>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.LONG);
 
     @Test
     void nullToBytes() {

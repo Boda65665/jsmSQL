@@ -1,13 +1,14 @@
 package org.example.Backend.TableStorageManager.TableCreater;
 
+import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
+import org.example.Backend.DataToBytesConverters.factory.TablePartTypeBytesConverterFactory;
 import org.example.Backend.Models.TableMetaData;
-import org.example.Backend.Models.TypeData;
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.Models.TablePartType;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TableCraterImpl extends TableCrater {
     private final TableWriter tableWriter;
@@ -47,17 +48,17 @@ public class TableCraterImpl extends TableCrater {
     }
 
     private void addMetaDataTable(String tableName, TableMetaData tableMetaData) {
-        byte[] byteTableMetaData = getBytesFromMetaData(tableMetaData);
+        ArrayList<Byte> byteTableMetaData = getBytesFromMetaData(tableMetaData);
         write(tableName, byteTableMetaData);
     }
 
-    private byte[] getBytesFromMetaData(TableMetaData tableMetaData) {
-        ArrayByteConverter<TableMetaData> tableMetaDataBytesConverters
-                = (ArrayByteConverter<TableMetaData>) BytesConverterFactory.getBytesConverters(TypeData.TABLE_METADATA);
+    private ArrayList<Byte> getBytesFromMetaData(TableMetaData tableMetaData) {
+        TablePartTypeConverter<TableMetaData> tableMetaDataBytesConverters
+                = (TablePartTypeConverter<TableMetaData>) TablePartTypeBytesConverterFactory.getTablePartTypeConverter(TablePartType.TABLE_METADATA);
         return tableMetaDataBytesConverters.toBytes(tableMetaData);
     }
 
-    private void write(String tableName, byte[] byteTableMetaData) {
+    private void write(String tableName, ArrayList<Byte> byteTableMetaData) {
         tableWriter.write(tableName, byteTableMetaData, 0);
     }
 }

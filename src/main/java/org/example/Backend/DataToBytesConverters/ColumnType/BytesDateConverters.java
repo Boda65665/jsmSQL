@@ -1,12 +1,13 @@
 package org.example.Backend.DataToBytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
-import org.example.Backend.Models.TypeData;
+import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.Models.ColumnType;
+
 import java.util.Date;
 
-public class BytesDateConverters implements ArrayByteConverter<Date> {
-    private final ArrayByteConverter<Long> longBytesConverters = (ArrayByteConverter<Long>) BytesConverterFactory.getBytesConverters(TypeData.LONG);
+public class BytesDateConverters implements ColumnTypeBytesConverter<Date> {
+    private final ColumnTypeBytesConverter<Long> longBytesConverters = (ColumnTypeBytesConverter<Long>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.LONG);
 
     @Override
     public Date toData(byte[] bytes) {

@@ -1,9 +1,9 @@
 package org.example.Backend.DataToBytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import java.nio.ByteBuffer;
 
-public class BytesLongConverters implements ArrayByteConverter<Long> {
+public class BytesLongConverters implements ColumnTypeBytesConverter<Long> {
 
     @Override
     public Long toData(byte[] bytes) {

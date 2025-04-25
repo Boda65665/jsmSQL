@@ -1,8 +1,8 @@
 package org.example.Backend.DataToBytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 
-public class BytesBooleanConverters implements ArrayByteConverter<Boolean> {
+public class BytesBooleanConverters implements ColumnTypeBytesConverter<Boolean> {
 
     @Override
     public Boolean toData(byte[] bytes) {

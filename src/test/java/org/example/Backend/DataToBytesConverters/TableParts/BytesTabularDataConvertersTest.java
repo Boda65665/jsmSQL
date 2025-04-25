@@ -1,19 +1,19 @@
 package org.example.Backend.DataToBytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
-import org.example.Backend.DataToBytesConverters.Interface.ByteCollectionConverter;
+import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.DataToBytesConverters.TableParts.TH.TestHelperConverterTableParts;
 import org.example.Backend.Models.Column;
+import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TabularData;
-import org.example.Backend.Models.TypeData;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BytesTabularDataConvertersTest {
-    private final ByteCollectionConverter<TabularData> converter = new BytesTabularDataConverters();
+    private final TablePartTypeConverter<TabularData> converter = new BytesTabularDataConverters();
     private final TestHelperConverterTableParts testHelperConverterTableParts = new TestHelperConverterTableParts();
 
     @Test
@@ -29,12 +29,12 @@ class BytesTabularDataConvertersTest {
         ArrayList<Byte> result = new ArrayList<>();
 
         for (Column column : columns) {
-            ArrayByteConverter<Object> arrayByteConverter = (ArrayByteConverter<Object>) BytesConverterFactory.getBytesConverters(column.getTypeData());
-            byte[] dataBytes = arrayByteConverter.toBytes(column.getData());
+            ColumnTypeBytesConverter<Object> columnTypeBytesConverter = (ColumnTypeBytesConverter<Object>) ColumnTypeBytesConverterFactory.getBytesConverters(column.getColumnType());
+            byte[] dataBytes = columnTypeBytesConverter.toBytes(column.getData());
 
             addBytesLengthData(result, dataBytes.length);
             addBytesData(result, dataBytes);
-            addBytesTypeColumn(result, column.getTypeData());
+            addBytesTypeColumn(result, column.getColumnType());
         }
         return result;
     }
@@ -48,19 +48,19 @@ class BytesTabularDataConvertersTest {
         testHelperConverterTableParts.addArrayToList(result, dataBytes);
     }
 
-    private void addBytesTypeColumn(ArrayList<Byte> result, TypeData typeData) {
-        ArrayList<Byte> bytesType = testHelperConverterTableParts.getBytesFromInt(typeData.ordinal());
+    private void addBytesTypeColumn(ArrayList<Byte> result, ColumnType columnType) {
+        ArrayList<Byte> bytesType = testHelperConverterTableParts.getBytesFromInt(columnType.ordinal());
         result.addAll(bytesType);
     }
 
     private TabularData generateTestData() {
         ArrayList<Column> columns = new ArrayList<>();
-        columns.add(new Column(1, TypeData.INT));
-        columns.add(new Column(122222222333L, TypeData.LONG));
-        columns.add(new Column(1.1, TypeData.DOUBLE));
-        columns.add(new Column(true, TypeData.BOOLEAN));
-        columns.add(new Column("hello", TypeData.VARCHAR));
-        columns.add(new Column(new Date(122L), TypeData.DATE));
+        columns.add(new Column(1, ColumnType.INT));
+        columns.add(new Column(122222222333L, ColumnType.LONG));
+        columns.add(new Column(1.1, ColumnType.DOUBLE));
+        columns.add(new Column(true, ColumnType.BOOLEAN));
+        columns.add(new Column("hello", ColumnType.VARCHAR));
+        columns.add(new Column(new Date(122L), ColumnType.DATE));
 
         return new TabularData(columns);
     }

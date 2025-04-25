@@ -1,12 +1,10 @@
 package org.example.Backend.Models;
 
-public enum TypeData {
+public enum ColumnType {
     INT,
     DOUBLE,
     VARCHAR,
     DATE,
     LONG,
-    BOOLEAN,
-    TABLE_METADATA,
-    TABULAR_DATA
+    BOOLEAN
 }

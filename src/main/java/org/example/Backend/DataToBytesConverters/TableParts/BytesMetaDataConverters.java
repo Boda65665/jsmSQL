@@ -1,22 +1,27 @@
 package org.example.Backend.DataToBytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
-import org.example.Backend.DataToBytesConverters.Interface.ByteCollectionConverter;
+import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.ColumnStruct;
+import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TableMetaData;
-import org.example.Backend.Models.TypeData;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BytesMetaDataConverters implements ByteCollectionConverter<TableMetaData> {
-    private final ArrayByteConverter<String> stringBytesConverters =
-            (ArrayByteConverter<String>) BytesConverterFactory.getBytesConverters(TypeData.VARCHAR);
-    private final ArrayByteConverter<Integer> integerBytesConverters =
-            (ArrayByteConverter<Integer>) BytesConverterFactory.getBytesConverters(TypeData.INT);
+public class BytesMetaDataConverters implements TablePartTypeConverter<TableMetaData> {
+    private final ColumnTypeBytesConverter<String> stringBytesConverters =
+            (ColumnTypeBytesConverter<String>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.VARCHAR);
+    private final ColumnTypeBytesConverter<Integer> integerBytesConverters =
+            (ColumnTypeBytesConverter<Integer>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.INT);
+    private final ColumnTypeBytesConverter<Boolean> booleanColumnTypeBytesConverter =
+            (ColumnTypeBytesConverter<Boolean>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.BOOLEAN);
     private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
+    private final int BOOLEAN_DATA_INDICATOR_BYTE_COUNT = 1;
+    private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
 
     @Override
     public TableMetaData toData(byte[] bytes) {
@@ -44,12 +49,16 @@ public class BytesMetaDataConverters implements ByteCollectionConverter<TableMet
         String name = getName(bytes, indexByte, lengthName);
         indexByte += lengthName;
 
-        TypeData typeData = getType(bytes, indexByte);
+        ColumnType columnType = getType(bytes, indexByte);
+        indexByte += LENGTH_TYPE_INDICATOR_BYTE_COUNT;
 
-        columnStructs.add(new ColumnStruct(name, typeData));
-        indexByte+=2;
+        boolean isPrimary = isPrimary(bytes, indexByte);
+        indexByte += BOOLEAN_DATA_INDICATOR_BYTE_COUNT;
+
+        columnStructs.add(new ColumnStruct(name, columnType, isPrimary));
         return indexByte;
     }
+
 
     private int getLengthName(byte[] bytes, int indexByte) {
         return getIntFromBytes(Arrays.copyOfRange(bytes, indexByte, indexByte + LENGTH_INDICATOR_BYTE_COUNT));
@@ -59,9 +68,9 @@ public class BytesMetaDataConverters implements ByteCollectionConverter<TableMet
         return stringBytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + lengthName));
     }
 
-    private TypeData getType(byte[] bytes, int indexByte) {
+    private ColumnType getType(byte[] bytes, int indexByte) {
         int typeId = integerBytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + 2));
-        return TypeData.values()[typeId];
+        return ColumnType.values()[typeId];
     }
 
     private int getIntFromBytes(byte[] bytes) {
@@ -70,6 +79,10 @@ public class BytesMetaDataConverters implements ByteCollectionConverter<TableMet
         buffer.put(bytes);
         buffer.flip();
         return buffer.getInt();
+    }
+
+    private boolean isPrimary(byte[] bytes, int indexByte) {
+        return booleanColumnTypeBytesConverter.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + BOOLEAN_DATA_INDICATOR_BYTE_COUNT));
     }
 
     @Override
@@ -98,20 +111,20 @@ public class BytesMetaDataConverters implements ByteCollectionConverter<TableMet
     }
 
     private List<Byte> getBytesFromListColumnStruct(List<ColumnStruct> columnsStructList) {
-        List<Byte> bytes = new ArrayList<>();
+        List<Byte> bytesList = new ArrayList<>();
 
         for (ColumnStruct columnStruct : columnsStructList) {
             byte[] columnNameBytes = stringBytesConverters.toBytes(columnStruct.getColumnName());
-
+            byte[] isPrimary = booleanColumnTypeBytesConverter.toBytes(columnStruct.isPrimary());
             List<Byte> columnNameLenBytes = getBytesFromInt(columnNameBytes.length);
             List<Byte> columnTypeByte = getBytesFromInt(columnStruct.getType().ordinal());
 
-            bytes.addAll(columnNameLenBytes);
-            addArrayToList(bytes, columnNameBytes);
-            bytes.addAll(columnTypeByte);
+            bytesList.addAll(columnNameLenBytes);
+            addArrayToList(bytesList, columnNameBytes);
+            bytesList.addAll(columnTypeByte);
+            addArrayToList(bytesList, isPrimary);
         }
-
-        return bytes;
+        return bytesList;
     }
 
     private void addArrayToList(List<Byte> bytes, byte[] columnNameBytes) {

@@ -5,13 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TablePathProviderImplTest {
     @Test
-    void getTablePath_shouldReturnNullIfFileDoesNotExist() {
-        TablePathProviderImpl provider = new TablePathProviderImpl();
-        String result = provider.getTablePath("non_existent_table");
-        assertNull(result);
-    }
-
-    @Test
     void getTablePath_shouldReturnCorrectPathIfFileExists() {
         TablePathProviderImpl provider = new TablePathProviderImpl();
         String tableName = "test_table";

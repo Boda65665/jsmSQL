@@ -1,10 +1,10 @@
 package org.example.Backend.DataToBytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.Interface.ArrayByteConverter;
+import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
-public class BytesStringConverters implements ArrayByteConverter<String> {
+public class BytesStringConverters implements ColumnTypeBytesConverter<String> {
     private final Charset charset = StandardCharsets.UTF_8;
 
     @Override

@@ -6,5 +6,5 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class Column {
     private Object data;
-    private TypeData typeData;
+    private ColumnType columnType;
 }

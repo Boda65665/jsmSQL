@@ -1,34 +1,37 @@
 package org.example.Backend.DbManager;
 
-public class DbManagerImpl implements DbManager<Integer, Integer> {
-    private final BtreeManager btreeManager;
+import com.google.common.reflect.TypeToken;
+import org.mapdb.serializer.GroupSerializer;
+
+public class DbManagerImpl<K> implements DbManager<K, Integer> {
+    private final BtreeManager<K> btreeManager;
 
     public DbManagerImpl(String nameDb, String basePath) {
         btreeManager = new BtreeManager(nameDb, basePath);
     }
 
     @Override
-    public Integer get(Integer key) {
+    public Integer get(K key) {
         return btreeManager.get(key);
     }
 
     @Override
-    public void put(Integer key, Integer value) {
+    public void put(K key, Integer value) {
         btreeManager.insert(key, value);
     }
 
     @Override
-    public void delete(Integer key) {
+    public void delete(K key) {
         btreeManager.delete(key);
     }
 
     @Override
-    public Integer higherKey(Integer key) {
+    public K higherKey(K key) {
         return btreeManager.higherKey(key);
     }
 
     @Override
-    public Integer maxKey() {
+    public K maxKey() {
         return btreeManager.maxKey();
     }
 

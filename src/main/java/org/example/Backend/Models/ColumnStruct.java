@@ -7,5 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class ColumnStruct {
     private String columnName;
-    private TypeData type;
+    private ColumnType type;
+    boolean isPrimary;
 }

@@ -2,7 +2,6 @@ package org.example.Backend.DbManager;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class BtreeManagerTest {
@@ -16,25 +15,25 @@ class BtreeManagerTest {
 
     @Test
     void getValid() {
-        assertThrows(IllegalArgumentException.class, () -> manager.get(-1));
+        assertThrows(NullPointerException.class, () -> manager.get(null));
         assertDoesNotThrow(() -> manager.get(0));
     }
 
     @Test
     void insertValid() {
-        assertThrows(IllegalArgumentException.class, () -> manager.insert(-1, -1));
+        assertThrows(NullPointerException.class, () -> manager.insert(null, -1));
         assertDoesNotThrow(() -> manager.insert(1, -1));
     }
 
     @Test
     void deleteValid() {
-        assertThrows(IllegalArgumentException.class, () -> manager.delete(-1));
+        assertThrows(NullPointerException.class, () -> manager.delete(null));
         assertDoesNotThrow(() -> manager.delete(0));
     }
 
     @Test
     void higherKeyValid() {
-        assertThrows(IllegalArgumentException.class, () -> manager.higherKey(-1));
+        assertThrows(NullPointerException.class, () -> manager.higherKey(null));
         assertDoesNotThrow(() -> manager.higherKey(0));
     }
 }
