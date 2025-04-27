@@ -1,0 +1,42 @@
+package org.example.Backend.TableStorageManager.InsertionPointManager;
+
+import org.example.Backend.DbManager.DbManager;
+import org.example.Backend.Models.FreeMemoryInfo;
+
+public class FreeSpaceManagerImpl extends FreeSpaceManager {
+
+    public FreeSpaceManagerImpl(DbManager<Integer, Integer> btreeManager) {
+        super(btreeManager);
+    }
+
+    @Override
+    public FreeMemoryInfo getInsertionPoint(int length) {
+        int countFreeBytes = getMoreSuitablePlace(length);
+
+        return new FreeMemoryInfo(countFreeBytes, freeSpace.get(countFreeBytes));
+    }
+
+    private Integer getMoreSuitablePlace(int length) {
+        Integer countFreeBytes = freeSpace.get(length);
+        if (countFreeBytes != null) return length;
+
+        countFreeBytes = freeSpace.higherKey(length);
+        if (countFreeBytes == null) countFreeBytes = freeSpace.maxKey();
+        return countFreeBytes;
+    }
+
+    @Override
+    public boolean freeSpaceIsOver() {
+        return freeSpace.size() == 0;
+    }
+
+    @Override
+    public void editFreeSpace(int length, int countFreeBytes) {
+        int newCountFreeBytes = countFreeBytes - length;
+        int offset = freeSpace.get(countFreeBytes);
+        freeSpace.delete(countFreeBytes);
+
+        if (newCountFreeBytes < 10) return;
+        freeSpace.put(newCountFreeBytes, offset + length);
+    }
+}

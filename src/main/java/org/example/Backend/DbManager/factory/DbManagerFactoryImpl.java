@@ -1,20 +1,23 @@
-package org.example.Backend.DbManager;
+package org.example.Backend.DbManager.factory;
 
+import org.example.Backend.DbManager.DbManager;
+import org.example.Backend.DbManager.DbManagerImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DbManagerFactory {
+public class DbManagerFactoryImpl implements DmManagerFactory{
     private final ConcurrentHashMap<String, DbManager> indexManagersMap = new ConcurrentHashMap<>();
-    private static DbManagerFactory dbManagerFactory;
+    private static DbManagerFactoryImpl dbManagerFactoryImpl;
 
-    private DbManagerFactory() {}
+    private DbManagerFactoryImpl() {}
 
-    public static DbManagerFactory getDbManagerFactory() {
-        if (dbManagerFactory == null) dbManagerFactory = new DbManagerFactory();
-        return dbManagerFactory;
+    public static DbManagerFactoryImpl getDbManagerFactory() {
+        if (dbManagerFactoryImpl == null) dbManagerFactoryImpl = new DbManagerFactoryImpl();
+        return dbManagerFactoryImpl;
     }
 
+    @Override
     public synchronized DbManager getDbManager(String basePath, String nameDb) {
         if (!indexManagersMap.containsKey(nameDb)) putDbManager(nameDb, basePath);
         return indexManagersMap.get(nameDb);
@@ -25,6 +28,7 @@ public class DbManagerFactory {
         indexManagersMap.put(nameDb, dbManager);
     }
 
+    @Override
     public synchronized List<DbManager> getDbManagers() {
         return new ArrayList<>(indexManagersMap.values());
     }

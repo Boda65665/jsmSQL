@@ -1,9 +1,10 @@
-package org.example.Backend.DataToBytesConverters.TableParts;
+package org.example.Backend.BytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.TableParts.BytesTabularDataConverters;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
-import org.example.Backend.DataToBytesConverters.TableParts.TH.TestHelperConverterTableParts;
+import org.example.Backend.BytesConverters.TableParts.TH.TestHelperConverterTableParts;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TabularData;
@@ -29,7 +30,7 @@ class BytesTabularDataConvertersTest {
         ArrayList<Byte> result = new ArrayList<>();
 
         for (Column column : columns) {
-            ColumnTypeBytesConverter<Object> columnTypeBytesConverter = (ColumnTypeBytesConverter<Object>) ColumnTypeBytesConverterFactory.getBytesConverters(column.getColumnType());
+            ColumnTypeBytesConverter<Object> columnTypeBytesConverter = (ColumnTypeBytesConverter<Object>) BytesConverterFactory.getColumnTypeBytesConverters(column.getColumnType());
             byte[] dataBytes = columnTypeBytesConverter.toBytes(column.getData());
 
             addBytesLengthData(result, dataBytes.length);

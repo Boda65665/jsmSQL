@@ -1,8 +1,8 @@
-package org.example.Backend.BytesConverters;
+package org.example.Backend.BytesConverters.ColumnType;
 
 import org.example.Backend.DataToBytesConverters.TableParts.BytesMetaDataConverters;
 import org.example.Backend.DataToBytesConverters.TableParts.BytesTabularDataConverters;
-import org.example.Backend.DataToBytesConverters.factory.TablePartTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.Models.TablePartType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,7 +17,7 @@ public class TablePartBytesConverterFactoryTest {
     @ParameterizedTest
     @MethodSource("caseForGetBytesConverters")
     void getBytesConverters(TablePartType type, Class<?> expectedClass) {
-        assertInstanceOf(expectedClass, TablePartTypeBytesConverterFactory.getTablePartTypeConverter(type));
+        assertInstanceOf(expectedClass, BytesConverterFactory.getTablePartTypeConverter(type));
     }
 
     public static Stream<Arguments> caseForGetBytesConverters() {

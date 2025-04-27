@@ -1,7 +1,7 @@
-package org.example.Backend.BytesConverters;
+package org.example.Backend.BytesConverters.ColumnType;
 
 import org.example.Backend.DataToBytesConverters.ColumnType.*;
-import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.Models.ColumnType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class ColumnTypeBytesConverterFactoryTest {
 
     @ParameterizedTest
-    @MethodSource("caseForGetBytesConverters")
-    void getBytesConverters(ColumnType columnType, Class<?> expectedClass) {
-        assertInstanceOf(expectedClass, ColumnTypeBytesConverterFactory.getBytesConverters(columnType));
+    @MethodSource("caseForGetColumnTypeBytesConverters")
+    void getColumnTypeBytesConverters(ColumnType columnType, Class<?> expectedClass) {
+        assertInstanceOf(expectedClass, BytesConverterFactory.getColumnTypeBytesConverters(columnType));
     }
 
-    public static Stream<Arguments> caseForGetBytesConverters() {
+    public static Stream<Arguments> caseForGetColumnTypeBytesConverters() {
         return Stream.of(
             Arguments.of(ColumnType.INT, BytesIntegerConverters.class),
             Arguments.of(ColumnType.LONG, BytesLongConverters.class),

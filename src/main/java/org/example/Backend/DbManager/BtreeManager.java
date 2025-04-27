@@ -73,4 +73,8 @@ public class BtreeManager<K> {
     public void clear(){
         bTree.clear();
     }
+
+    public int size() {
+        return bTree.size();
+    }
 }

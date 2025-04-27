@@ -1,8 +1,5 @@
 package org.example.Backend.DbManager;
 
-import com.google.common.reflect.TypeToken;
-import org.mapdb.serializer.GroupSerializer;
-
 public class DbManagerImpl<K> implements DbManager<K, Integer> {
     private final BtreeManager<K> btreeManager;
 
@@ -43,5 +40,10 @@ public class DbManagerImpl<K> implements DbManager<K, Integer> {
     @Override
     public void clear() {
         btreeManager.clear();
+    }
+
+    @Override
+    public int size() {
+        return btreeManager.size();
     }
 }

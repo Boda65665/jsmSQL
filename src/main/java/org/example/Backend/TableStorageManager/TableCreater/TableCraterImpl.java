@@ -1,7 +1,7 @@
 package org.example.Backend.TableStorageManager.TableCreater;
 
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
-import org.example.Backend.DataToBytesConverters.factory.TablePartTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TablePartType;
 import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
@@ -54,7 +54,7 @@ public class TableCraterImpl extends TableCrater {
 
     private ArrayList<Byte> getBytesFromMetaData(TableMetaData tableMetaData) {
         TablePartTypeConverter<TableMetaData> tableMetaDataBytesConverters
-                = (TablePartTypeConverter<TableMetaData>) TablePartTypeBytesConverterFactory.getTablePartTypeConverter(TablePartType.TABLE_METADATA);
+                = (TablePartTypeConverter<TableMetaData>) BytesConverterFactory.getTablePartTypeConverter(TablePartType.TABLE_METADATA);
         return tableMetaDataBytesConverters.toBytes(tableMetaData);
     }
 

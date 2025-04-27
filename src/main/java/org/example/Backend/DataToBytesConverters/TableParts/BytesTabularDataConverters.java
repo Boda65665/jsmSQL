@@ -1,6 +1,6 @@
 package org.example.Backend.DataToBytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.Column;
@@ -61,7 +61,7 @@ public class BytesTabularDataConverters implements TablePartTypeConverter<Tabula
     }
 
     private Object getObjectFromBytes(byte[] bytes, ColumnType columnType, int indexByte, int lenDataBytes) {
-        ColumnTypeBytesConverter bytesConverters = ColumnTypeBytesConverterFactory.getBytesConverters(columnType);
+        ColumnTypeBytesConverter bytesConverters = BytesConverterFactory.getColumnTypeBytesConverters(columnType);
         return bytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + lenDataBytes));
     }
 
@@ -83,7 +83,7 @@ public class BytesTabularDataConverters implements TablePartTypeConverter<Tabula
     }
 
     private ArrayList<Byte> getListByteFromColumn(Column column) {
-        ColumnTypeBytesConverter bytesConverters = ColumnTypeBytesConverterFactory.getBytesConverters(column.getColumnType());
+        ColumnTypeBytesConverter bytesConverters = BytesConverterFactory.getColumnTypeBytesConverters(column.getColumnType());
 
         byte[] dataBytes = bytesConverters.toBytes(column.getData());
         List<Byte> lenDataBytes = getBytesFromInt(dataBytes.length);

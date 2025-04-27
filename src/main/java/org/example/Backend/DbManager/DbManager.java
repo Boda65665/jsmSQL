@@ -8,4 +8,5 @@ public interface DbManager<K, V> {
     K maxKey();
     void close();
     void clear();
+    int size();
 }

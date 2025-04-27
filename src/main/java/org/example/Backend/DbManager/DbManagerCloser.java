@@ -1,9 +1,14 @@
 package org.example.Backend.DbManager;
 
+import org.example.Backend.DbManager.factory.DmManagerFactory;
 import java.util.List;
 
 public class DbManagerCloser {
-    private final DbManagerFactory factory = DbManagerFactory.getDbManagerFactory();
+    private final DmManagerFactory factory;
+
+    public DbManagerCloser(DmManagerFactory factory) {
+        this.factory = factory;
+    }
 
     public void closeAll(){
 

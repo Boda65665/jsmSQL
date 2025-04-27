@@ -40,7 +40,7 @@ public class TestHelperTSM {
         }
     }
 
-    public List<Byte> readList(String nameTable, int offset, int length) {
+    public ArrayList<Byte> readList(String nameTable, int offset, int length) {
         try (RandomAccessFile file = new RandomAccessFile(tablePathProvider.getTablePath(nameTable), "r")) {
             file.seek(offset);
             byte[] data = new byte[length];
@@ -51,8 +51,8 @@ public class TestHelperTSM {
         }
     }
 
-    private List<Byte> toList(byte[] data) {
-        List<Byte> result = new ArrayList<>();
+    private ArrayList<Byte> toList(byte[] data) {
+        ArrayList<Byte> result = new ArrayList<>();
         for (byte b : data) {
             result.add(b);
         }

@@ -1,7 +1,7 @@
 package org.example.Backend.TableStorageManager.TableCreater;
 
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
-import org.example.Backend.DataToBytesConverters.factory.TablePartTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TableMetaData;
@@ -23,7 +23,7 @@ class TableCraterImplTest {
     private final TableCraterImpl tableCrate = new TableCraterImpl(pathProvider, new TableWriterImpl(pathProvider));
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(pathProvider);
     private final TablePartTypeConverter<TableMetaData> tableMetaDataConverter
-            = TablePartTypeBytesConverterFactory.getTablePartTypeConverter(TablePartType.TABLE_METADATA);
+            = BytesConverterFactory.getTablePartTypeConverter(TablePartType.TABLE_METADATA);
     private final String NAME_TABLE = "test_table";
 
     @BeforeEach

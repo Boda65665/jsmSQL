@@ -1,6 +1,6 @@
 package org.example.Backend.DataToBytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.ColumnStruct;
@@ -14,11 +14,11 @@ import java.util.List;
 
 public class BytesMetaDataConverters implements TablePartTypeConverter<TableMetaData> {
     private final ColumnTypeBytesConverter<String> stringBytesConverters =
-            (ColumnTypeBytesConverter<String>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.VARCHAR);
+            (ColumnTypeBytesConverter<String>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.VARCHAR);
     private final ColumnTypeBytesConverter<Integer> integerBytesConverters =
-            (ColumnTypeBytesConverter<Integer>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.INT);
+            (ColumnTypeBytesConverter<Integer>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.INT);
     private final ColumnTypeBytesConverter<Boolean> booleanColumnTypeBytesConverter =
-            (ColumnTypeBytesConverter<Boolean>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.BOOLEAN);
+            (ColumnTypeBytesConverter<Boolean>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.BOOLEAN);
     private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
     private final int BOOLEAN_DATA_INDICATOR_BYTE_COUNT = 1;
     private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;

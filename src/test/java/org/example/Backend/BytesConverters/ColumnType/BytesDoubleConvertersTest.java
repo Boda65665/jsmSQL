@@ -1,4 +1,4 @@
-package org.example.Backend.BytesConverters;
+package org.example.Backend.BytesConverters.ColumnType;
 
 import org.example.Backend.DataToBytesConverters.ColumnType.BytesDoubleConverters;
 import org.junit.jupiter.api.Test;

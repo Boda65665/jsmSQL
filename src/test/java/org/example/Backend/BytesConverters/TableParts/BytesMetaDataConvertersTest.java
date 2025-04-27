@@ -1,8 +1,9 @@
-package org.example.Backend.DataToBytesConverters.TableParts;
+package org.example.Backend.BytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.factory.ColumnTypeBytesConverterFactory;
+import org.example.Backend.DataToBytesConverters.TableParts.BytesMetaDataConverters;
+import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
-import org.example.Backend.DataToBytesConverters.TableParts.TH.TestHelperConverterTableParts;
+import org.example.Backend.BytesConverters.TableParts.TH.TestHelperConverterTableParts;
 import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.ColumnType;
@@ -13,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BytesMetaDataConvertersTest {
     private final BytesMetaDataConverters metaDatConverters = new BytesMetaDataConverters();
-    private final ColumnTypeBytesConverter<String> stingBytesConverter = (ColumnTypeBytesConverter<String>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.VARCHAR);
-    private final ColumnTypeBytesConverter<Boolean> booleanConverter = (ColumnTypeBytesConverter<Boolean>) ColumnTypeBytesConverterFactory.getBytesConverters(ColumnType.BOOLEAN);
+    private final ColumnTypeBytesConverter<String> stingBytesConverter = (ColumnTypeBytesConverter<String>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.VARCHAR);
+    private final ColumnTypeBytesConverter<Boolean> booleanConverter = (ColumnTypeBytesConverter<Boolean>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.BOOLEAN);
     private final TestHelperConverterTableParts testHelperConverterTableParts = new TestHelperConverterTableParts();
 
     @Test

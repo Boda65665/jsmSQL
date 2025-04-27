@@ -1,5 +1,8 @@
 package org.example.Backend.TableStorageManager.TableOperationFactory;
 
+import org.example.Backend.DbManager.DbManager;
+import org.example.Backend.TableStorageManager.InsertionPointManager.FreeSpaceManager;
+import org.example.Backend.TableStorageManager.InsertionPointManager.FreeSpaceManagerImpl;
 import org.example.Backend.TableStorageManager.TableCreater.TableCrater;
 import org.example.Backend.TableStorageManager.TableCreater.TableCraterImpl;
 import org.example.Backend.TableStorageManager.TableDeleater.TableDeleter;
@@ -41,5 +44,10 @@ public class TableOperationFactoryImpl implements TableOperationFactory {
     @Override
     public TablePathProvider getTablePathProvider() {
         return tablePathProvider;
+    }
+
+    @Override
+    public FreeSpaceManager getFreeSpaceManager(DbManager dbManager) {
+        return new FreeSpaceManagerImpl(dbManager);
     }
 }
