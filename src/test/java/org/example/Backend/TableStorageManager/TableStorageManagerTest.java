@@ -79,11 +79,12 @@ class TableStorageManagerTest {
         TablePartTypeConverter<TabularData> tabularDataTablePartTypeConverter = BytesConverterFactory.getTablePartTypeConverter(TablePartType.TABULAR_DATA);
         ArrayList<Byte> result = tabularDataTablePartTypeConverter.toBytes(tabularData);
         ArrayList<Byte> excepted = new ArrayList<>();
-        addZero(excepted, 10);
-        excepted.addAll(result.subList(0, 16));
+        addZero(excepted, 10);   //ближайшее свободное место на позиции 10(поэтому заполняем 10 байт нулями 0 + 10)
+        excepted.addAll(result.subList(0, 16));// вставляем 15 свободных байт
 
-        addZero(excepted, 15);
-        excepted.addAll(result.subList(16, 53));
+        addZero(excepted, 15); //ближайшее свободное место на позицци 40 (поэтому заполняем 15 байт нулями 10 + 15 + 15)
+        excepted.addAll(result.subList(16, 27));//вставляеми 10 свободных байт
+        excepted.addAll(result.subList(27, 53));//вставляем остаток в конец файла
         return excepted;
     }
 
@@ -109,4 +110,14 @@ class TableStorageManagerTest {
         tableStorageManager.save(NAME_TABLE, tabularData);
     }
 
+    @Test
+    public void editFreeSpace(){
+        TabularData tabularData = generateTestDataForSave();
+        TablePartTypeConverter<TabularData> tabularDataTablePartTypeConverter = BytesConverterFactory.getTablePartTypeConverter(TablePartType.TABULAR_DATA);
+        ArrayList<Byte> result = tabularDataTablePartTypeConverter.toBytes(tabularData);
+        freeSpace.put(result.size() + 20, 0);
+        save(tabularData);
+
+        assertNotNull(freeSpace.get(20));
+    }
 }

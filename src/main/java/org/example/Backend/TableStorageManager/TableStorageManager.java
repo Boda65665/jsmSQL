@@ -75,7 +75,8 @@ public class TableStorageManager {
 
     private void write(String tableName, ArrayList<Byte> bytesData, FreeMemoryInfo freeMemoryInfo) {
 
-        List<Byte> sublist = bytesData.subList(0, freeMemoryInfo.getCountFreeBytes());
+        int endIndex = Math.min(freeMemoryInfo.getCountFreeBytes(), bytesData.size());
+        List<Byte> sublist = bytesData.subList(0, endIndex);
         ArrayList<Byte> bytesDataForSave = new ArrayList<>(sublist);
         tableWriter.write(tableName, bytesDataForSave, freeMemoryInfo.getPosition());
     }
