@@ -17,6 +17,8 @@ public class TableStorageManager {
     private final String baseDbPath;
     private final TableOperationFactory tableOperationFactory;
     private final TableWriter tableWriter;
+    private final int LENGTH_LINK_INDICATOR_BYTE_COUNT = 1;
+    private final int MAX_LENGTH_LINK_INDICATOR_BYTE_COUNT = 4;
 
     public TableStorageManager(String baseDbPath, DmManagerFactory dmManagerFactory, TableOperationFactory tableOperationFactory) {
         this.dmManagerFactory = dmManagerFactory;
@@ -58,20 +60,31 @@ public class TableStorageManager {
 
     private int save(String tableName, ArrayList<Byte> bytesData, FreeSpaceManager freeSpaceManager) {
         int len = bytesData.size();
+        int position = 0;
         if(freeSpaceManager.freeSpaceIsOver()){
             tableWriter.write(tableName, bytesData, -1);
-            return -1;
+            tableWriter.write(tableName, new byte[]{0}, -1);
+            position = -1;
+        }
+        else {
+            FreeMemoryInfo freeMemoryInfo = freeSpaceManager.getInsertionPoint(len + LENGTH_LINK_INDICATOR_BYTE_COUNT + MAX_LENGTH_LINK_INDICATOR_BYTE_COUNT);
+
+            write(tableName, bytesData, freeMemoryInfo);
+            freeSpaceManager.editFreeSpace(len, freeMemoryInfo.getCountFreeBytes());
+            if (freeMemoryInfo.getCountFreeBytes() < len) {
+                List<Byte> sublist = bytesData.subList(freeMemoryInfo.getCountFreeBytes(), len);
+                save(tableName, new ArrayList<>(sublist), freeSpaceManager);
+            }
+            position = freeMemoryInfo.getPosition();
         }
 
-        FreeMemoryInfo freeMemoryInfo = freeSpaceManager.getInsertionPoint(len);
-        write(tableName, bytesData, freeMemoryInfo);
-        freeSpaceManager.editFreeSpace(len, freeMemoryInfo.getCountFreeBytes());
-        if (freeMemoryInfo.getCountFreeBytes() < len){
-            List<Byte> sublist = bytesData.subList(freeMemoryInfo.getCountFreeBytes(), len);
-            save(tableName, new ArrayList<>(sublist), freeSpaceManager);
-        }
-        return freeMemoryInfo.getPosition();
+        return position;
     }
+
+    private int numberToByteCount(int number) {
+        return (int) Math.ceil(Math.log(Math.abs(number) + 1) / Math.log(256));
+    }
+
 
     private void write(String tableName, ArrayList<Byte> bytesData, FreeMemoryInfo freeMemoryInfo) {
 
