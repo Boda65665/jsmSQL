@@ -2,6 +2,5 @@ package org.example.Backend.Models;
 
 public enum TablePartType {
     TABLE_METADATA,
-    TABULAR_DATA,
-    TABLE_FRAGMENT_LINK
+    TABULAR_DATA
 }

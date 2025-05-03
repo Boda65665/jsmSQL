@@ -6,6 +6,7 @@ import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 import org.mapdb.serializer.GroupSerializer;
 import java.io.File;
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 public class BtreeManager<K> {
@@ -25,7 +26,13 @@ public class BtreeManager<K> {
 
     private void creatDbDirectoryIfDoesntExist(String pathIndexesTree) {
         File file = new File(pathIndexesTree);
-        if (!file.exists()) file.mkdir();
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     private void commit(){

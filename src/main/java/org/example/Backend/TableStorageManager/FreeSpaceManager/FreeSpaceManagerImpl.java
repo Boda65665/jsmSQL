@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.InsertionPointManager;
+package org.example.Backend.TableStorageManager.FreeSpaceManager;
 
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.Models.FreeMemoryInfo;
@@ -11,8 +11,8 @@ public class FreeSpaceManagerImpl extends FreeSpaceManager {
 
     @Override
     public FreeMemoryInfo getInsertionPoint(int length) {
-        int countFreeBytes = getMoreSuitablePlace(length);
-
+        Integer countFreeBytes = getMoreSuitablePlace(length);
+        if (countFreeBytes == null) return null;
         return new FreeMemoryInfo(countFreeBytes, freeSpace.get(countFreeBytes));
     }
 
@@ -31,7 +31,7 @@ public class FreeSpaceManagerImpl extends FreeSpaceManager {
     }
 
     @Override
-    public void editFreeSpace(int length, int countFreeBytes) {
+    public void adjustFreeSpace(int length, int countFreeBytes) {
         int newCountFreeBytes = countFreeBytes - length;
         int offset = freeSpace.get(countFreeBytes);
         freeSpace.delete(countFreeBytes);

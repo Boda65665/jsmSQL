@@ -5,7 +5,7 @@ import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.DbManager.DbManagerCloser;
 import org.example.Backend.DbManager.factory.DbManagerFactoryImpl;
-import org.example.Backend.DbManager.factory.DmManagerFactory;
+import org.example.Backend.DbManager.factory.DbManagerFactory;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TablePartType;
@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TableStorageManagerTest {
     private static final String baseDbPath = "/test";
-    private static final DmManagerFactory dmManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
-    private static final TableStorageManager tableStorageManager = new TableStorageManager(baseDbPath, dmManagerFactory, new TableOperationFactoryImpl());
+    private static final DbManagerFactory DB_MANAGER_FACTORY = DbManagerFactoryImpl.getDbManagerFactory();
+    private static final TableStorageManager tableStorageManager = new TableStorageManager(baseDbPath, DB_MANAGER_FACTORY, new TableOperationFactoryImpl());
     private static final DbManagerFactoryImpl dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
-    private static final String basePath = System.getProperty("user.dir") + File.separator + "db";
+    private static final String basePath = System.getProperty("user.dir") + File.separator + "test";
     private static final DbManagerCloser dbManagerCloser = new DbManagerCloser(dbManagerFactory);
     private static final String NAME_TABLE = "test_table";
     private static final DbManager freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace_"+NAME_TABLE);

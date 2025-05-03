@@ -1,12 +1,12 @@
 package org.example.Backend.DbManager;
 
-import org.example.Backend.DbManager.factory.DmManagerFactory;
+import org.example.Backend.DbManager.factory.DbManagerFactory;
 import java.util.List;
 
 public class DbManagerCloser {
-    private final DmManagerFactory factory;
+    private final DbManagerFactory factory;
 
-    public DbManagerCloser(DmManagerFactory factory) {
+    public DbManagerCloser(DbManagerFactory factory) {
         this.factory = factory;
     }
 

@@ -1,17 +1,12 @@
 package org.example.Backend.Models;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public class FreeMemoryInfo {
-    private int countFreeBytes;
-    private int position;
+    private Integer countFreeBytes;
+    private Integer position;
 
-    public int getCountFreeBytes() {
-        return countFreeBytes;
-    }
-
-    public int getPosition() {
-        return position;
-    }
 }

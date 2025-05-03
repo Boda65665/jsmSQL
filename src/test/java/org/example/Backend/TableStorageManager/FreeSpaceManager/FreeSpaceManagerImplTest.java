@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.InsertionPointManager;
+package org.example.Backend.TableStorageManager.FreeSpaceManager;
 
 import org.example.Backend.DbManager.factory.DbManagerFactoryImpl;
 import org.example.Backend.DbManager.DbManagerImpl;

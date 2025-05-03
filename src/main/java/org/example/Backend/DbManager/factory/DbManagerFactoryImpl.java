@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DbManagerFactoryImpl implements DmManagerFactory{
+public class DbManagerFactoryImpl implements DbManagerFactory {
     private final ConcurrentHashMap<String, DbManager> indexManagersMap = new ConcurrentHashMap<>();
     private static DbManagerFactoryImpl dbManagerFactoryImpl;
 

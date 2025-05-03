@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.InsertionPointManager;
+package org.example.Backend.TableStorageManager.FreeSpaceManager;
 
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.Models.FreeMemoryInfo;
@@ -14,5 +14,5 @@ public abstract class FreeSpaceManager {
 
     public abstract boolean freeSpaceIsOver();
 
-    public abstract void editFreeSpace(int length, int countFreeBytes);
+    public abstract void adjustFreeSpace(int length, int countFreeBytes);
 }
