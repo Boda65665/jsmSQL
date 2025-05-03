@@ -1,6 +1,8 @@
 package org.example.Backend.TableStorageManager.TableOperationFactory;
 
 import org.example.Backend.DbManager.DbManager;
+import org.example.Backend.Models.FragmentMetaDataInfo;
+import org.example.Backend.TableStorageManager.FragmentMetaDataManager.FragmentMetaDataManager;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.TableCreater.TableCrater;
 import org.example.Backend.TableStorageManager.TableDeleater.TableDeleter;
@@ -15,4 +17,5 @@ public interface TableOperationFactory {
     TableReader getTableReader();
     TablePathProvider getTablePathProvider();
     FreeSpaceManager getFreeSpaceManager(DbManager dbManager);
+    FragmentMetaDataManager getFragmentMetaDataManager();
 }

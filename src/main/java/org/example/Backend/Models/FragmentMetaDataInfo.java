@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class FragmentMetaData {
+public class FragmentMetaDataInfo {
     private int lengthFragment;
     private Integer positionNextFragment;
 }

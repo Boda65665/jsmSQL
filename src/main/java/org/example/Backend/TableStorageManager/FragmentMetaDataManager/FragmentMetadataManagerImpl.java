@@ -1,21 +1,22 @@
-package org.example.Backend.TableStorageManager;
+package org.example.Backend.TableStorageManager.FragmentMetaDataManager;
 
-import org.example.Backend.Models.FragmentMetaData;
+import org.example.Backend.Models.FragmentMetaDataInfo;
 import org.example.Backend.Models.FreeMemoryInfo;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 
-public class FragmentMetadataManager {
+public class FragmentMetadataManagerImpl implements FragmentMetaDataManager {
     private final int LENGTH_INDICATOR_BYTE_COUNT = 1;
     private final int MAX_LENGTH_LINK_BYTE_COUNT = 8;
     private final int MAX_LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT * 2 + MAX_LENGTH_LINK_BYTE_COUNT;
 
-    public FragmentMetaData getFragmentMetaData(FreeSpaceManager freeSpaceManager, int lengthDataFragment) {
+    @Override
+    public FragmentMetaDataInfo getFragmentMetaDataInfo(FreeSpaceManager freeSpaceManager, int lengthDataFragment) {
         int maxLengthFragmentsBytes = getMaxLengthFragmentsBytes(lengthDataFragment);
         int countFreeBytes = getCountFreeBytes(maxLengthFragmentsBytes, freeSpaceManager);
         freeSpaceManager.adjustFreeSpace(maxLengthFragmentsBytes, countFreeBytes);
 
         Integer positionNextFragment = getPositionNextFragment(maxLengthFragmentsBytes - countFreeBytes, freeSpaceManager);
-        return new FragmentMetaData(Math.min(lengthDataFragment, countFreeBytes), positionNextFragment);
+        return new FragmentMetaDataInfo(Math.min(lengthDataFragment, countFreeBytes), positionNextFragment);
     }
 
     private Integer getPositionNextFragment(int lengthNextFragment, FreeSpaceManager freeSpaceManager) {
