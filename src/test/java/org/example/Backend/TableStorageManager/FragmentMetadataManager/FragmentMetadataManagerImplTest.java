@@ -23,9 +23,9 @@ class FragmentMetadataManagerImplTest {
     private final String basePath = System.getProperty("user.dir") + File.separator + "test";
     private final String NAME_TABLE = "test_table";
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(tableOperationFactory.getTablePathProvider());
-    private final int LENGTH_INDICATOR_BYTE_COUNT = 1;
-    private final int MAX_LENGTH_LINK_BYTE_COUNT = 8;
-    private final int MAX_LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT * 2 + MAX_LENGTH_LINK_BYTE_COUNT;
+    private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
+    private final int LENGTH_LINK_BYTE_COUNT = 4;
+    private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
 
     @BeforeEach
     void setUp() {
@@ -45,6 +45,7 @@ class FragmentMetadataManagerImplTest {
         int lengthFragment = 20;
         FragmentMetaDataInfo fragmentMetaDataInfo = manager.getFragmentMetaDataInfo(freeSpaceManager, lengthFragment);
 
+        assertEquals(positionFreeSpace, fragmentMetaDataInfo.getPositionFragment());
         assertEquals(lengthFragment, fragmentMetaDataInfo.getLengthFragment());
         assertEquals(1, freeSpace.size());
         assertNotNull(freeSpace.get(countFreeBytes - getMaxLengthFragment(lengthFragment)));
@@ -52,7 +53,7 @@ class FragmentMetadataManagerImplTest {
     }
 
     private int getMaxLengthFragment(int lengthFragment) {
-        return lengthFragment + MAX_LENGTH_METADATA_BYTE_COUNT;
+        return lengthFragment + LENGTH_METADATA_BYTE_COUNT;
     }
 
     @Test
@@ -62,6 +63,7 @@ class FragmentMetadataManagerImplTest {
         int lengthFragment = 70;
         FragmentMetaDataInfo fragmentMetaDataInfo = manager.getFragmentMetaDataInfo(freeSpaceManager, lengthFragment);
 
+        assertEquals(2, fragmentMetaDataInfo.getPositionFragment());
         assertEquals(60, fragmentMetaDataInfo.getLengthFragment());
         assertEquals(1, fragmentMetaDataInfo.getPositionNextFragment());
         assertEquals(1, freeSpace.size());
@@ -73,8 +75,21 @@ class FragmentMetadataManagerImplTest {
         freeSpace.put(10, 1);
         int lengthFragment = 20;
         FragmentMetaDataInfo fragmentMetaDataInfo = manager.getFragmentMetaDataInfo(freeSpaceManager, lengthFragment);
+
+        assertEquals(1, fragmentMetaDataInfo.getPositionFragment());
         assertEquals(10, fragmentMetaDataInfo.getLengthFragment());
         assertEquals(-1, fragmentMetaDataInfo.getPositionNextFragment());
+        assertEquals(0, freeSpace.size());
+    }
+
+    @Test
+    void getFragmentMetaDataInfoWhenNotThereFreeSpace() {
+        int lengthFragment = 20;
+        FragmentMetaDataInfo fragmentMetaDataInfo = manager.getFragmentMetaDataInfo(freeSpaceManager, lengthFragment);
+
+        assertEquals(-1, fragmentMetaDataInfo.getPositionFragment());
+        assertEquals(20 + LENGTH_METADATA_BYTE_COUNT, fragmentMetaDataInfo.getLengthFragment());
+        assertEquals(-2, fragmentMetaDataInfo.getPositionNextFragment());
         assertEquals(0, freeSpace.size());
     }
 }

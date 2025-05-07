@@ -31,6 +31,9 @@ public class TestHelperTSM {
 
     public byte[] read(String nameTable, int offset, int length) {
         try (RandomAccessFile file = new RandomAccessFile(tablePathProvider.getTablePath(nameTable), "r")) {
+            if (offset == -1) offset = (int) file.length();
+            if (length == -1) length = (int) file.length();
+
             file.seek(offset);
             byte[] data = new byte[length];
             file.read(data);
@@ -43,8 +46,7 @@ public class TestHelperTSM {
     public ArrayList<Byte> readList(String nameTable, int offset, int length) {
         try (RandomAccessFile file = new RandomAccessFile(tablePathProvider.getTablePath(nameTable), "r")) {
             file.seek(offset);
-            byte[] data = new byte[length];
-            file.read(data);
+            byte[] data = read(nameTable, offset, length);
             return toList(data);
         } catch (IOException e) {
             throw new RuntimeException(e);

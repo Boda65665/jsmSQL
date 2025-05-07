@@ -17,5 +17,4 @@ public interface TableOperationFactory {
     TableReader getTableReader();
     TablePathProvider getTablePathProvider();
     FreeSpaceManager getFreeSpaceManager(DbManager dbManager);
-    FragmentMetaDataManager getFragmentMetaDataManager();
 }

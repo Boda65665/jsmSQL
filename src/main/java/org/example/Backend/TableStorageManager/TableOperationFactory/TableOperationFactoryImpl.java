@@ -1,8 +1,6 @@
 package org.example.Backend.TableStorageManager.TableOperationFactory;
 
 import org.example.Backend.DbManager.DbManager;
-import org.example.Backend.TableStorageManager.FragmentMetaDataManager.FragmentMetaDataManager;
-import org.example.Backend.TableStorageManager.FragmentMetaDataManager.FragmentMetadataManagerImpl;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerImpl;
 import org.example.Backend.TableStorageManager.TableCreater.TableCrater;
@@ -22,7 +20,6 @@ public class TableOperationFactoryImpl implements TableOperationFactory {
     private final TableCrater tableCrater = new TableCraterImpl(tablePathProvider, tableWriter);
     private final TableReader tableReader = new TableReaderImpl(tablePathProvider);
     private final TableDeleter tableDeleter = new TableDeleterImpl(tablePathProvider);
-    private final FragmentMetaDataManager fragmentMetaDataManager = new FragmentMetadataManagerImpl();
 
     @Override
     public TableCrater getTableCrater() {
@@ -53,7 +50,4 @@ public class TableOperationFactoryImpl implements TableOperationFactory {
     public FreeSpaceManager getFreeSpaceManager(DbManager dbManager) {
         return new FreeSpaceManagerImpl(dbManager);
     }
-
-    @Override
-    public FragmentMetaDataManager getFragmentMetaDataManager() {return fragmentMetaDataManager;}
 }

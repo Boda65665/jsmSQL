@@ -1,6 +1,5 @@
 package org.example.Backend.TableStorageManager.TableOperationFactory;
 
-t
 import org.example.Backend.TableStorageManager.FragmentMetaDataManager.FragmentMetadataManagerImpl;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerImpl;
 import org.example.Backend.TableStorageManager.TableCreater.TableCraterImpl;
@@ -37,11 +36,6 @@ class TableOperationFactoryImplTest {
     @Test
     void getTablePathProvider() {
         assertInstanceOf(TablePathProviderImpl.class, tableOperationFactory.getTablePathProvider());
-    }
-
-    @Test
-    void getFragmentMetaDataManager() {
-        assertInstanceOf(FragmentMetadataManagerImpl.class, tableOperationFactory.getFragmentMetaDataManager());
     }
 
     @Test
