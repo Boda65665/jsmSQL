@@ -15,9 +15,9 @@ import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperat
 import org.example.Backend.TableStorageManager.TableWriter.TableWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +35,12 @@ class FragmentSaverTest {
     private final FragmentMetaDataManager fragmentMetaDataManager = fragmentOperationFactory.getFragmentMetaDataManager();
     private static final String NAME_TABLE = "test_table";
     private final String basePath = System.getProperty("user.dir") + File.separator + "test";
+
+    private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
+    private final int LENGTH_LINK_BYTE_COUNT = 4;
+    private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
     private final int LENGTH_FRAGMENT_BYTES = 94;
     private final int POSITION_THIRD_FRAGMENT_BYTES = 42;
-    private final int LENGTH_METADATA = 8;
 
     @BeforeEach
     void setUp() {
@@ -53,13 +56,13 @@ class FragmentSaverTest {
     void save() {
         initFreeSpace();
         TabularData tabularData = generateTestDataForSave();
+
         byte[] exceptedResult = getExceptedResult(tabularData);
 
         initFreeSpace();
         fragmentSaver.save(NAME_TABLE, tabularData, freeSpaceManager);
         byte[] result = testHelperTSM.read(NAME_TABLE, 0, -1);
 
-        System.out.println(Arrays.toString(result));
         assertArrayEquals(exceptedResult, result);
     }
 
@@ -88,34 +91,40 @@ class FragmentSaverTest {
         byte[] excepted = new byte[LENGTH_FRAGMENT_BYTES];
         while (dataIndex < dataBytes.size()) {
             FragmentMetaDataInfo fragmentMetaDataInfo = fragmentMetaDataManager.getFragmentMetaDataInfo(freeSpaceManager, dataBytes.size() - dataIndex);
-            int setPos = fragmentMetaDataInfo.getPositionFragment()==-1 ?POSITION_THIRD_FRAGMENT_BYTES : fragmentMetaDataInfo.getPositionFragment()-1;
+            int setPos = getStartingPositionFragment(fragmentMetaDataInfo);
 
-            setPos = addLengthFragment(setPos, fragmentMetaDataInfo, excepted);
+            addLengthFragment(setPos, fragmentMetaDataInfo, excepted);
+            setPos += LENGTH_INDICATOR_BYTE_COUNT;
 
-            setPos = addFragmentData(setPos, dataBytes, dataIndex, fragmentMetaDataInfo, excepted);
-            dataIndex += (fragmentMetaDataInfo.getLengthFragment() - LENGTH_METADATA);
+            addFragmentData(setPos, dataBytes, dataIndex, fragmentMetaDataInfo, excepted);
+            int lengthDataFragment = getLengthFragmentData(fragmentMetaDataInfo);
+            setPos += lengthDataFragment;
+            dataIndex += lengthDataFragment;
 
             addLink(setPos, excepted, fragmentMetaDataInfo);
         }
-        System.out.println(Arrays.toString(excepted));
         return excepted;
     }
 
-    private int addLengthFragment(int setPos, FragmentMetaDataInfo fragmentMetaDataInfo, byte[] excepted) {
+    private int getLengthFragmentData(FragmentMetaDataInfo fragmentMetaDataInfo) {
+        return fragmentMetaDataInfo.getLengthFragment() - LENGTH_METADATA_BYTE_COUNT;
+    }
+
+    private int getStartingPositionFragment(FragmentMetaDataInfo fragmentMetaDataInfo) {
+        return fragmentMetaDataInfo.getPositionFragment()==-1 ?POSITION_THIRD_FRAGMENT_BYTES : fragmentMetaDataInfo.getPositionFragment()-1;
+    }
+
+    private void addLengthFragment(int setPos, FragmentMetaDataInfo fragmentMetaDataInfo, byte[] excepted) {
         ArrayList<Byte> lengthFragment = intToBytes(fragmentMetaDataInfo.getLengthFragment());
         setListToArray(setPos, excepted, lengthFragment);
-
-        setPos+=lengthFragment.size();
-        return setPos;
     }
 
-    private int addFragmentData(int setPos, ArrayList<Byte> dataBytes, int dataIndex, FragmentMetaDataInfo fragmentMetaDataInfo, byte[] excepted) {
-        int lengthDataFragment = fragmentMetaDataInfo.getLengthFragment() - LENGTH_METADATA;
+    private void addFragmentData(int setPos, ArrayList<Byte> dataBytes, int dataIndex, FragmentMetaDataInfo fragmentMetaDataInfo, byte[] excepted) {
+        int lengthDataFragment = getLengthFragmentData(fragmentMetaDataInfo);
         List<Byte> dataFragment = dataBytes.subList(dataIndex, dataIndex + lengthDataFragment);
         setListToArray(setPos, excepted, dataFragment);
-        setPos += lengthDataFragment;
-        return setPos;
     }
+
 
     private void addLink(int setPos, byte[] excepted, FragmentMetaDataInfo fragmentMetaDataInfo) {
         setListToArray(setPos, excepted, intToBytes(fragmentMetaDataInfo.getPositionNextFragment()));
