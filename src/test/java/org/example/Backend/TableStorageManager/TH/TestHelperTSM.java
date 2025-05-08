@@ -1,6 +1,6 @@
 package org.example.Backend.TableStorageManager.TH;
 
-import org.example.Backend.TableStorageManager.TablePathProvider.TablePathProvider;
+import org.example.Backend.TableStorageManager.TableManager.TablePathProvider.TablePathProvider;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

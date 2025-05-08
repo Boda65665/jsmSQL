@@ -4,15 +4,18 @@ import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.DbManager.DbManagerCloser;
 import org.example.Backend.DbManager.factory.DbManagerFactoryImpl;
 import org.example.Backend.DbManager.factory.DbManagerFactory;
-import org.example.Backend.TableStorageManager.FragmentOperationFactory.FragmentOperationFactory;
-import org.example.Backend.TableStorageManager.FragmentOperationFactory.FragmentOperationFactoryImpl;
+import org.example.Backend.Models.TabularData;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactory;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
-import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactory;
-import org.example.Backend.TableStorageManager.TableOperationFactory.TableOperationFactoryImpl;
+import org.example.Backend.TableStorageManager.TableManager.TableOperationFactory.TableOperationFactory;
+import org.example.Backend.TableStorageManager.TableManager.TableOperationFactory.TableOperationFactoryImpl;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.File;
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TableStorageManagerTest {
@@ -45,5 +48,13 @@ class TableStorageManagerTest {
         assertThrows(IllegalArgumentException.class, () -> tableStorageManager.createTable(null, null));
         assertThrows(IllegalArgumentException.class, () -> tableStorageManager.createTable("", null));
         assertThrows(NullPointerException.class, () -> tableStorageManager.createTable("not_emtpy_and_null", null));
+    }
+
+    @Test
+    void validSave() {
+        assertThrows(NullPointerException.class, () -> tableStorageManager.save(null, null));
+        assertThrows(NullPointerException.class, () -> tableStorageManager.save(NAME_TABLE, null));
+        assertThrows(IllegalArgumentException.class, () -> tableStorageManager.save("", new TabularData(new ArrayList<>())));
+
     }
 }
