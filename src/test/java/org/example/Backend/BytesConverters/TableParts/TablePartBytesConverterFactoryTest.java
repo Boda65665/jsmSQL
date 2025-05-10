@@ -1,7 +1,7 @@
-package org.example.Backend.BytesConverters.ColumnType;
+package org.example.Backend.BytesConverters.TableParts;
 
 import org.example.Backend.DataToBytesConverters.TableParts.BytesMetaDataConverters;
-import org.example.Backend.DataToBytesConverters.TableParts.BytesTabularDataConverters;
+import org.example.Backend.DataToBytesConverters.TableParts.BytesRecordConverters;
 import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.Models.TablePartType;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,6 +23,6 @@ public class TablePartBytesConverterFactoryTest {
     public static Stream<Arguments> caseForGetBytesConverters() {
         return Stream.of(
                 Arguments.of(TablePartType.METADATA, BytesMetaDataConverters.class),
-                Arguments.of(TablePartType.RECORD, BytesTabularDataConverters.class));
+                Arguments.of(TablePartType.RECORD, BytesRecordConverters.class));
     }
 }

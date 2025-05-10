@@ -1,6 +1,6 @@
 package org.example.Backend.BytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.TableParts.BytesTabularDataConverters;
+import org.example.Backend.DataToBytesConverters.TableParts.BytesRecordConverters;
 import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
@@ -14,7 +14,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BytesRecordConvertersTest {
-    private final TablePartTypeConverter<Record> converter = new BytesTabularDataConverters();
+    private final TablePartTypeConverter<Record> converter = new BytesRecordConverters();
     private final TestHelperConverterTableParts testHelperConverterTableParts = new TestHelperConverterTableParts();
 
     @Test

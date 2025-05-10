@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BytesTabularDataConverters implements TablePartTypeConverter<Record> {
+public class BytesRecordConverters implements TablePartTypeConverter<Record> {
     private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
     private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
 

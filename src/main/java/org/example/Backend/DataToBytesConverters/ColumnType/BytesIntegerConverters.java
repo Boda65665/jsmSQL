@@ -1,19 +1,27 @@
 package org.example.Backend.DataToBytesConverters.ColumnType;
 
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.Exception.ValidationException;
 
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class BytesIntegerConverters implements ColumnTypeBytesConverter<Integer> {
+    private final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
 
     @Override
     public Integer toData(byte[] bytes) {
-        if (bytes == null || bytes.length == 0) throw new IllegalArgumentException("bytes is null or empty");
+        validToData(bytes);
+
+        if (Arrays.equals(NULL_BYTES, bytes)) return null;
 
         if (bytes.length < 4) bytes = padWithZero(bytes);
         return getData(bytes);
     }
 
+    private void validToData(byte[] bytes) {
+        if (bytes == null || bytes.length == 0) throw new ValidationException("bytes is null or empty");
+    }
 
     private byte[] padWithZero(byte[] bytes) {
         byte[] paddedArray = new byte[4];
@@ -27,7 +35,7 @@ public class BytesIntegerConverters implements ColumnTypeBytesConverter<Integer>
 
     @Override
     public byte[] toBytes(Integer number) {
-        if (number == null) throw new NullPointerException("data is null");
+        if (number == null) return NULL_BYTES;
 
         if (number < 0) return getBytesWithNegativeNumber(number);
         return getBytesWithPositiveNumber(number);

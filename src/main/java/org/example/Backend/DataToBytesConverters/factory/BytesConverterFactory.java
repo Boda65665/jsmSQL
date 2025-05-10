@@ -4,7 +4,7 @@ import org.example.Backend.DataToBytesConverters.ColumnType.*;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.DataToBytesConverters.TableParts.BytesMetaDataConverters;
-import org.example.Backend.DataToBytesConverters.TableParts.BytesTabularDataConverters;
+import org.example.Backend.DataToBytesConverters.TableParts.BytesRecordConverters;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TablePartType;
 
@@ -22,7 +22,7 @@ public class BytesConverterFactory {
 
     public static TablePartTypeConverter getTablePartTypeConverter(TablePartType tablePartType) {
         return switch(tablePartType){
-            case RECORD -> new BytesTabularDataConverters();
+            case RECORD -> new BytesRecordConverters();
             case METADATA -> new BytesMetaDataConverters();
         };
     }

@@ -1,6 +1,7 @@
 package org.example.Backend.BytesConverters.ColumnType;
 
 import org.example.Backend.DataToBytesConverters.ColumnType.BytesLongConverters;
+import org.example.Backend.Exception.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BytesLongConvertersTest {
     private final BytesLongConverters bytesConverters = new BytesLongConverters();
+    private static final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
 
     @ParameterizedTest
     @MethodSource("provideTestData")
@@ -34,16 +36,11 @@ class BytesLongConvertersTest {
                 Arguments.of(-255L, ByteBuffer.allocate(8).putLong(-255L).array()),
                 Arguments.of(-256L, ByteBuffer.allocate(8).putLong(-256L).array()),
                 Arguments.of(-65535L, ByteBuffer.allocate(8).putLong(-65535L).array()),
-                Arguments.of(-12321333333L, ByteBuffer.allocate(8).putLong(-12321333333L).array())
+                Arguments.of(-12321333333L, ByteBuffer.allocate(8).putLong(-12321333333L).array()),
+
+                Arguments.of(null, NULL_BYTES)
         );
     }
-
-    @Test
-    public void toBytesWithNull() {
-        assertThrows(NullPointerException.class, () -> bytesConverters.toBytes(null));
-    }
-
-
 
     @ParameterizedTest
     @MethodSource("provideTestDataForToData")
@@ -63,17 +60,16 @@ class BytesLongConvertersTest {
                 Arguments.of(ByteBuffer.allocate(8).putLong(-1L).array(), -1L),
                 Arguments.of(ByteBuffer.allocate(8).putLong(-256L).array(), -256L),
                 Arguments.of(ByteBuffer.allocate(8).putLong(-65536L).array(), -65536L),
-                Arguments.of(ByteBuffer.allocate(8).putLong(-12321333333L).array(), -12321333333L)
+                Arguments.of(ByteBuffer.allocate(8).putLong(-12321333333L).array(), -12321333333L),
+
+                Arguments.of(NULL_BYTES, null)
         );
     }
 
     @Test
-    public void toDataWithNull() {
-        assertThrows(IllegalArgumentException.class, () -> bytesConverters.toData(null));
+    public void validToData() {
+        assertThrows(ValidationException.class, () -> bytesConverters.toData(null));
+        assertThrows(ValidationException.class, () -> bytesConverters.toData(new byte[]{}));
     }
 
-    @Test
-    public void toDataWithEmptyArray() {
-        assertThrows(IllegalArgumentException.class, () -> bytesConverters.toData(new byte[]{}));
-    }
 }
