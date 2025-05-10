@@ -1,6 +1,6 @@
 package org.example.Backend.TableStorageManager.TH;
 
-import org.example.Backend.TableStorageManager.TableManager.TablePathProvider.TablePathProvider;
+import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestHelperTSM {
-    private final TablePathProvider tablePathProvider;
+    private final FilePathProvider filePathProvider;
 
-    public TestHelperTSM(TablePathProvider tablePathProvider) {
-        this.tablePathProvider = tablePathProvider;
+    public TestHelperTSM(FilePathProvider filePathProvider) {
+        this.filePathProvider = filePathProvider;
     }
 
     public void clear(String nameTable) {
-        String path = tablePathProvider.getTablePath(nameTable);
+        String path = filePathProvider.getTablePath(nameTable);
         try (FileWriter ignored = new FileWriter(path, false)) {
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -24,13 +24,13 @@ public class TestHelperTSM {
     }
 
     public void delete(String nameTable) {
-        String path = tablePathProvider.getTablePath(nameTable);
+        String path = filePathProvider.getTablePath(nameTable);
         File file = new File(path);
         if (file.exists()) file.delete();
     }
 
     public byte[] read(String nameTable, int offset, int length) {
-        try (RandomAccessFile file = new RandomAccessFile(tablePathProvider.getTablePath(nameTable), "r")) {
+        try (RandomAccessFile file = new RandomAccessFile(filePathProvider.getTablePath(nameTable), "r")) {
             if (offset == -1) offset = (int) file.length();
             if (length == -1) length = (int) file.length();
 
@@ -44,7 +44,7 @@ public class TestHelperTSM {
     }
 
     public ArrayList<Byte> readList(String nameTable, int offset, int length) {
-        try (RandomAccessFile file = new RandomAccessFile(tablePathProvider.getTablePath(nameTable), "r")) {
+        try (RandomAccessFile file = new RandomAccessFile(filePathProvider.getTablePath(nameTable), "r")) {
             file.seek(offset);
             byte[] data = read(nameTable, offset, length);
             return toList(data);
@@ -62,7 +62,7 @@ public class TestHelperTSM {
     }
 
     public void write(int offset, byte[] data, String nameTable) {
-        String path = tablePathProvider.getTablePath(nameTable);
+        String path = filePathProvider.getTablePath(nameTable);
 
         try (RandomAccessFile file = new RandomAccessFile(path, "rw")) {
             file.seek(offset);

@@ -4,19 +4,19 @@ import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.Column;
-import org.example.Backend.Models.TabularData;
+import org.example.Backend.Models.Record;
 import org.example.Backend.Models.ColumnType;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class BytesTabularDataConverters implements TablePartTypeConverter<TabularData> {
+public class BytesTabularDataConverters implements TablePartTypeConverter<Record> {
     private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
     private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
 
     @Override
-    public TabularData toData(byte[] bytes) {
+    public Record toData(byte[] bytes) {
         validToData(bytes);
 
         ArrayList<Column> columns = new ArrayList<>();
@@ -33,7 +33,7 @@ public class BytesTabularDataConverters implements TablePartTypeConverter<Tabula
 
             columns.add(new Column(data, columnType));
         }
-        return new TabularData(columns);
+        return new Record(columns);
     }
 
     private void validToData(byte[] bytes) {
@@ -66,7 +66,7 @@ public class BytesTabularDataConverters implements TablePartTypeConverter<Tabula
     }
 
     @Override
-    public ArrayList<Byte> toBytes(TabularData data) {
+    public ArrayList<Byte> toBytes(Record data) {
         validToBytes(data);
 
         ArrayList<Byte> listBytesColumn = new ArrayList<>();
@@ -77,17 +77,17 @@ public class BytesTabularDataConverters implements TablePartTypeConverter<Tabula
         return listBytesColumn;
     }
 
-    private void validToBytes(TabularData data) {
+    private void validToBytes(Record data) {
         if (data == null) throw new NullPointerException("Null data");
         if (data.getColumns().isEmpty()) throw new IllegalArgumentException("Empty array");
     }
 
     private ArrayList<Byte> getListByteFromColumn(Column column) {
-        ColumnTypeBytesConverter bytesConverters = BytesConverterFactory.getColumnTypeBytesConverters(column.getColumnType());
+        ColumnTypeBytesConverter bytesConverters = BytesConverterFactory.getColumnTypeBytesConverters(column.getType());
 
         byte[] dataBytes = bytesConverters.toBytes(column.getData());
         List<Byte> lenDataBytes = getBytesFromInt(dataBytes.length);
-        List<Byte> typeDataBytes = getBytesFromInt(column.getColumnType().ordinal());
+        List<Byte> typeDataBytes = getBytesFromInt(column.getType().ordinal());
 
         ArrayList<Byte> bytesList = new ArrayList<>(lenDataBytes);
         addArrayToList(bytesList, dataBytes);

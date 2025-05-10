@@ -6,5 +6,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class Column {
     private Object data;
-    private ColumnType columnType;
+    private ColumnType type;
+    private String name;
+
+    public Column(Object data, ColumnType type) {
+        this.data = data;
+        this.type = type;
+    }
 }

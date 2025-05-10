@@ -7,8 +7,8 @@ import org.example.Backend.Models.FragmentMetaDataInfo;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.FragmentMetadataManagerImpl;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
-import org.example.Backend.TableStorageManager.TableManager.TableOperationFactory.TableOperationFactory;
-import org.example.Backend.TableStorageManager.TableManager.TableOperationFactory.TableOperationFactoryImpl;
+import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactory;
+import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.File;
@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class FragmentMetadataManagerImplTest {
     private final FragmentMetadataManagerImpl manager = new FragmentMetadataManagerImpl();
     private final DbManagerFactory dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
-    private final TableOperationFactory tableOperationFactory = new TableOperationFactoryImpl();
+    private final FileOperationFactory fileOperationFactory = new FileOperationFactoryImpl();
     private FreeSpaceManager freeSpaceManager;
     private DbManager freeSpace;
     private final String basePath = System.getProperty("user.dir") + File.separator + "test";
     private final String NAME_TABLE = "test_table";
-    private final TestHelperTSM testHelperTSM = new TestHelperTSM(tableOperationFactory.getTablePathProvider());
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(fileOperationFactory.getTablePathProvider());
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
     private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
@@ -34,7 +34,7 @@ class FragmentMetadataManagerImplTest {
         dbManager.clear();
 
         freeSpace = dbManager;
-        freeSpaceManager = tableOperationFactory.getFreeSpaceManager(dbManager);
+        freeSpaceManager = fileOperationFactory.getFreeSpaceManager(dbManager);
     }
 
     @Test

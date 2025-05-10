@@ -2,7 +2,7 @@
 //
 //import org.example.Backend.BinaryConverter.BinaryConverter;
 //import org.example.Backend.Models.TableMetaData;
-//import org.example.Backend.Models.TabularData;
+//import org.example.Backend.Models.Record;
 //
 //public class Pager {
 //    private final BinaryConverter binaryConverter;
@@ -13,12 +13,12 @@
 //        this.tableOperator = tableOperator;
 //    }
 //
-//    public void compose(String tableName, TabularData tabularData) {
+//    public void compose(String tableName, Record tabularData) {
 //        TableMetaData tableMetaData = tableOperator.getTableMetaData(tableName);
 //
 //    }
 //
-//    private TableMetaData generateTableMetaData(String tableName, TabularData tabularData) {
+//    private TableMetaData generateTableMetaData(String tableName, Record tabularData) {
 //
 //    }
 //}

@@ -4,14 +4,12 @@ import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataM
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.FragmentMetadataManagerImpl;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaverImpl;
-import org.example.Backend.TableStorageManager.TableManager.TableWriter.TableWriter;
+import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
 
 public class FragmentOperationFactoryImpl implements FragmentOperationFactory {
     private final FragmentMetaDataManager fragmentMetaDataManager = new FragmentMetadataManagerImpl();
 
-    public FragmentMetaDataManager getFragmentMetaDataManager() {return fragmentMetaDataManager;}
-
-    public FragmentSaver getFragmentSaver(TableWriter tableWriter) {
-        return new FragmentSaverImpl(tableWriter, fragmentMetaDataManager);
+    public FragmentSaver getFragmentSaver(FileWriter fileWriter) {
+        return new FragmentSaverImpl(fileWriter, fragmentMetaDataManager);
     }
 }

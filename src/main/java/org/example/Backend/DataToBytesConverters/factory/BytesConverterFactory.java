@@ -22,8 +22,8 @@ public class BytesConverterFactory {
 
     public static TablePartTypeConverter getTablePartTypeConverter(TablePartType tablePartType) {
         return switch(tablePartType){
-            case TABULAR_DATA -> new BytesTabularDataConverters();
-            case TABLE_METADATA -> new BytesMetaDataConverters();
+            case RECORD -> new BytesTabularDataConverters();
+            case METADATA -> new BytesMetaDataConverters();
         };
     }
 }

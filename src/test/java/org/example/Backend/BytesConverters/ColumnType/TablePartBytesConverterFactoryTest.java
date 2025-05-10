@@ -22,7 +22,7 @@ public class TablePartBytesConverterFactoryTest {
 
     public static Stream<Arguments> caseForGetBytesConverters() {
         return Stream.of(
-                Arguments.of(TablePartType.TABLE_METADATA, BytesMetaDataConverters.class),
-                Arguments.of(TablePartType.TABULAR_DATA, BytesTabularDataConverters.class));
+                Arguments.of(TablePartType.METADATA, BytesMetaDataConverters.class),
+                Arguments.of(TablePartType.RECORD, BytesTabularDataConverters.class));
     }
 }
