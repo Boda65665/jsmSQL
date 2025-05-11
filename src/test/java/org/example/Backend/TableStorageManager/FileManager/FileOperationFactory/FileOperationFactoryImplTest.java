@@ -4,8 +4,8 @@ import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager
 import org.example.Backend.TableStorageManager.FileManager.FileCreater.FileCraterImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDeleterImpl;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProviderImpl;
-import org.example.Backend.TableStorageManager.FileManager.TableReader.FileReaderImpl;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriterImpl;
+import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReaderImpl;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriterImpl;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 

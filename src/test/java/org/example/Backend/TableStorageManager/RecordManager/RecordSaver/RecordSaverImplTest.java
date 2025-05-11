@@ -14,7 +14,7 @@ import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperation
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactoryImpl;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +29,7 @@ class RecordSaverImplTest {
     private final FileOperationFactoryImpl tableOperationFactory = new FileOperationFactoryImpl();
     private final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl();
     private final FileWriter fileWriter = tableOperationFactory.getTableWriter();
-    private final RecordSaverImpl recordSaver = new RecordSaverImpl(fragmentOperationFactory.getFragmentSaver(fileWriter));
+    private RecordSaverImpl recordSaver;
     private FreeSpaceManager freeSpaceManager;
     private DbManager freeSpace;
     private final DbManagerFactory dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
@@ -52,6 +52,7 @@ class RecordSaverImplTest {
 
         freeSpace = dbManager;
         freeSpaceManager = tableOperationFactory.getFreeSpaceManager(dbManager);
+        recordSaver = new RecordSaverImpl(fragmentOperationFactory.getFragmentRecordSaver(fileWriter, freeSpaceManager));
     }
 
     @Test
@@ -62,7 +63,7 @@ class RecordSaverImplTest {
         byte[] exceptedResult = getExceptedResult(record);
 
         initFreeSpace();
-        int startPos = recordSaver.save(NAME_TABLE, record, freeSpaceManager);
+        int startPos = recordSaver.save(NAME_TABLE, record);
         assertEquals(28, startPos);
 
         byte[] result = testHelperTSM.read(NAME_TABLE, 0, -1);

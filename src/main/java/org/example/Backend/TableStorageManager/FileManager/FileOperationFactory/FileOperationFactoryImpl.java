@@ -9,10 +9,10 @@ import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDele
 import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDeleterImpl;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProviderImpl;
-import org.example.Backend.TableStorageManager.FileManager.TableReader.FileReader;
-import org.example.Backend.TableStorageManager.FileManager.TableReader.FileReaderImpl;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriterImpl;
+import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReader;
+import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReaderImpl;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriterImpl;
 
 public class FileOperationFactoryImpl implements FileOperationFactory {
     private final FilePathProvider filePathProvider = new FilePathProviderImpl();

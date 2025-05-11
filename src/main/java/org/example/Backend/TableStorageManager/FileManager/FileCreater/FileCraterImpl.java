@@ -5,7 +5,7 @@ import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TablePartType;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.FileManager.TableReader;
+package org.example.Backend.TableStorageManager.FileManager.FileReader;
 
 import org.example.Backend.Exception.NotFoundTable;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;

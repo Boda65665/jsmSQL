@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.FileManager.TableWriter;
+package org.example.Backend.TableStorageManager.FileManager.FileWriter;
 
 import org.example.Backend.Exception.NotFoundTable;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;

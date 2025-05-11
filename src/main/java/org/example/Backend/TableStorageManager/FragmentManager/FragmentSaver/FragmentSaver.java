@@ -1,9 +1,7 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public interface FragmentSaver {
-    int save(String tableName, ArrayList<Byte> bytesData, FreeSpaceManager freeSpaceManager);
+    int save(String tableName, List<Byte> bytesData);
 }

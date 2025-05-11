@@ -10,7 +10,7 @@ import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactory;
 import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriterImpl;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriterImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;

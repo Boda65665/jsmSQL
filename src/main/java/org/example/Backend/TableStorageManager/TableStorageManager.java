@@ -5,12 +5,13 @@ import org.example.Backend.DbManager.factory.DbManagerFactory;
 import org.example.Backend.Models.*;
 import org.example.Backend.Models.Record;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactory;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;
 import org.example.Backend.TableStorageManager.RecordManager.RecordOperationFactory.RecordOperationFactory;
 import org.example.Backend.TableStorageManager.RecordManager.RecordSaver.RecordSaver;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.FileManager.FileCreater.FileCrater;
 import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactory;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 
 public class TableStorageManager {
     private final DbManagerFactory dbManagerFactory;
@@ -46,11 +47,16 @@ public class TableStorageManager {
     public void save(String tableName, Record data){
         validSave(tableName, data);
 
-        RecordSaver recordSaver = recordOperationFactory.getRecordSaver(fragmentOperationFactory.getFragmentSaver(fileWriter));
         FreeSpaceManager freeSpaceManager = getFreeSpaceManager(tableName);
+        RecordSaver recordSaver = getRecordSaver(tableName, freeSpaceManager);
 
-        int offsetIndex = recordSaver.save(tableName, data, freeSpaceManager);
+        int offsetIndex = recordSaver.save(tableName, data);
 
+    }
+
+    private RecordSaver getRecordSaver(String tableName, FreeSpaceManager freeSpaceManager) {
+        FragmentSaver fragmentSaver = fragmentOperationFactory.getFragmentRecordSaver(fileWriter, freeSpaceManager);
+        return recordOperationFactory.getRecordSaver(fragmentSaver);
     }
 
     private FreeSpaceManager getFreeSpaceManager(String tableName) {

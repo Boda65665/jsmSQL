@@ -2,8 +2,9 @@ package org.example.Backend.TableStorageManager.FragmentManager.FragmentOperatio
 
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;
 
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 
 public interface FragmentOperationFactory {
-    FragmentSaver getFragmentSaver(FileWriter fileWriter);
+    FragmentSaver getFragmentRecordSaver(FileWriter fileWriter, FreeSpaceManager freeSpaceManager);
 }

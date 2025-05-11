@@ -1,25 +1,27 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
 import org.example.Backend.Models.FragmentMetaDataInfo;
-import org.example.Backend.TableStorageManager.FileManager.TableWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.FragmentMetaDataManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentSaverImpl implements FragmentSaver {
+public class FragmentRecordSaverImpl implements FragmentSaver {
     private final FileWriter fileWriter;
     private final FragmentMetaDataManager fragmentMetaDataManager;
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
     private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
+    private final FreeSpaceManager freeSpaceManager;
 
-    public FragmentSaverImpl(FileWriter fileWriter, FragmentMetaDataManager fragmentMetaDataManager) {
+    public FragmentRecordSaverImpl(FileWriter fileWriter, FragmentMetaDataManager fragmentMetaDataManager, FreeSpaceManager freeSpaceManager) {
         this.fileWriter = fileWriter;
         this.fragmentMetaDataManager = fragmentMetaDataManager;
+        this.freeSpaceManager = freeSpaceManager;
     }
 
-    public int save(String tableName, ArrayList<Byte> bytesData, FreeSpaceManager freeSpaceManager) {
+    public int save(String tableName, List<Byte> bytesData) {
         int len = bytesData.size();
 
         FragmentMetaDataInfo fragmentMetaDataInfo = fragmentMetaDataManager.getFragmentMetaDataInfo(freeSpaceManager, len);
@@ -28,12 +30,12 @@ public class FragmentSaverImpl implements FragmentSaver {
         int lengthDataFragment = getLengthFragmentData(fragmentMetaDataInfo.getLengthFragment());
         if (lengthDataFragment < len) {
             List<Byte> sublist = bytesData.subList(lengthDataFragment, len);
-            save(tableName, new ArrayList<>(sublist), freeSpaceManager);
+            save(tableName, new ArrayList<>(sublist));
         }
         return fragmentMetaDataInfo.getPositionFragment();
     }
 
-    private void writeFragment(String tableName, ArrayList<Byte> bytesData, FragmentMetaDataInfo fragmentMetaDataInfo) {
+    private void writeFragment(String tableName, List<Byte> bytesData, FragmentMetaDataInfo fragmentMetaDataInfo) {
         int pos = getStartingPositionFragment(fragmentMetaDataInfo.getPositionFragment());
 
         writeLengthFragment(tableName, fragmentMetaDataInfo, pos);
@@ -63,7 +65,7 @@ public class FragmentSaverImpl implements FragmentSaver {
         };
     }
 
-    private void writeDataFragment(String tableName, ArrayList<Byte> bytesData, int lengthFragment, int position) {
+    private void writeDataFragment(String tableName, List<Byte> bytesData, int lengthFragment, int position) {
         int lengthFragmentData = getLengthFragmentData(lengthFragment);
         List<Byte> sublist = bytesData.subList(0, lengthFragmentData);
         ArrayList<Byte> bytesDataForSave = new ArrayList<>(sublist);
