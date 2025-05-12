@@ -3,10 +3,11 @@ package org.example.Backend.TableStorageManager;
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.DbManager.DbManagerCloser;
 import org.example.Backend.DbManager.factory.DbManagerFactoryImpl;
-import org.example.Backend.DbManager.factory.DbManagerFactory;
 import org.example.Backend.Models.Record;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactory;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactoryImpl;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactoryImpl;
 import org.example.Backend.TableStorageManager.RecordManager.RecordOperationFactory.RecordOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactory;
@@ -21,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TableStorageManagerTest {
     private static final String baseDbPath = "/test";
-    private static final DbManagerFactory DB_MANAGER_FACTORY = DbManagerFactoryImpl.getDbManagerFactory();
-    private static final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl();
+    private static final DbManagerFactoryImpl dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
+    private static final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(baseDbPath, dbManagerFactory);
+    private static final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl(freeSpaceManagerFactory);
     private static final RecordOperationFactoryImpl recordOperationFactory = new RecordOperationFactoryImpl();
     private static final TableStorageManager tableStorageManager =
-            new TableStorageManager(baseDbPath, DB_MANAGER_FACTORY, new FileOperationFactoryImpl(), fragmentOperationFactory, recordOperationFactory);
-    private static final DbManagerFactoryImpl dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
+            new TableStorageManager(baseDbPath, dbManagerFactory, new FileOperationFactoryImpl(), fragmentOperationFactory, recordOperationFactory);
     private static final String basePath = System.getProperty("user.dir") + File.separator + "test";
     private static final DbManagerCloser dbManagerCloser = new DbManagerCloser(dbManagerFactory);
     private static final String NAME_TABLE = "test_table";

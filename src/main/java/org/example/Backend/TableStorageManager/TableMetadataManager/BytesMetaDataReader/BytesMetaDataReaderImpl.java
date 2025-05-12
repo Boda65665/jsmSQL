@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.MetadataManager.BytesMetaDataReader;
+package org.example.Backend.TableStorageManager.TableMetadataManager.BytesMetaDataReader;
 
 import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReader;
 

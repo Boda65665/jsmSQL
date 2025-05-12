@@ -48,14 +48,14 @@ public class TableStorageManager {
         validSave(tableName, data);
 
         FreeSpaceManager freeSpaceManager = getFreeSpaceManager(tableName);
-        RecordSaver recordSaver = getRecordSaver(tableName, freeSpaceManager);
+        RecordSaver recordSaver = getRecordSaver();
 
         int offsetIndex = recordSaver.save(tableName, data);
 
     }
 
-    private RecordSaver getRecordSaver(String tableName, FreeSpaceManager freeSpaceManager) {
-        FragmentSaver fragmentSaver = fragmentOperationFactory.getFragmentRecordSaver(fileWriter, freeSpaceManager);
+    private RecordSaver getRecordSaver() {
+        FragmentSaver fragmentSaver = fragmentOperationFactory.getFragmentRecordSaver(fileWriter);
         return recordOperationFactory.getRecordSaver(fragmentSaver);
     }
 

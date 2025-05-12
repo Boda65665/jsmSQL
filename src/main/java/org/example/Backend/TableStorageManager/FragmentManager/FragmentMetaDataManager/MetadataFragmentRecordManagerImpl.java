@@ -3,14 +3,21 @@ package org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaData
 import org.example.Backend.Models.FragmentMetaDataInfo;
 import org.example.Backend.Models.FreeMemoryInfo;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
 
-public class FragmentMetadataManagerImpl implements FragmentMetaDataManager {
+public class MetadataFragmentRecordManagerImpl implements MetaDataFragmentManager {
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
     private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
+    private final FreeSpaceManagerFactory freeSpaceManagerFactory;
+
+    public MetadataFragmentRecordManagerImpl(FreeSpaceManagerFactory freeSpaceManagerFactory) {
+        this.freeSpaceManagerFactory = freeSpaceManagerFactory;
+    }
 
     @Override
-    public FragmentMetaDataInfo getFragmentMetaDataInfo(FreeSpaceManager freeSpaceManager, int lengthDataFragment) {
+    public FragmentMetaDataInfo getFragmentMetaDataInfo(String nameTable, int lengthDataFragment) {
+        FreeSpaceManager freeSpaceManager = freeSpaceManagerFactory.getFreeSpaceManager(nameTable);
         int maxLengthFragmentsBytes = getMaxLengthFragmentsBytes(lengthDataFragment);
         FreeMemoryInfo freeMemoryInfo = getCountFreeBytes(maxLengthFragmentsBytes, freeSpaceManager);
         if (freeMemoryInfo == null) return new FragmentMetaDataInfo(-1, lengthDataFragment + LENGTH_METADATA_BYTE_COUNT, -2);

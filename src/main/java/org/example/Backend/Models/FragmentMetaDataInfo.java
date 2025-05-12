@@ -8,5 +8,5 @@ import lombok.Data;
 public class FragmentMetaDataInfo {
     private int positionFragment;
     private int lengthFragment;
-    private Integer positionNextFragment;
+    private Integer linkOnNextFragment;
 }

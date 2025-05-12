@@ -2,6 +2,7 @@ package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
 import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReader;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -10,13 +11,15 @@ import java.util.List;
 public class FragmentTableMetadataSaver implements FragmentSaver{
     private final FileWriter fileWriter;
     private final FileReader fileReader;
+    private final MetaDataFragmentManager metaDataFragmentManager;
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
     private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
 
-    public FragmentTableMetadataSaver(FileWriter fileWriter, FileReader fileReader) {
+    public FragmentTableMetadataSaver(FileWriter fileWriter, FileReader fileReader, MetaDataFragmentManager metaDataFragmentManager) {
         this.fileWriter = fileWriter;
         this.fileReader = fileReader;
+        this.metaDataFragmentManager = metaDataFragmentManager;
     }
 
     @Override

@@ -7,17 +7,17 @@ import org.example.Backend.DbManager.factory.DbManagerFactory;
 import org.example.Backend.DbManager.factory.DbManagerFactoryImpl;
 import org.example.Backend.Models.*;
 import org.example.Backend.Models.Record;
-import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.FragmentMetaDataManager;
-import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.FragmentMetadataManagerImpl;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetadataFragmentRecordManagerImpl;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactory;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactoryImpl;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactoryImpl;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactoryImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,16 +27,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class RecordSaverImplTest {
     private final FileOperationFactoryImpl tableOperationFactory = new FileOperationFactoryImpl();
-    private final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl();
+    private static final String NAME_TABLE = "test_table";
+    private final String prefixName = "freespace_";
+    private final String basePath = System.getProperty("user.dir") + File.separator + "test";
+    private final DbManagerFactory dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
+    private final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(basePath, dbManagerFactory);
+    private final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl(freeSpaceManagerFactory);
     private final FileWriter fileWriter = tableOperationFactory.getTableWriter();
     private RecordSaverImpl recordSaver;
-    private FreeSpaceManager freeSpaceManager;
     private DbManager freeSpace;
-    private final DbManagerFactory dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(tableOperationFactory.getTablePathProvider());
-    private final FragmentMetaDataManager fragmentMetaDataManager = new FragmentMetadataManagerImpl();
-    private static final String NAME_TABLE = "test_table";
-    private final String basePath = System.getProperty("user.dir") + File.separator + "test";
+    private MetaDataFragmentManager metaDataFragmentManager;
+
 
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
@@ -47,12 +49,12 @@ class RecordSaverImplTest {
     @BeforeEach
     void setUp() {
         testHelperTSM.clear(NAME_TABLE);
-        DbManager dbManager = dbManagerFactory.getDbManager(basePath, NAME_TABLE);
+        DbManager dbManager = dbManagerFactory.getDbManager(basePath, prefixName+NAME_TABLE);
         dbManager.clear();
 
         freeSpace = dbManager;
-        freeSpaceManager = tableOperationFactory.getFreeSpaceManager(dbManager);
-        recordSaver = new RecordSaverImpl(fragmentOperationFactory.getFragmentRecordSaver(fileWriter, freeSpaceManager));
+        recordSaver = new RecordSaverImpl(fragmentOperationFactory.getFragmentRecordSaver(fileWriter));
+        metaDataFragmentManager = new MetadataFragmentRecordManagerImpl(freeSpaceManagerFactory);
     }
 
     @Test
@@ -94,7 +96,7 @@ class RecordSaverImplTest {
         int dataIndex = 0;
         byte[] excepted = new byte[LENGTH_FRAGMENT_BYTES];
         while (dataIndex < dataBytes.size()) {
-            FragmentMetaDataInfo fragmentMetaDataInfo = fragmentMetaDataManager.getFragmentMetaDataInfo(freeSpaceManager, dataBytes.size() - dataIndex);
+            FragmentMetaDataInfo fragmentMetaDataInfo = metaDataFragmentManager.getFragmentMetaDataInfo(NAME_TABLE, dataBytes.size() - dataIndex);
             int setPos = getStartingPositionFragment(fragmentMetaDataInfo);
 
             addLengthFragment(setPos, fragmentMetaDataInfo, excepted);
@@ -131,7 +133,7 @@ class RecordSaverImplTest {
 
 
     private void addLink(int setPos, byte[] excepted, FragmentMetaDataInfo fragmentMetaDataInfo) {
-        setListToArray(setPos, excepted, intToBytes(fragmentMetaDataInfo.getPositionNextFragment()));
+        setListToArray(setPos, excepted, intToBytes(fragmentMetaDataInfo.getLinkOnNextFragment()));
     }
 
     private void setListToArray(int start, byte[] arr, List<Byte> list){

@@ -6,5 +6,5 @@ import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 
 public interface FragmentOperationFactory {
-    FragmentSaver getFragmentRecordSaver(FileWriter fileWriter, FreeSpaceManager freeSpaceManager);
+    FragmentSaver getFragmentRecordSaver(FileWriter fileWriter);
 }
