@@ -22,18 +22,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TableStorageManagerTest {
     private static final String baseDbPath = "/test";
+    private static final String NAME_TABLE = "test_table";
+    private static final String basePath = System.getProperty("user.dir") + File.separator + "test";
+    private static final String PREFIX_NAME_FREESPACE = "freeSpace_";
+
     private static final DbManagerFactoryImpl dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
     private static final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(baseDbPath, dbManagerFactory);
     private static final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl(freeSpaceManagerFactory);
     private static final RecordOperationFactoryImpl recordOperationFactory = new RecordOperationFactoryImpl();
     private static final TableStorageManager tableStorageManager =
-            new TableStorageManager(baseDbPath, dbManagerFactory, new FileOperationFactoryImpl(), fragmentOperationFactory, recordOperationFactory);
-    private static final String basePath = System.getProperty("user.dir") + File.separator + "test";
+            new TableStorageManager(new FileOperationFactoryImpl(), fragmentOperationFactory, recordOperationFactory);
     private static final DbManagerCloser dbManagerCloser = new DbManagerCloser(dbManagerFactory);
-    private static final String NAME_TABLE = "test_table";
-    private static final DbManager freeSpace = dbManagerFactory.getDbManager(basePath, "freeSpace_"+NAME_TABLE);
+    private static final DbManager freeSpace = dbManagerFactory.getDbManager(basePath, PREFIX_NAME_FREESPACE + NAME_TABLE);
     private static final FileOperationFactory FILE_OPERATION_FACTORY = new FileOperationFactoryImpl();
-    private final TestHelperTSM testHelperTSM = new TestHelperTSM(FILE_OPERATION_FACTORY.getTablePathProvider());
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(FILE_OPERATION_FACTORY.getFilePathProvider());
 
     @BeforeEach
     void setUp() {

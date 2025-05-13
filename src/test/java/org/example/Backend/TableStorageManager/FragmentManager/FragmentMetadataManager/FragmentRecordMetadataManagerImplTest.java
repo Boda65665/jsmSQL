@@ -23,12 +23,12 @@ class FragmentRecordMetadataManagerImplTest {
     private final String prefixName = "freespace_";
     private final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(basePath, dbManagerFactory);
     private final MetadataFragmentRecordManagerImpl manager = new MetadataFragmentRecordManagerImpl(freeSpaceManagerFactory);
+    private static final DbManagerCloser dbManagerCloser = new DbManagerCloser(dbManagerFactory);
     private DbManager freeSpace;
-    private final TestHelperTSM testHelperTSM = new TestHelperTSM(fileOperationFactory.getTablePathProvider());
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(fileOperationFactory.getFilePathProvider());
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
     private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
-    private static final DbManagerCloser dbManagerCloser = new DbManagerCloser(dbManagerFactory);
 
     @AfterAll
     static void tearDown() {
@@ -56,7 +56,7 @@ class FragmentRecordMetadataManagerImplTest {
         assertEquals(lengthFragment, fragmentMetaDataInfo.getLengthFragment());
         assertEquals(1, freeSpace.size());
         assertNotNull(freeSpace.get(countFreeBytes - getMaxLengthFragment(lengthFragment)));
-        assertNull(fragmentMetaDataInfo.getLinkOnNextFragment());
+        assertEquals(-2, fragmentMetaDataInfo.getLinkOnNextFragment());
     }
 
     private int getMaxLengthFragment(int lengthFragment) {

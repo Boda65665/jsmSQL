@@ -14,5 +14,7 @@ public abstract class FreeSpaceManager {
 
     public abstract boolean freeSpaceIsOver();
 
-    public abstract void adjustFreeSpace(int length, int countFreeBytes);
+    public abstract void redactFreeSpace(int length, int countFreeBytes);
+
+    public abstract void addFreeSpace(int length, int countFreeBytes);
 }

@@ -22,25 +22,25 @@ public class MetadataFragmentRecordManagerImpl implements MetaDataFragmentManage
         FreeMemoryInfo freeMemoryInfo = getCountFreeBytes(maxLengthFragmentsBytes, freeSpaceManager);
         if (freeMemoryInfo == null) return new FragmentMetaDataInfo(-1, lengthDataFragment + LENGTH_METADATA_BYTE_COUNT, -2);
 
-        freeSpaceManager.adjustFreeSpace(maxLengthFragmentsBytes, freeMemoryInfo.getCountFreeBytes());
+        freeSpaceManager.redactFreeSpace(maxLengthFragmentsBytes, freeMemoryInfo.getCountFreeBytes());
 
         Integer positionNextFragment = getPositionNextFragment(maxLengthFragmentsBytes - freeMemoryInfo.getCountFreeBytes(), freeSpaceManager);
         return new FragmentMetaDataInfo(freeMemoryInfo.getPosition(), Math.min(lengthDataFragment, freeMemoryInfo.getCountFreeBytes()), positionNextFragment);
     }
 
-    private Integer getPositionNextFragment(int lengthNextFragment, FreeSpaceManager freeSpaceManager) {
-        if (lengthNextFragment <= 0) return null;
-        int maxLength = getMaxLengthFragmentsBytes(lengthNextFragment);
-        FreeMemoryInfo freeMemoryInfo = freeSpaceManager.getInsertionPoint(maxLength);
-        if (freeMemoryInfo == null) return -1;
-        return freeMemoryInfo.getPosition();
+    private int getMaxLengthFragmentsBytes(int countBytesInLengthFragment) {
+        return countBytesInLengthFragment + LENGTH_METADATA_BYTE_COUNT;
     }
 
     private FreeMemoryInfo getCountFreeBytes(int lengthFragment, FreeSpaceManager freeSpaceManager) {
         return freeSpaceManager.getInsertionPoint(lengthFragment);
     }
 
-    private int getMaxLengthFragmentsBytes(int countBytesInLengthFragment) {
-        return countBytesInLengthFragment + LENGTH_METADATA_BYTE_COUNT;
+    private Integer getPositionNextFragment(int lengthNextFragment, FreeSpaceManager freeSpaceManager) {
+        if (lengthNextFragment <= 0) return -2;
+        int maxLength = getMaxLengthFragmentsBytes(lengthNextFragment);
+        FreeMemoryInfo freeMemoryInfo = freeSpaceManager.getInsertionPoint(maxLength);
+        if (freeMemoryInfo == null) return -1;
+        return freeMemoryInfo.getPosition();
     }
 }

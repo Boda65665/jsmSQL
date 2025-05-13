@@ -14,8 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileDeleterImplTest {
     private final FileOperationFactory fileOperationFactory = new FileOperationFactoryImpl();
-    private final FileCrater fileCrater = fileOperationFactory.getTableCrater();
-    private final FilePathProvider filePathProvider = fileOperationFactory.getTablePathProvider();
+    private final FileCrater fileCrater = fileOperationFactory.getFileCrater();
+    private final FilePathProvider filePathProvider = fileOperationFactory.getFilePathProvider();
     private final FileDeleter fileDeleter = new FileDeleterImpl(filePathProvider);
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(filePathProvider);
     private final String NAME_TABLE = "test_table";

@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileReaderImplTest {
     private final FileOperationFactoryImpl tableOperationFactory = new FileOperationFactoryImpl();
-    private final FilePathProvider filePathProvider = tableOperationFactory.getTablePathProvider();
+    private final FilePathProvider filePathProvider = tableOperationFactory.getFilePathProvider();
     private final FileReader fileReader = new FileReaderImpl(filePathProvider);
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(filePathProvider);
     private final String NAME_TABLE = "test_table";

@@ -17,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileWriterImplTest {
     private final FileOperationFactory fileOperationFactory = new FileOperationFactoryImpl();
-    private final FileWriter fileWriter = new FileWriterImpl(fileOperationFactory.getTablePathProvider());
-    private final TestHelperTSM testHelperTSM = new TestHelperTSM(fileOperationFactory.getTablePathProvider());
+    private final FileWriter fileWriter = new FileWriterImpl(fileOperationFactory.getFilePathProvider());
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(fileOperationFactory.getFilePathProvider());
     private final String NAME_TABLE = "test_table";
 
     @BeforeEach

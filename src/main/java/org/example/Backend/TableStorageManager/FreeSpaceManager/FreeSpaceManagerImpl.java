@@ -31,12 +31,18 @@ public class FreeSpaceManagerImpl extends FreeSpaceManager {
     }
 
     @Override
-    public void adjustFreeSpace(int length, int countFreeBytes) {
+    public void redactFreeSpace(int length, int countFreeBytes) {
         int newCountFreeBytes = countFreeBytes - length;
-        int offset = freeSpace.get(countFreeBytes);
-        freeSpace.delete(countFreeBytes);
+        Integer offset = freeSpace.get(countFreeBytes);
+        if (offset == null) return;
 
+        freeSpace.delete(countFreeBytes);
         if (newCountFreeBytes < 10) return;
         freeSpace.put(newCountFreeBytes, offset + length);
+    }
+
+    @Override
+    public void addFreeSpace(int length, int position) {
+        freeSpace.put(length, position);
     }
 }

@@ -1,6 +1,5 @@
 package org.example.Backend.TableStorageManager.FileManager.FileOperationFactory;
 
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileCreater.FileCraterImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDeleterImpl;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProviderImpl;
@@ -13,32 +12,28 @@ class FileOperationFactoryImplTest {
     private final FileOperationFactory fileOperationFactory = new FileOperationFactoryImpl();
 
     @Test
-    void getTableCrater() {
-        assertInstanceOf(FileCraterImpl.class, fileOperationFactory.getTableCrater());
+    void getFileCrater() {
+        assertInstanceOf(FileCraterImpl.class, fileOperationFactory.getFileCrater());
     }
 
     @Test
-    void getTableDeleter() {
-        assertInstanceOf(FileDeleterImpl.class, fileOperationFactory.getTableDeleter());
+    void getFileDeleter() {
+        assertInstanceOf(FileDeleterImpl.class, fileOperationFactory.getFileDeleter());
     }
 
     @Test
-    void getTableWriter() {
-        assertInstanceOf(FileWriterImpl.class, fileOperationFactory.getTableWriter());
+    void getFileWriter() {
+        assertInstanceOf(FileWriterImpl.class, fileOperationFactory.getFileWriter());
     }
 
     @Test
-    void getTableReader() {
-        assertInstanceOf(FileReaderImpl.class, fileOperationFactory.getTableReader());
+    void getFileReader() {
+        assertInstanceOf(FileReaderImpl.class, fileOperationFactory.getFileReader());
     }
 
     @Test
-    void getTablePathProvider() {
-        assertInstanceOf(FilePathProviderImpl.class, fileOperationFactory.getTablePathProvider());
+    void getFilePathProvider() {
+        assertInstanceOf(FilePathProviderImpl.class, fileOperationFactory.getFilePathProvider());
     }
 
-    @Test
-    void getFreeSpaceManager() {
-        assertInstanceOf(FreeSpaceManagerImpl.class, fileOperationFactory.getFreeSpaceManager(null));
-    }
 }

@@ -1,8 +1,5 @@
 package org.example.Backend.TableStorageManager.FileManager.FileOperationFactory;
 
-import org.example.Backend.DbManager.DbManager;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileCreater.FileCrater;
 import org.example.Backend.TableStorageManager.FileManager.FileCreater.FileCraterImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDeleter;
@@ -22,32 +19,27 @@ public class FileOperationFactoryImpl implements FileOperationFactory {
     private final FileDeleter fileDeleter = new FileDeleterImpl(filePathProvider);
 
     @Override
-    public FileCrater getTableCrater() {
+    public FileCrater getFileCrater() {
         return fileCrater;
     }
 
     @Override
-    public FileDeleter getTableDeleter() {
+    public FileDeleter getFileDeleter() {
         return fileDeleter;
     }
 
     @Override
-    public FileWriter getTableWriter() {
+    public FileWriter getFileWriter() {
         return fileWriter;
     }
 
     @Override
-    public FileReader getTableReader() {
+    public FileReader getFileReader() {
         return fileReader;
     }
 
     @Override
-    public FilePathProvider getTablePathProvider() {
+    public FilePathProvider getFilePathProvider() {
         return filePathProvider;
-    }
-
-    @Override
-    public FreeSpaceManager getFreeSpaceManager(DbManager dbManager) {
-        return new FreeSpaceManagerImpl(dbManager);
     }
 }

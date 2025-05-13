@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FileCraterImplTest {
     private final FileOperationFactory fileOperationFactory = new FileOperationFactoryImpl();
-    private final FilePathProvider pathProvider = fileOperationFactory.getTablePathProvider();
+    private final FilePathProvider pathProvider = fileOperationFactory.getFilePathProvider();
     private final FileCraterImpl tableCrate = new FileCraterImpl(pathProvider, new FileWriterImpl(pathProvider));
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(pathProvider);
     private final TablePartTypeConverter<TableMetaData> tableMetaDataConverter

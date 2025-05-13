@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GetterFileSizeImplTest {
     private final FileOperationFactory fileOperationFactory = new FileOperationFactoryImpl();
-    private final FilePathProvider filePathProvider = fileOperationFactory.getTablePathProvider();
+    private final FilePathProvider filePathProvider = fileOperationFactory.getFilePathProvider();
     private final GetterFileSizeImpl getterFileSize = new GetterFileSizeImpl(filePathProvider);
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(filePathProvider);
     private final String NAME_TABLE = "test_table";

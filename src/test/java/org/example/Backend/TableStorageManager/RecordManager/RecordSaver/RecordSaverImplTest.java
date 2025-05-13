@@ -33,10 +33,10 @@ class RecordSaverImplTest {
     private final DbManagerFactory dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
     private final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(basePath, dbManagerFactory);
     private final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl(freeSpaceManagerFactory);
-    private final FileWriter fileWriter = tableOperationFactory.getTableWriter();
+    private final FileWriter fileWriter = tableOperationFactory.getFileWriter();
     private RecordSaverImpl recordSaver;
     private DbManager freeSpace;
-    private final TestHelperTSM testHelperTSM = new TestHelperTSM(tableOperationFactory.getTablePathProvider());
+    private final TestHelperTSM testHelperTSM = new TestHelperTSM(tableOperationFactory.getFilePathProvider());
     private MetaDataFragmentManager metaDataFragmentManager;
 
 
@@ -49,7 +49,7 @@ class RecordSaverImplTest {
     @BeforeEach
     void setUp() {
         testHelperTSM.clear(NAME_TABLE);
-        DbManager dbManager = dbManagerFactory.getDbManager(basePath, prefixName+NAME_TABLE);
+        DbManager dbManager = dbManagerFactory.getDbManager(basePath, prefixName+ NAME_TABLE);
         dbManager.clear();
 
         freeSpace = dbManager;
