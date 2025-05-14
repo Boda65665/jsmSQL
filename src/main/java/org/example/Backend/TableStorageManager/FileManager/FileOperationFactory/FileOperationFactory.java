@@ -5,6 +5,7 @@ import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDele
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
 import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReader;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
+import org.example.Backend.TableStorageManager.FileManager.GetterFileSize.GetterFileSize;
 
 public interface FileOperationFactory {
     FileCrater getFileCrater();
@@ -12,4 +13,5 @@ public interface FileOperationFactory {
     FileWriter getFileWriter();
     FileReader getFileReader();
     FilePathProvider getFilePathProvider();
+    GetterFileSize getGetterFileSize();
 }

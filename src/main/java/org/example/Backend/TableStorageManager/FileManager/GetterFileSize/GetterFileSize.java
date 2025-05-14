@@ -9,6 +9,6 @@ public abstract class GetterFileSize {
         this.filePathProvider = filePathProvider;
     }
 
-    public abstract long getSize(String tableName);
+    public abstract int getSize(String tableName);
 
 }

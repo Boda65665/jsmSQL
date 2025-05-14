@@ -5,6 +5,7 @@ import org.example.Backend.TableStorageManager.FileManager.FileDeleater.FileDele
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProviderImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReaderImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriterImpl;
+import org.example.Backend.TableStorageManager.FileManager.GetterFileSize.GetterFileSizeImpl;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
@@ -36,4 +37,8 @@ class FileOperationFactoryImplTest {
         assertInstanceOf(FilePathProviderImpl.class, fileOperationFactory.getFilePathProvider());
     }
 
+    @Test
+    void getGetterFileSize() {
+        assertInstanceOf(GetterFileSizeImpl.class, fileOperationFactory.getGetterFileSize());
+    }
 }

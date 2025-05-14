@@ -21,13 +21,12 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TableStorageManagerTest {
-    private static final String baseDbPath = "/test";
     private static final String NAME_TABLE = "test_table";
     private static final String basePath = System.getProperty("user.dir") + File.separator + "test";
     private static final String PREFIX_NAME_FREESPACE = "freeSpace_";
 
     private static final DbManagerFactoryImpl dbManagerFactory = DbManagerFactoryImpl.getDbManagerFactory();
-    private static final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(baseDbPath, dbManagerFactory);
+    private static final FreeSpaceManagerFactory freeSpaceManagerFactory = new FreeSpaceManagerFactoryImpl(basePath, dbManagerFactory);
     private static final FragmentOperationFactory fragmentOperationFactory = new FragmentOperationFactoryImpl(freeSpaceManagerFactory);
     private static final RecordOperationFactoryImpl recordOperationFactory = new RecordOperationFactoryImpl();
     private static final TableStorageManager tableStorageManager =

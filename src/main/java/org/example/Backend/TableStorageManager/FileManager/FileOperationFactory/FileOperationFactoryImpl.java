@@ -10,6 +10,8 @@ import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReader
 import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReaderImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriterImpl;
+import org.example.Backend.TableStorageManager.FileManager.GetterFileSize.GetterFileSize;
+import org.example.Backend.TableStorageManager.FileManager.GetterFileSize.GetterFileSizeImpl;
 
 public class FileOperationFactoryImpl implements FileOperationFactory {
     private final FilePathProvider filePathProvider = new FilePathProviderImpl();
@@ -17,6 +19,7 @@ public class FileOperationFactoryImpl implements FileOperationFactory {
     private final FileCrater fileCrater = new FileCraterImpl(filePathProvider, fileWriter);
     private final FileReader fileReader = new FileReaderImpl(filePathProvider);
     private final FileDeleter fileDeleter = new FileDeleterImpl(filePathProvider);
+    private final GetterFileSize getGetterFileSize = new GetterFileSizeImpl(filePathProvider);
 
     @Override
     public FileCrater getFileCrater() {
@@ -42,4 +45,7 @@ public class FileOperationFactoryImpl implements FileOperationFactory {
     public FilePathProvider getFilePathProvider() {
         return filePathProvider;
     }
+
+    @Override
+    public GetterFileSize getGetterFileSize() {return getGetterFileSize;}
 }

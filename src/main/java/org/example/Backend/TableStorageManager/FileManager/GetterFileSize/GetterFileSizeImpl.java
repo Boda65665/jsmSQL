@@ -6,15 +6,15 @@ import java.io.File;
 
 public class GetterFileSizeImpl extends GetterFileSize {
 
-    protected GetterFileSizeImpl(FilePathProvider filePathProvider) {
+    public GetterFileSizeImpl(FilePathProvider filePathProvider) {
         super(filePathProvider);
     }
 
     @Override
-    public long getSize(String tableName) {
+    public int getSize(String tableName) {
         String path = filePathProvider.getTablePath(tableName);
 
         File file = new File(path);
-        return file.length();
+        return (int) file.length();
     }
 }
