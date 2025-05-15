@@ -25,6 +25,7 @@ public class FragmentRecordSaverImpl implements FragmentSaver {
         int len = bytesData.size();
 
         FragmentMetaDataInfo fragmentMetaDataInfo = metaDataFragmentManager.getFragmentMetaDataInfo(tableName, len);
+
         writeFragment(tableName, bytesData, fragmentMetaDataInfo);
 
         int lengthDataFragment = getLengthFragmentData(fragmentMetaDataInfo.getLengthFragment());

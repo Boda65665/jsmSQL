@@ -23,7 +23,7 @@ public class TestHelperTSM {
         }
     }
 
-    public void delete(String nameTable) {
+    public void deleteTable(String nameTable) {
         String path = filePathProvider.getTablePath(nameTable);
         File file = new File(path);
         if (file.exists()) file.delete();

@@ -28,7 +28,7 @@ class FileCraterImplTest {
 
     @BeforeEach
     void setUp() {
-        testHelperTSM.delete(NAME_TABLE);
+        testHelperTSM.deleteTable(NAME_TABLE);
     }
 
     @Test

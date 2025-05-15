@@ -5,7 +5,6 @@ import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataM
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentRecordSaverImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
 
 public class FragmentOperationFactoryImpl implements FragmentOperationFactory {

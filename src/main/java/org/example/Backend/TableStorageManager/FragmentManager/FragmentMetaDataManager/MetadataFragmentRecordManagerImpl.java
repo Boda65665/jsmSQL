@@ -18,6 +18,8 @@ public class MetadataFragmentRecordManagerImpl implements MetaDataFragmentManage
     @Override
     public FragmentMetaDataInfo getFragmentMetaDataInfo(String nameTable, int lengthDataFragment) {
         FreeSpaceManager freeSpaceManager = freeSpaceManagerFactory.getFreeSpaceManager(nameTable);
+
+
         int maxLengthFragmentsBytes = getMaxLengthFragmentsBytes(lengthDataFragment);
         FreeMemoryInfo freeMemoryInfo = getCountFreeBytes(maxLengthFragmentsBytes, freeSpaceManager);
         if (freeMemoryInfo == null) return new FragmentMetaDataInfo(-1, lengthDataFragment + LENGTH_METADATA_BYTE_COUNT, -2);
