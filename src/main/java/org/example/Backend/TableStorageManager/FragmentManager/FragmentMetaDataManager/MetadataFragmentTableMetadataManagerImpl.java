@@ -1,10 +1,8 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager;
 
 import org.example.Backend.Models.FragmentMetaDataInfo;
-import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactory;
 import org.example.Backend.TableStorageManager.FileManager.GetterFileSize.GetterFileSize;
 import org.example.Backend.TableStorageManager.TableMetadataManager.PositionTableMetadataManager.PositionTableMetadataManager;
-import org.example.Backend.TableStorageManager.TableMetadataManager.TableMetadataOperationFactory.TableMetadataOperationFactory;
 
 public class MetadataFragmentTableMetadataManagerImpl implements MetaDataFragmentManager {
     private final PositionTableMetadataManager positionTableMetadataManager;

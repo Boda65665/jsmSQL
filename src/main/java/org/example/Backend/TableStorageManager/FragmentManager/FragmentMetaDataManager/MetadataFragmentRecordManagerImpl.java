@@ -16,18 +16,22 @@ public class MetadataFragmentRecordManagerImpl implements MetaDataFragmentManage
     }
 
     @Override
-    public FragmentMetaDataInfo getFragmentMetaDataInfo(String nameTable, int lengthDataFragment) {
+    public FragmentMetaDataInfo getFragmentMetaDataInfo(String nameTable, int lengthData) {
         FreeSpaceManager freeSpaceManager = freeSpaceManagerFactory.getFreeSpaceManager(nameTable);
 
-
-        int maxLengthFragmentsBytes = getMaxLengthFragmentsBytes(lengthDataFragment);
+        int maxLengthFragmentsBytes = getMaxLengthFragmentsBytes(lengthData);
         FreeMemoryInfo freeMemoryInfo = getCountFreeBytes(maxLengthFragmentsBytes, freeSpaceManager);
-        if (freeMemoryInfo == null) return new FragmentMetaDataInfo(-1, lengthDataFragment + LENGTH_METADATA_BYTE_COUNT, -2);
+        if (freeMemoryInfo == null) return new FragmentMetaDataInfo(-1, getLengthDataFragment(lengthData), -2);
 
         freeSpaceManager.redactFreeSpace(maxLengthFragmentsBytes, freeMemoryInfo.getCountFreeBytes());
 
         Integer positionNextFragment = getPositionNextFragment(maxLengthFragmentsBytes - freeMemoryInfo.getCountFreeBytes(), freeSpaceManager);
-        return new FragmentMetaDataInfo(freeMemoryInfo.getPosition(), Math.min(lengthDataFragment, freeMemoryInfo.getCountFreeBytes()), positionNextFragment);
+        return new FragmentMetaDataInfo(freeMemoryInfo.getPosition(),
+                getLengthDataFragment(Math.min(lengthData, freeMemoryInfo.getCountFreeBytes())), positionNextFragment);
+    }
+
+    private int getLengthDataFragment(int lengthData) {
+        return lengthData - LENGTH_METADATA_BYTE_COUNT;
     }
 
     private int getMaxLengthFragmentsBytes(int countBytesInLengthFragment) {

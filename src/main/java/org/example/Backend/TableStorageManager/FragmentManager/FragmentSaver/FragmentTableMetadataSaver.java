@@ -1,6 +1,5 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
-import org.example.Backend.TableStorageManager.FileManager.FileReader.FileReader;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
 
@@ -10,15 +9,11 @@ import java.util.List;
 
 public class FragmentTableMetadataSaver implements FragmentSaver{
     private final FileWriter fileWriter;
-    private final FileReader fileReader;
-    private final MetaDataFragmentManager metaDataFragmentManager;
-    private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int LENGTH_LINK_BYTE_COUNT = 4;
-    private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
+    private final MetaDataFragmentManager metaDataFragmentManager;
 
-    public FragmentTableMetadataSaver(FileWriter fileWriter, FileReader fileReader, MetaDataFragmentManager metaDataFragmentManager) {
+    public FragmentTableMetadataSaver(FileWriter fileWriter, MetaDataFragmentManager metaDataFragmentManager) {
         this.fileWriter = fileWriter;
-        this.fileReader = fileReader;
         this.metaDataFragmentManager = metaDataFragmentManager;
     }
 
@@ -28,7 +23,7 @@ public class FragmentTableMetadataSaver implements FragmentSaver{
         allocateBytesForLink(metadataBytes);
 
         int positionLastMetadata = getPositionLastFragmentMetadata();
-        fileWriter.write(tableName, metadataBytes, -1);
+        fileWriter.write(tableName, metadataBytes, positionLastMetadata);
         return 0;
     }
 

@@ -37,7 +37,7 @@ class MetadataFragmentTableMetadataManagerImplTest {
         mockPositionTableMetadata(sizeFile);
 
         FragmentMetaDataInfo fragmentMetaDataInfo = metadataFragmentTableMetadataManager.getFragmentMetaDataInfo(nameTable, lengthFragment);
-        assertEquals(lengthFragment, fragmentMetaDataInfo.getLengthFragment());
+        assertEquals(lengthFragment, fragmentMetaDataInfo.getLengthDataFragment());
         assertEquals(sizeFile - LENGTH_LINK_BYTE_COUNT, fragmentMetaDataInfo.getPositionFragment());
         assertEquals(0, fragmentMetaDataInfo.getLinkOnNextFragment());
     }
@@ -56,7 +56,7 @@ class MetadataFragmentTableMetadataManagerImplTest {
         mockPositionTableMetadata(sizeFile - 1);//sizeFile != endPositionMetaData
 
         FragmentMetaDataInfo fragmentMetaDataInfo = metadataFragmentTableMetadataManager.getFragmentMetaDataInfo(nameTable, lengthFragment);
-        assertEquals(lengthFragment, fragmentMetaDataInfo.getLengthFragment());
+        assertEquals(lengthFragment, fragmentMetaDataInfo.getLengthDataFragment());
         assertEquals(-1, fragmentMetaDataInfo.getPositionFragment());
         assertEquals(0, fragmentMetaDataInfo.getLinkOnNextFragment());
     }

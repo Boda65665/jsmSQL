@@ -2,9 +2,7 @@ package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
 import org.example.Backend.Models.FragmentMetaDataInfo;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +11,6 @@ public class FragmentRecordSaverImpl implements FragmentSaver {
     private final FileWriter fileWriter;
     private final MetaDataFragmentManager metaDataFragmentManager;
     private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
-    private final int LENGTH_LINK_BYTE_COUNT = 4;
-    private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
 
     public FragmentRecordSaverImpl(FileWriter fileWriter, MetaDataFragmentManager metaDataFragmentManager) {
         this.fileWriter = fileWriter;
@@ -23,27 +19,24 @@ public class FragmentRecordSaverImpl implements FragmentSaver {
 
     public int save(String tableName, List<Byte> bytesData) {
         int len = bytesData.size();
-
         FragmentMetaDataInfo fragmentMetaDataInfo = metaDataFragmentManager.getFragmentMetaDataInfo(tableName, len);
-
         writeFragment(tableName, bytesData, fragmentMetaDataInfo);
 
-        int lengthDataFragment = getLengthFragmentData(fragmentMetaDataInfo.getLengthFragment());
+        int lengthDataFragment = fragmentMetaDataInfo.getLengthDataFragment();
         if (lengthDataFragment < len) {
-            List<Byte> sublist = bytesData.subList(lengthDataFragment, len);
-            save(tableName, new ArrayList<>(sublist));
+            List<Byte> remainingData = bytesData.subList(lengthDataFragment, len);
+            save(tableName, new ArrayList<>(remainingData));
         }
         return fragmentMetaDataInfo.getPositionFragment();
     }
 
     private void writeFragment(String tableName, List<Byte> bytesData, FragmentMetaDataInfo fragmentMetaDataInfo) {
         int pos = getStartingPositionFragment(fragmentMetaDataInfo.getPositionFragment());
-
         writeLengthFragment(tableName, fragmentMetaDataInfo, pos);
         if (pos != -1) pos += LENGTH_INDICATOR_BYTE_COUNT;
 
-        writeDataFragment(tableName, bytesData, fragmentMetaDataInfo.getLengthFragment(), pos);
-        if (pos != -1) pos += getLengthFragmentData(fragmentMetaDataInfo.getLengthFragment());
+        writeDataFragment(tableName, bytesData, fragmentMetaDataInfo.getLengthDataFragment(), pos);
+        if (pos != -1) pos += fragmentMetaDataInfo.getLengthDataFragment();
 
         writeLinkOnNextFragment(tableName, fragmentMetaDataInfo, pos);
     }
@@ -54,7 +47,7 @@ public class FragmentRecordSaverImpl implements FragmentSaver {
     }
 
     private void writeLengthFragment(String tableName, FragmentMetaDataInfo fragmentMetaDataInfo, int pos) {
-        fileWriter.write(tableName, intToBytes(fragmentMetaDataInfo.getLengthFragment()), pos);
+        fileWriter.write(tableName, intToBytes(fragmentMetaDataInfo.getLengthDataFragment()), pos);
     }
 
     private byte[] intToBytes(int value) {
@@ -66,16 +59,12 @@ public class FragmentRecordSaverImpl implements FragmentSaver {
         };
     }
 
-    private void writeDataFragment(String tableName, List<Byte> bytesData, int lengthFragment, int position) {
-        int lengthFragmentData = getLengthFragmentData(lengthFragment);
+    private void writeDataFragment(String tableName, List<Byte> bytesData, int lengthFragmentData, int position) {
         List<Byte> sublist = bytesData.subList(0, lengthFragmentData);
         ArrayList<Byte> bytesDataForSave = new ArrayList<>(sublist);
         fileWriter.write(tableName, bytesDataForSave, position);
     }
 
-    private int getLengthFragmentData(int lengthFragment) {
-        return lengthFragment - LENGTH_METADATA_BYTE_COUNT;
-    }
 
     private void writeLinkOnNextFragment(String tableName, FragmentMetaDataInfo fragmentMetaDataInfo, int pos) {
         fileWriter.write(tableName, intToBytes(fragmentMetaDataInfo.getLinkOnNextFragment()), pos);
