@@ -8,17 +8,22 @@ import org.example.Backend.TableStorageManager.TableMetadataManager.PositionTabl
 public class TableMetadataOperationFactoryImpl implements TableMetadataOperationFactory {
     private final DbManagerFactory dbManagerFactory;
     private final String basePathDb;
-    private final String nameDb;
+    private final String PREFIX_NAME_DB_MANAGER_END_POSITION = "endPosition_";
+    private final String PREFIX_NAME_DB_MANAGER_START_POSITION_LAST_METADATA = "positionStartLastMetadata_";
+    private final String nameDbManagerEndPosition;
+    private final String nameDbManagerStartPositionLastMetadata;
 
     public TableMetadataOperationFactoryImpl(DbManagerFactory dbManagerFactory, String basePathDb, String nameDb) {
         this.dbManagerFactory = dbManagerFactory;
         this.basePathDb = basePathDb;
-        this.nameDb = nameDb;
+        nameDbManagerEndPosition = PREFIX_NAME_DB_MANAGER_END_POSITION + nameDb;
+        nameDbManagerStartPositionLastMetadata = PREFIX_NAME_DB_MANAGER_START_POSITION_LAST_METADATA + nameDb;
     }
 
     @Override
     public PositionTableMetadataManager getPositionTableMetadataManager() {
-        DbManager dbManager = dbManagerFactory.getDbManager(basePathDb, nameDb);
-        return new PositionTableMetadataManagerImpl(dbManager);
+        DbManager managerEndPosition = dbManagerFactory.getDbManager(basePathDb, nameDbManagerEndPosition);
+        DbManager managerPositionStartLastMetadata = dbManagerFactory.getDbManager(basePathDb, nameDbManagerStartPositionLastMetadata);
+        return new PositionTableMetadataManagerImpl(managerEndPosition, managerPositionStartLastMetadata);
     }
 }

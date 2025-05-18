@@ -1,5 +1,6 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
+import org.example.Backend.Models.FragmentMetaDataInfo;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
 
@@ -9,7 +10,6 @@ import java.util.List;
 
 public class FragmentTableMetadataSaver implements FragmentSaver{
     private final FileWriter fileWriter;
-    private final int LENGTH_LINK_BYTE_COUNT = 4;
     private final MetaDataFragmentManager metaDataFragmentManager;
 
     public FragmentTableMetadataSaver(FileWriter fileWriter, MetaDataFragmentManager metaDataFragmentManager) {
@@ -18,17 +18,18 @@ public class FragmentTableMetadataSaver implements FragmentSaver{
     }
 
     @Override
-    public int save(String tableName, List<Byte> metadataBytes) {
-        addLengthBytesMetadataData(metadataBytes);
-        allocateBytesForLink(metadataBytes);
+    public int save(String tableName, List<Byte> bytes) {
+        FragmentMetaDataInfo fragmentMetaDataInfo = metaDataFragmentManager.getFragmentMetaDataInfo(tableName, bytes.size());
 
-        int positionLastMetadata = getPositionLastFragmentMetadata();
-        fileWriter.write(tableName, metadataBytes, positionLastMetadata);
+        if (possibleContinuePreviousFragment(fragmentMetaDataInfo.getPositionFragment())) addLengthBytesMetadataData(bytes);
+        addLink(bytes, fragmentMetaDataInfo);
+
+        fileWriter.write(tableName, bytes, fragmentMetaDataInfo.getPositionFragment());
         return 0;
     }
 
-    private int getPositionLastFragmentMetadata() {
-        return -1;
+    private boolean possibleContinuePreviousFragment(int positionThisFragment) {
+        return positionThisFragment != -1;
     }
 
     private void addLengthBytesMetadataData(List<Byte> bytesData) {
@@ -44,14 +45,7 @@ public class FragmentTableMetadataSaver implements FragmentSaver{
         return byteList;
     }
 
-    private void allocateBytesForLink(List<Byte> bytesData) {
-        ByteBuffer byteBuffer = ByteBuffer.allocate(LENGTH_LINK_BYTE_COUNT);
-        addArrayToList(bytesData, byteBuffer.array());
-    }
-
-    private void addArrayToList(List<Byte> bytesData, byte[] byteArray) {
-        for (byte b : byteArray) {
-            bytesData.add(b);
-        }
+    private void addLink(List<Byte> bytes, FragmentMetaDataInfo fragmentMetaDataInfo) {
+        bytes.addAll(intToBytes(fragmentMetaDataInfo.getLinkOnNextFragment()));
     }
 }
