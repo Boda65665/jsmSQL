@@ -12,8 +12,8 @@ public class MetaDataFragmentTableMetadataManagerImpl implements MetaDataFragmen
     }
 
     @Override
-    public MetaDataFragmentTableMetadata getMetaDataNewFragment(String nameTable, int lengthDataFragment) {
-        return creatorNewFragment.createNewFragment(nameTable, lengthDataFragment);
+    public MetaDataFragmentTableMetadata getMetaDataNewFragment(String nameTable) {
+        return creatorNewFragment.createNewFragment(nameTable);
     }
 
 

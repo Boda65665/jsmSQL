@@ -3,5 +3,5 @@ package org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaData
 import org.example.Backend.Models.MetaDataFragmentTableMetadata;
 
 public interface MetaDataFragmentTableMetadataManager {
-    MetaDataFragmentTableMetadata getMetaDataNewFragment(String nameTable, int lengthDataFragment);
+    MetaDataFragmentTableMetadata getMetaDataNewFragment(String nameTable);
 }

@@ -30,7 +30,6 @@ class CreatorMetadataFragmentTest {
     private DbManager dbManager;
     private IndexManager<Integer, Interval> indexManager;
     private final String NAME_TABLE = "test";
-    private final int LENGTH_DATA_FRAGMENT = 20;
 
     @BeforeEach
     void setUp() {
@@ -54,8 +53,7 @@ class CreatorMetadataFragmentTest {
         mockGetFileLength(lengthFile);
         mockGetIndexManagerFactory(positionEndLastFragment);
 
-        MetaDataFragmentTableMetadata metadata = creatorNewFragment.createNewFragment(NAME_TABLE, LENGTH_DATA_FRAGMENT);
-        assertEquals(LENGTH_DATA_FRAGMENT, metadata.getLengthDataFragment());
+        MetaDataFragmentTableMetadata metadata = creatorNewFragment.createNewFragment(NAME_TABLE);
 
         int positionNewFragment = lengthFile - LENGTH_LINK_BYTE_COUNT; //Продолжаем предыдущий фгармент ,удалив ссылку с конца предыдущего фрагмента
         assertEquals(positionNewFragment, metadata.getPositionFragment());
@@ -80,9 +78,8 @@ class CreatorMetadataFragmentTest {
         mockGetFileLength(lengthFile);
         mockGetIndexManagerFactory(positionEndLastFragment);
 
-        MetaDataFragmentTableMetadata metadata = creatorNewFragment.createNewFragment(NAME_TABLE, LENGTH_DATA_FRAGMENT);
+        MetaDataFragmentTableMetadata metadata = creatorNewFragment.createNewFragment(NAME_TABLE);
 
-        assertEquals(LENGTH_DATA_FRAGMENT, metadata.getLengthDataFragment());
         assertEquals(lengthFile, metadata.getPositionFragment());
         assertFalse(metadata.isContinuePreviousFragment());
     }

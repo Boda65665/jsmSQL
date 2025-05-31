@@ -16,13 +16,13 @@ public class CreatorMetadataFragment{
         this.getterFileLength = getterFileLength;
     }
 
-    public MetaDataFragmentTableMetadata createNewFragment(String nameTable, int lengthDataFragment) {
+    public MetaDataFragmentTableMetadata createNewFragment(String nameTable) {
         IndexManager<Integer, Interval> metadataIndexes = indexManagerFactory.getIndexManager(nameTable);
         int lengthFile = getterFileLength.getLength(nameTable);
 
         boolean continuePreviousFragment = isContinuePreviousFragment(lengthFile, metadataIndexes);
         int position = getPositionNewFragment(lengthFile, continuePreviousFragment);
-        return new MetaDataFragmentTableMetadata(position, lengthDataFragment, continuePreviousFragment);
+        return new MetaDataFragmentTableMetadata(position, continuePreviousFragment);
     }
 
     private boolean isContinuePreviousFragment(int lengthFile, IndexManager<Integer, Interval> metadataIndexes) {
