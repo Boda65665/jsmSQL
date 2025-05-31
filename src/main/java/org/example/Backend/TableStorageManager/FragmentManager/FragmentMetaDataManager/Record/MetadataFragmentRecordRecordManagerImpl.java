@@ -1,33 +1,32 @@
-package org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager;
+package org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.Record;
 
-import org.example.Backend.Models.FragmentMetaDataInfo;
+import org.example.Backend.Models.MetaDataFragment;
 import org.example.Backend.Models.FreeMemoryInfo;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.Factory.FreeSpaceManagerFactory;
 
-public class MetadataFragmentRecordManagerImpl implements MetaDataFragmentManager {
-    private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
-    private final int LENGTH_LINK_BYTE_COUNT = 4;
-    private final int LENGTH_METADATA_BYTE_COUNT = LENGTH_INDICATOR_BYTE_COUNT + LENGTH_LINK_BYTE_COUNT;
+import static org.example.Backend.TableStorageManager.FragmentManager.FragmentStructureConstants.LENGTH_METADATA_BYTE_COUNT;
+
+public class MetadataFragmentRecordRecordManagerImpl implements MetaDataFragmentRecordManager {
     private final FreeSpaceManagerFactory freeSpaceManagerFactory;
 
-    public MetadataFragmentRecordManagerImpl(FreeSpaceManagerFactory freeSpaceManagerFactory) {
+    public MetadataFragmentRecordRecordManagerImpl(FreeSpaceManagerFactory freeSpaceManagerFactory) {
         this.freeSpaceManagerFactory = freeSpaceManagerFactory;
     }
 
     @Override
-    public FragmentMetaDataInfo getFragmentMetaDataInfo(String nameTable, int lengthData) {
+    public MetaDataFragment getMetaDataNewFragment(String nameTable, int lengthData) {
         FreeSpaceManager freeSpaceManager = freeSpaceManagerFactory.getFreeSpaceManager(nameTable);
 
         int maxLengthFragmentsBytes = getMaxLengthFragmentsBytes(lengthData);
         FreeMemoryInfo freeMemoryInfo = getCountFreeBytes(maxLengthFragmentsBytes, freeSpaceManager);
-        if (freeMemoryInfo == null) return new FragmentMetaDataInfo(-1, getLengthDataFragment(lengthData), -2);
+        if (freeMemoryInfo == null) return new MetaDataFragment(-1, getLengthDataFragment(lengthData), -2);
 
         freeSpaceManager.redactFreeSpace(maxLengthFragmentsBytes, freeMemoryInfo.getCountFreeBytes());
 
-        Integer positionNextFragment = getPositionNextFragment(maxLengthFragmentsBytes - freeMemoryInfo.getCountFreeBytes(), freeSpaceManager);
-        return new FragmentMetaDataInfo(freeMemoryInfo.getPosition(),
-                getLengthDataFragment(Math.min(lengthData, freeMemoryInfo.getCountFreeBytes())), positionNextFragment);
+        Integer linkOnNextFragment = getPositionNextFragment(maxLengthFragmentsBytes - freeMemoryInfo.getCountFreeBytes(), freeSpaceManager);
+        return new MetaDataFragment(freeMemoryInfo.getPosition(),
+                getLengthDataFragment(Math.min(lengthData, freeMemoryInfo.getCountFreeBytes())), linkOnNextFragment);
     }
 
     private int getLengthDataFragment(int lengthData) {

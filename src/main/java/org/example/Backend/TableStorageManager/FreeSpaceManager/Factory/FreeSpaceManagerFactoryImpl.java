@@ -1,4 +1,4 @@
-package org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory;
+package org.example.Backend.TableStorageManager.FreeSpaceManager.Factory;
 
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.DbManager.factory.DbManagerFactory;

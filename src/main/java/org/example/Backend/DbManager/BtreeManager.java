@@ -3,14 +3,12 @@ package org.example.Backend.DbManager;
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
-import org.mapdb.Serializer;
 import org.mapdb.serializer.GroupSerializer;
 import java.io.File;
-import java.io.IOException;
 import java.util.NoSuchElementException;
 
-public class BtreeManager<K> {
-    private final BTreeMap<K, Integer> bTree;
+public class BtreeManager<K, V> {
+    private final BTreeMap<K, V> bTree;
     private final DB db;
 
     public BtreeManager(String nameDb, String basePath) {
@@ -20,18 +18,14 @@ public class BtreeManager<K> {
         db = DBMaker.fileDB(pathIndexTree).make();
         bTree = db.treeMap(nameDb)
                 .keySerializer(GroupSerializer.JAVA)
-                .valueSerializer(Serializer.JAVA)
+                .valueSerializer(GroupSerializer.JAVA)
                 .createOrOpen();
     }
 
     private void creatDbDirectoryIfDoesntExist(String pathIndexesTree) {
         File file = new File(pathIndexesTree);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        if (!file.exists()){
+            file.mkdirs();
         }
     }
 
@@ -39,13 +33,13 @@ public class BtreeManager<K> {
         db.commit();
     }
 
-    public Integer get(K key) {
+    public V get(K key) {
         if (key == null) throw new NullPointerException("key is null");
 
         return bTree.get(key);
     }
 
-    public void insert(K key, int value) {
+    public void insert(K key, V value) {
         if (key == null) throw new NullPointerException("key is null");
 
         bTree.put(key, value);

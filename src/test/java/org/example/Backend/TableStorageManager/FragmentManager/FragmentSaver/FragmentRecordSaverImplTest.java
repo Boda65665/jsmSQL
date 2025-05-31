@@ -1,11 +1,11 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
-import org.example.Backend.Models.FragmentMetaDataInfo;
+import org.example.Backend.Models.MetaDataFragment;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProviderImpl;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriterImpl;
-import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.Record.MetaDataFragmentRecordManager;
 import org.example.Backend.TableStorageManager.TH.TestHelperTSM;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static org.example.Backend.TableStorageManager.FragmentManager.FragmentStructureConstants.LENGTH_INDICATOR_BYTE_COUNT;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -23,7 +25,6 @@ class FragmentRecordSaverImplTest {
     private final String NAME_TABLE = "test_table";
     private final TestHelperTSM testHelperTSM = new TestHelperTSM(filePathProvider);
 
-    private final int LENGTH_INDICATOR_BYTE_COUNT = 4;
     private final int lengthBytesData = 100;
     private final int posFirstFragment = 10;
     private final int lengthFirstFragment = 60;
@@ -50,20 +51,20 @@ class FragmentRecordSaverImplTest {
     }
 
     private FragmentRecordSaverImpl getFragmentSaver() {
-        MetaDataFragmentManager metaDataFragmentManager = mockMetaDataFragmentManager();
-        return new FragmentRecordSaverImpl(fileWriter, metaDataFragmentManager);
+        MetaDataFragmentRecordManager metaDataFragmentRecordManager = mockMetaDataFragmentManager();
+        return new FragmentRecordSaverImpl(fileWriter, metaDataFragmentRecordManager);
     }
 
-    private MetaDataFragmentManager mockMetaDataFragmentManager() {
-        FragmentMetaDataInfo metadataFirstFragment = new FragmentMetaDataInfo(posFirstFragment, lengthFirstFragment, linkOnSecondFragment);
-        FragmentMetaDataInfo metadataSecondFragment
-                = new FragmentMetaDataInfo(linkOnSecondFragment, lengthSecondFragment, linkOnThirdFragment);
+    private MetaDataFragmentRecordManager mockMetaDataFragmentManager() {
+        MetaDataFragment metadataFirstFragment = new MetaDataFragment(posFirstFragment, lengthFirstFragment, linkOnSecondFragment);
+        MetaDataFragment metadataSecondFragment
+                = new MetaDataFragment(linkOnSecondFragment, lengthSecondFragment, linkOnThirdFragment);
 
-        MetaDataFragmentManager metaDataFragmentManager = mock(MetaDataFragmentManager.class);
-        when(metaDataFragmentManager.getFragmentMetaDataInfo(NAME_TABLE, lengthBytesData)).thenReturn(metadataFirstFragment);
-        when(metaDataFragmentManager.getFragmentMetaDataInfo(NAME_TABLE, lengthSecondFragment)).thenReturn(metadataSecondFragment);
+        MetaDataFragmentRecordManager metaDataFragmentRecordManager = mock(MetaDataFragmentRecordManager.class);
+        when(metaDataFragmentRecordManager.getMetaDataNewFragment(NAME_TABLE, lengthBytesData)).thenReturn(metadataFirstFragment);
+        when(metaDataFragmentRecordManager.getMetaDataNewFragment(NAME_TABLE, lengthSecondFragment)).thenReturn(metadataSecondFragment);
 
-        return metaDataFragmentManager;
+        return metaDataFragmentRecordManager;
     }
 
     private List<Byte> generateTestDataForSave() {

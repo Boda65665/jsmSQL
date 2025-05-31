@@ -2,24 +2,30 @@ package org.example.Backend.TableStorageManager.IndexManager;
 
 import org.example.Backend.DbManager.DbManager;
 
-public class IndexManagerImpl extends IndexManager {
+public class IndexManagerImpl<K, V> extends IndexManager<K, V> {
 
-    public IndexManagerImpl(DbManager indexes) {
+    public IndexManagerImpl(DbManager<K, V> indexes) {
         super(indexes);
     }
 
     @Override
-    public void addIndex(Object key, Object value) {
+    public void addIndex(K key, V value) {
         indexes.put(key, value);
     }
 
     @Override
-    public void removeIndex(Object key) {
+    public void removeIndex(K key) {
         indexes.delete(key);
     }
 
     @Override
-    public Object getIndex(Object key) {
+    public V getIndex(K key) {
         return indexes.get(key);
+    }
+
+    @Override
+    public V getLast() {
+        if(indexes.maxKey() == null) return null;
+        return getIndex(indexes.maxKey());
     }
 }

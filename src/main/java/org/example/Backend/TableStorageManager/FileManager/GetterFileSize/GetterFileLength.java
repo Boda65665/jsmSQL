@@ -2,13 +2,13 @@ package org.example.Backend.TableStorageManager.FileManager.GetterFileSize;
 
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
 
-public abstract class GetterFileSize {
+public abstract class GetterFileLength {
     protected final FilePathProvider filePathProvider;
 
-    public GetterFileSize(FilePathProvider filePathProvider) {
+    public GetterFileLength(FilePathProvider filePathProvider) {
         this.filePathProvider = filePathProvider;
     }
 
-    public abstract int getSize(String tableName);
+    public abstract int getLength(String tableName);
 
 }

@@ -23,14 +23,14 @@ class FreeSpaceManagerImplTest {
     private FreeSpaceManagerImpl freeSpaceManager;
     @Mock
     private static DbManagerFactoryImpl dbManagerFactoryImpl;
-    private static DbManagerImpl<Integer> dbManager;
+    private static DbManagerImpl<Integer, Integer> dbManager;
     private final int countFreeBytes = 50;
     private final int position = 4;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        dbManager = new DbManagerImpl("test", "test");
+        dbManager = new DbManagerImpl("test", System.getProperty("user.dir") + "/test");
         dbManager.clear();
 
         freeSpaceManager = new FreeSpaceManagerImpl(dbManager);

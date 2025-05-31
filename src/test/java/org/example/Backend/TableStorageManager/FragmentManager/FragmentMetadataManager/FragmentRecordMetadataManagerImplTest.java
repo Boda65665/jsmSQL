@@ -2,32 +2,33 @@ package org.example.Backend.TableStorageManager.FragmentManager.FragmentMetadata
 
 import org.example.Backend.DbManager.DbManager;
 import org.example.Backend.DbManager.DbManagerImpl;
-import org.example.Backend.Models.FragmentMetaDataInfo;
-import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetadataFragmentRecordManagerImpl;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
+import org.example.Backend.Models.MetaDataFragment;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.Record.MetadataFragmentRecordRecordManagerImpl;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.Factory.FreeSpaceManagerFactory;
 import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerImpl;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.example.Backend.TableStorageManager.FragmentManager.FragmentStructureConstants.LENGTH_METADATA_BYTE_COUNT;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 class FragmentRecordMetadataManagerImplTest {
     @InjectMocks
-    private MetadataFragmentRecordManagerImpl metadataFragmentRecordManager;
+    private MetadataFragmentRecordRecordManagerImpl metadataFragmentRecordManager;
     @Mock
     private FreeSpaceManagerFactory freeSpaceManagerFactory;
     private final String NAME_TABLE = "test";
-    private final int LENGTH_METADATA = 8;
     private DbManager freeSpace;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         
-        freeSpace = new DbManagerImpl("test", "test");
+        freeSpace = new DbManagerImpl("test", System.getProperty("user.dir") + "/test");
         freeSpace.clear();
     }
 
@@ -44,8 +45,8 @@ class FragmentRecordMetadataManagerImplTest {
         mockFreeSpaceManagerFactory();
         int lengthFragment = 20;
 
-        FragmentMetaDataInfo fragmentMetaDataInfo = metadataFragmentRecordManager.getFragmentMetaDataInfo(NAME_TABLE, lengthFragment);
-        assertEqualsFragmentMetadataInfo(new FragmentMetaDataInfo(positionFreeSpace, lengthFragment - LENGTH_METADATA, -2), fragmentMetaDataInfo);
+        MetaDataFragment metaDataFragment = metadataFragmentRecordManager.getMetaDataNewFragment(NAME_TABLE, lengthFragment);
+        assertEqualsFragmentMetadataInfo(new MetaDataFragment(positionFreeSpace, lengthFragment - LENGTH_METADATA_BYTE_COUNT, -2), metaDataFragment);
     }
 
     private void mockFreeSpaceManagerFactory() {
@@ -53,7 +54,7 @@ class FragmentRecordMetadataManagerImplTest {
         when(freeSpaceManagerFactory.getFreeSpaceManager(anyString())).thenReturn(freeSpaceManager);
     }
     
-    private void assertEqualsFragmentMetadataInfo(FragmentMetaDataInfo excepted, FragmentMetaDataInfo actual) {
+    private void assertEqualsFragmentMetadataInfo(MetaDataFragment excepted, MetaDataFragment actual) {
         assertEquals(excepted.getPositionFragment(), actual.getPositionFragment());
         assertEquals(excepted.getLengthDataFragment(), actual.getLengthDataFragment());
         assertEquals(excepted.getLinkOnNextFragment(), actual.getLinkOnNextFragment());
@@ -66,8 +67,8 @@ class FragmentRecordMetadataManagerImplTest {
         mockFreeSpaceManagerFactory();
         int lengthFragment = 70;
 
-        FragmentMetaDataInfo fragmentMetaDataInfo = metadataFragmentRecordManager.getFragmentMetaDataInfo(NAME_TABLE, lengthFragment);
-        assertEqualsFragmentMetadataInfo(new FragmentMetaDataInfo(2, 52, 1), fragmentMetaDataInfo);
+        MetaDataFragment metaDataFragment = metadataFragmentRecordManager.getMetaDataNewFragment(NAME_TABLE, lengthFragment);
+        assertEqualsFragmentMetadataInfo(new MetaDataFragment(2, 52, 1), metaDataFragment);
     }
 
     @Test
@@ -76,8 +77,8 @@ class FragmentRecordMetadataManagerImplTest {
         freeSpace.put(10, 1);
         mockFreeSpaceManagerFactory();
 
-        FragmentMetaDataInfo fragmentMetaDataInfo = metadataFragmentRecordManager.getFragmentMetaDataInfo(NAME_TABLE, lengthFragment);
-        assertEqualsFragmentMetadataInfo(new FragmentMetaDataInfo(1, 2, -1), fragmentMetaDataInfo);
+        MetaDataFragment metaDataFragment = metadataFragmentRecordManager.getMetaDataNewFragment(NAME_TABLE, lengthFragment);
+        assertEqualsFragmentMetadataInfo(new MetaDataFragment(1, 2, -1), metaDataFragment);
     }
 
     @Test
@@ -85,7 +86,7 @@ class FragmentRecordMetadataManagerImplTest {
         int lengthFragment = 20;
         mockFreeSpaceManagerFactory();
 
-        FragmentMetaDataInfo fragmentMetaDataInfo = metadataFragmentRecordManager.getFragmentMetaDataInfo(NAME_TABLE, lengthFragment);
-        assertEqualsFragmentMetadataInfo(new FragmentMetaDataInfo(-1, lengthFragment - LENGTH_METADATA, -2), fragmentMetaDataInfo);
+        MetaDataFragment metaDataFragment = metadataFragmentRecordManager.getMetaDataNewFragment(NAME_TABLE, lengthFragment);
+        assertEqualsFragmentMetadataInfo(new MetaDataFragment(-1, lengthFragment - LENGTH_METADATA_BYTE_COUNT, -2), metaDataFragment);
     }
 }

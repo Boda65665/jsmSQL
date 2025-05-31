@@ -1,15 +1,8 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory;
 
-import org.example.Backend.TableStorageManager.FileManager.GetterFileSize.GetterFileSize;
-import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;
-
-import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManager;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
-import org.example.Backend.TableStorageManager.TableMetadataManager.PositionTableMetadataManager.PositionTableMetadataManager;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.Factory.FreeSpaceManagerFactory;
 
 public interface FragmentOperationFactory {
     FragmentSaver getFragmentRecordSaver(FreeSpaceManagerFactory freeSpaceManagerFactory);
-    FragmentSaver getFragmentTableMetadataSave(GetterFileSize getterFileSize, PositionTableMetadataManager positionTableMetadataManager);
 }

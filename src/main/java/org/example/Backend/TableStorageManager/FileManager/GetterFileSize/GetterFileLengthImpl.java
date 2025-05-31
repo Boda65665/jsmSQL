@@ -4,14 +4,14 @@ import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.File
 
 import java.io.File;
 
-public class GetterFileSizeImpl extends GetterFileSize {
+public class GetterFileLengthImpl extends GetterFileLength {
 
-    public GetterFileSizeImpl(FilePathProvider filePathProvider) {
+    public GetterFileLengthImpl(FilePathProvider filePathProvider) {
         super(filePathProvider);
     }
 
     @Override
-    public int getSize(String tableName) {
+    public int getLength(String tableName) {
         String path = filePathProvider.getTablePath(tableName);
 
         File file = new File(path);

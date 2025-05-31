@@ -1,19 +1,19 @@
 package org.example.Backend.DbManager;
 
-public class DbManagerImpl<K> implements DbManager<K, Integer> {
-    private final BtreeManager<K> btreeManager;
+public class DbManagerImpl<K, V> implements DbManager<K, V> {
+    private final BtreeManager<K, V> btreeManager;
 
     public DbManagerImpl(String nameDb, String basePath) {
         btreeManager = new BtreeManager(nameDb, basePath);
     }
 
     @Override
-    public Integer get(K key) {
+    public V get(K key) {
         return btreeManager.get(key);
     }
 
     @Override
-    public void put(K key, Integer value) {
+    public void put(K key, V value) {
         btreeManager.insert(key, value);
     }
 

@@ -3,10 +3,10 @@ package org.example.Backend.TableStorageManager;
 import org.example.Backend.Models.Record;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.TableStorageManager.FileManager.FileCreater.FileCrater;
-import org.example.Backend.TableStorageManager.FileManager.FileOperationFactory.FileOperationFactory;
+import org.example.Backend.TableStorageManager.FileManager.Factory.FileOperationFactory;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentOperationFactory.FragmentOperationFactory;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;
-import org.example.Backend.TableStorageManager.FreeSpaceManager.FreeSpaceManagerFactory.FreeSpaceManagerFactory;
+import org.example.Backend.TableStorageManager.FreeSpaceManager.Factory.FreeSpaceManagerFactory;
 import org.example.Backend.TableStorageManager.RecordManager.RecordOperationFactory.RecordOperationFactory;
 import org.example.Backend.TableStorageManager.RecordManager.RecordSaver.RecordSaver;
 

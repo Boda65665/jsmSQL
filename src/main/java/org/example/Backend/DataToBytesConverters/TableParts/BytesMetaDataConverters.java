@@ -6,11 +6,14 @@ import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverte
 import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TableMetaData;
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.BOOLEAN_DATA_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.LENGTH_TYPE_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.TableStorageManager.FragmentManager.FragmentStructureConstants.LENGTH_INDICATOR_BYTE_COUNT;
 
 public class BytesMetaDataConverters implements TablePartTypeConverter<TableMetaData> {
     private final ColumnTypeBytesConverter<String> stringBytesConverters =
@@ -19,9 +22,6 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
             (ColumnTypeBytesConverter<Integer>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.INT);
     private final ColumnTypeBytesConverter<Boolean> booleanColumnTypeBytesConverter =
             (ColumnTypeBytesConverter<Boolean>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.BOOLEAN);
-    private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
-    private final int BOOLEAN_DATA_INDICATOR_BYTE_COUNT = 1;
-    private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
 
     @Override
     public TableMetaData toData(byte[] bytes) {

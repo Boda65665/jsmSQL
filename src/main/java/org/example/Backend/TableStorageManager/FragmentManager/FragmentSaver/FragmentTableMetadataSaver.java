@@ -1,30 +1,29 @@
 package org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver;
 
-import org.example.Backend.Models.FragmentMetaDataInfo;
+import org.example.Backend.Models.MetaDataFragment;
 import org.example.Backend.TableStorageManager.FileManager.FileWriter.FileWriter;
-import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.MetaDataFragmentManager;
+import org.example.Backend.TableStorageManager.FragmentManager.FragmentMetaDataManager.Record.MetaDataFragmentRecordManager;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentTableMetadataSaver implements FragmentSaver{
     private final FileWriter fileWriter;
-    private final MetaDataFragmentManager metaDataFragmentManager;
+    private final MetaDataFragmentRecordManager metaDataFragmentRecordManager;
 
-    public FragmentTableMetadataSaver(FileWriter fileWriter, MetaDataFragmentManager metaDataFragmentManager) {
+    public FragmentTableMetadataSaver(FileWriter fileWriter, MetaDataFragmentRecordManager metaDataFragmentRecordManager) {
         this.fileWriter = fileWriter;
-        this.metaDataFragmentManager = metaDataFragmentManager;
+        this.metaDataFragmentRecordManager = metaDataFragmentRecordManager;
     }
 
     @Override
     public int save(String tableName, List<Byte> bytes) {
-        FragmentMetaDataInfo fragmentMetaDataInfo = metaDataFragmentManager.getFragmentMetaDataInfo(tableName, bytes.size());
+        MetaDataFragment metaDataFragment = metaDataFragmentRecordManager.getMetaDataNewFragment(tableName, bytes.size());
 
-        if (possibleContinuePreviousFragment(fragmentMetaDataInfo.getPositionFragment())) addLengthBytesMetadataData(bytes);
-        addLink(bytes, fragmentMetaDataInfo);
+        if (possibleContinuePreviousFragment(metaDataFragment.getPositionFragment())) addLengthBytesMetadataData(bytes);
+        addLink(bytes, metaDataFragment);
 
-        fileWriter.write(tableName, bytes, fragmentMetaDataInfo.getPositionFragment());
+        fileWriter.write(tableName, bytes, metaDataFragment.getPositionFragment());
         return 0;
     }
 
@@ -45,7 +44,7 @@ public class FragmentTableMetadataSaver implements FragmentSaver{
         return byteList;
     }
 
-    private void addLink(List<Byte> bytes, FragmentMetaDataInfo fragmentMetaDataInfo) {
-        bytes.addAll(intToBytes(fragmentMetaDataInfo.getLinkOnNextFragment()));
+    private void addLink(List<Byte> bytes, MetaDataFragment metaDataFragment) {
+        bytes.addAll(intToBytes(metaDataFragment.getLinkOnNextFragment()));
     }
 }

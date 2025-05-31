@@ -11,9 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.LENGTH_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.LENGTH_TYPE_INDICATOR_BYTE_COUNT;
+
 public class BytesRecordConverters implements TablePartTypeConverter<Record> {
-    private final int LENGTH_INDICATOR_BYTE_COUNT = 2;
-    private final int LENGTH_TYPE_INDICATOR_BYTE_COUNT = 2;
 
     @Override
     public Record toData(byte[] bytes) {
