@@ -13,4 +13,5 @@ public abstract class IndexManager<K, V> {
     public abstract void removeIndex(K key);
     public abstract V getIndex(K key);
     public abstract V getLast();
+    public abstract int size();
 }

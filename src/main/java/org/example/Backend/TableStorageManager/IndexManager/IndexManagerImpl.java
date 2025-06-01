@@ -28,4 +28,9 @@ public class IndexManagerImpl<K, V> extends IndexManager<K, V> {
         if(indexes.maxKey() == null) return null;
         return getIndex(indexes.maxKey());
     }
+
+    @Override
+    public int size() {
+        return indexes.size();
+    }
 }
