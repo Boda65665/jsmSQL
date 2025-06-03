@@ -1,7 +1,7 @@
 package org.example.Backend.TableStorageManager.RecordManager.RecordSaver;
 
-import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.Interface.TablePartTypeConverter;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
 import org.example.Backend.Models.Record;
 import org.example.Backend.Models.TablePartType;
 import org.example.Backend.TableStorageManager.FragmentManager.FragmentSaver.FragmentSaver;

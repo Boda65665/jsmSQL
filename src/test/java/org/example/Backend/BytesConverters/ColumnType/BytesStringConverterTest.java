@@ -1,6 +1,6 @@
 package org.example.Backend.BytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.ColumnType.BytesStringConverters;
+import org.example.Backend.DataToBytesConverter.ColumnType.BytesStringConverter;
 import org.example.Backend.Exception.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -8,17 +8,17 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.stream.Stream;
+
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.NULL_BYTES;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesStringConvertersTest {
-    private final BytesStringConverters converter = new BytesStringConverters();
+class BytesStringConverterTest {
+    private final BytesStringConverter converter = new BytesStringConverter();
     private final Charset charset = StandardCharsets.UTF_8;
-    private final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
 
     @ParameterizedTest
-    @MethodSource("testCase")
+    @MethodSource("provideTestData")
     void toBytes(String inputString) {
         byte[] bytes = converter.toBytes(inputString);
         assertArrayEquals(getBytes(inputString), bytes);
@@ -29,7 +29,7 @@ class BytesStringConvertersTest {
         return inputString.getBytes(charset);
     }
 
-    private static Stream<Arguments> testCase() {
+    private static Stream<Arguments> provideTestData() {
         return Stream.of(
                 Arguments.of("Hello, World!"),
                 Arguments.of("Привет, мир!"),
@@ -42,7 +42,7 @@ class BytesStringConvertersTest {
     }
 
     @ParameterizedTest
-    @MethodSource("testCase")
+    @MethodSource("provideTestData")
     void toData(String inputString) {
         byte[] bytes = getBytes(inputString);
         assertEquals(inputString, converter.toData(bytes));

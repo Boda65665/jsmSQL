@@ -1,4 +1,4 @@
-package org.example.Backend.DataToBytesConverters.Interface;
+package org.example.Backend.DataToBytesConverter.Interface;
 
 import java.util.ArrayList;
 

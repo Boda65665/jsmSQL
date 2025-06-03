@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.List;
 
+import static org.example.Backend.Utils.ByteUtils.byteListToArray;
+
 public class FileWriterImpl extends FileWriter {
 
     public FileWriterImpl(FilePathProvider filePathProvider) {
@@ -16,17 +18,9 @@ public class FileWriterImpl extends FileWriter {
 
     @Override
     public void write(String tableName, List<Byte> byteList, int offset) {
-        byte[] bytes = listByteToArray(byteList);
+        byte[] bytes = byteListToArray(byteList);
 
         write(tableName, bytes, offset);
-    }
-
-    private byte[] listByteToArray(List<Byte> byteList) {
-        byte[] bytes = new byte[byteList.size()];
-        for (int i = 0; i < byteList.size(); i++) {
-            bytes[i] = byteList.get(i);
-        }
-        return bytes;
     }
 
     @Override

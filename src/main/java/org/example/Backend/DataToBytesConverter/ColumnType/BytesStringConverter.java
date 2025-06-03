@@ -1,15 +1,16 @@
-package org.example.Backend.DataToBytesConverters.ColumnType;
+package org.example.Backend.DataToBytesConverter.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverter.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.Exception.ValidationException;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
-public class BytesStringConverters implements ColumnTypeBytesConverter<String> {
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.NULL_BYTES;
+
+public class BytesStringConverter implements ColumnTypeBytesConverter<String> {
     private final Charset charset = StandardCharsets.UTF_8;
-    private final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
 
     @Override
     public String toData(byte[] bytes) {

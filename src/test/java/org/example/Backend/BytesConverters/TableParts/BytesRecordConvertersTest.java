@@ -1,21 +1,22 @@
 package org.example.Backend.BytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.TableParts.BytesRecordConverters;
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
-import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
-import org.example.Backend.BytesConverters.TableParts.TH.TestHelperConverterTableParts;
+import org.example.Backend.DataToBytesConverter.TableParts.BytesRecordConverters;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverter.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.Record;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import static org.example.Backend.Utils.ByteUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BytesRecordConvertersTest {
     private final TablePartTypeConverter<Record> converter = new BytesRecordConverters();
-    private final TestHelperConverterTableParts testHelperConverterTableParts = new TestHelperConverterTableParts();
 
     @Test
     void toBytes() {
@@ -41,16 +42,16 @@ class BytesRecordConvertersTest {
     }
 
     private void addBytesLengthData(ArrayList<Byte> result, int length) {
-        ArrayList<Byte> bytesLength = testHelperConverterTableParts.getBytesFromInt(length);
+        List<Byte> bytesLength = intToTwoByteList(length);
         result.addAll(bytesLength);
     }
 
     private void addBytesData(ArrayList<Byte> result, byte[] dataBytes) {
-        testHelperConverterTableParts.addArrayToList(result, dataBytes);
+        addArrayToList(result, dataBytes);
     }
 
     private void addBytesTypeColumn(ArrayList<Byte> result, ColumnType columnType) {
-        ArrayList<Byte> bytesType = testHelperConverterTableParts.getBytesFromInt(columnType.ordinal());
+        List<Byte> bytesType = intToTwoByteList(columnType.ordinal());
         result.addAll(bytesType);
     }
 
@@ -71,7 +72,7 @@ class BytesRecordConvertersTest {
         Record testData = generateTestData();
         ArrayList<Byte> bytes = toBytes(testData.getColumns());
 
-        Record result = converter.toData(testHelperConverterTableParts.toArray(bytes));
+        Record result = converter.toData(byteListToArray(bytes));
         assertEquals(testData, result);
     }
 }

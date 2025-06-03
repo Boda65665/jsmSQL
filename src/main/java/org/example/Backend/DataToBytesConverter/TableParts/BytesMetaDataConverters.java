@@ -1,19 +1,19 @@
-package org.example.Backend.DataToBytesConverters.TableParts;
+package org.example.Backend.DataToBytesConverter.TableParts;
 
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
-import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverter.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.ColumnStruct;
 import org.example.Backend.Models.ColumnType;
 import org.example.Backend.Models.TableMetaData;
-import java.nio.ByteBuffer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.BOOLEAN_DATA_INDICATOR_BYTE_COUNT;
-import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.LENGTH_TYPE_INDICATOR_BYTE_COUNT;
-import static org.example.Backend.TableStorageManager.FragmentManager.FragmentStructureConstants.LENGTH_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.Utils.ByteUtils.*;
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.BOOLEAN_DATA_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.LENGTH_TYPE_INDICATOR_BYTE_COUNT;
 
 public class BytesMetaDataConverters implements TablePartTypeConverter<TableMetaData> {
     private final ColumnTypeBytesConverter<String> stringBytesConverters =
@@ -30,7 +30,7 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
         ArrayList<ColumnStruct> columnStructs = new ArrayList<>();
 
         int countColumn = getCountColumn(bytes);
-        int indexByte = LENGTH_INDICATOR_BYTE_COUNT;
+        int indexByte = LENGTH_TYPE_INDICATOR_BYTE_COUNT;
 
         for (int i = 0; i < countColumn; i++) {
             indexByte = addColumn(columnStructs, bytes, indexByte);
@@ -39,12 +39,12 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
     }
 
     private int getCountColumn(byte[] bytes) {
-        return getIntFromBytes(Arrays.copyOf(bytes, LENGTH_INDICATOR_BYTE_COUNT));
+        return getIntFromBytesWithPadZero(Arrays.copyOf(bytes, LENGTH_TYPE_INDICATOR_BYTE_COUNT));
     }
 
     private Integer addColumn(ArrayList<ColumnStruct> columnStructs, byte[] bytes, Integer indexByte) {
         int lengthName = getLengthName(bytes, indexByte);
-        indexByte += LENGTH_INDICATOR_BYTE_COUNT;
+        indexByte += LENGTH_TYPE_INDICATOR_BYTE_COUNT;
 
         String name = getName(bytes, indexByte, lengthName);
         indexByte += lengthName;
@@ -59,9 +59,8 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
         return indexByte;
     }
 
-
     private int getLengthName(byte[] bytes, int indexByte) {
-        return getIntFromBytes(Arrays.copyOfRange(bytes, indexByte, indexByte + LENGTH_INDICATOR_BYTE_COUNT));
+        return getIntFromBytesWithPadZero(Arrays.copyOfRange(bytes, indexByte, indexByte + LENGTH_TYPE_INDICATOR_BYTE_COUNT));
     }
 
     private String getName(byte[] bytes, int indexByte, int lengthName) {
@@ -71,14 +70,6 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
     private ColumnType getType(byte[] bytes, int indexByte) {
         int typeId = integerBytesConverters.toData(Arrays.copyOfRange(bytes, indexByte, indexByte + 2));
         return ColumnType.values()[typeId];
-    }
-
-    private int getIntFromBytes(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.allocate(4);
-        buffer.position(4 - bytes.length);
-        buffer.put(bytes);
-        buffer.flip();
-        return buffer.getInt();
     }
 
     private boolean isPrimary(byte[] bytes, int indexByte) {
@@ -91,23 +82,13 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
 
         ArrayList<Byte> tableMetadata = new ArrayList<>();
 
-        ArrayList<ColumnStruct> columnStructList = data.getColumnStructList();
-        ArrayList<Byte> countColumn = getBytesFromInt(columnStructList.size());
+        List<ColumnStruct> columnStructList = data.getColumnStructList();
+        List<Byte> countColumn = intToTwoByteList(columnStructList.size());
         List<Byte> columnStruct = getBytesFromListColumnStruct(columnStructList);
 
         tableMetadata.addAll(countColumn);
         tableMetadata.addAll(columnStruct);
         return tableMetadata;
-    }
-
-
-
-    private ArrayList<Byte> getBytesFromInt(int number) {
-        ArrayList<Byte> bytes = new ArrayList<>();
-
-        bytes.add((byte) ((number >> 8) & 0xFF));
-        bytes.add((byte) (number & 0xFF));
-        return bytes;
     }
 
     private List<Byte> getBytesFromListColumnStruct(List<ColumnStruct> columnsStructList) {
@@ -116,8 +97,8 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
         for (ColumnStruct columnStruct : columnsStructList) {
             byte[] columnNameBytes = stringBytesConverters.toBytes(columnStruct.getColumnName());
             byte[] isPrimary = booleanColumnTypeBytesConverter.toBytes(columnStruct.isPrimary());
-            List<Byte> columnNameLenBytes = getBytesFromInt(columnNameBytes.length);
-            List<Byte> columnTypeByte = getBytesFromInt(columnStruct.getType().ordinal());
+            List<Byte> columnNameLenBytes = intToTwoByteList(columnNameBytes.length);
+            List<Byte> columnTypeByte = intToTwoByteList(columnStruct.getType().ordinal());
 
             bytesList.addAll(columnNameLenBytes);
             addArrayToList(bytesList, columnNameBytes);
@@ -125,11 +106,5 @@ public class BytesMetaDataConverters implements TablePartTypeConverter<TableMeta
             addArrayToList(bytesList, isPrimary);
         }
         return bytesList;
-    }
-
-    private void addArrayToList(List<Byte> bytes, byte[] columnNameBytes) {
-        for (byte b : columnNameBytes) {
-            bytes.add(b);
-        }
     }
 }

@@ -1,7 +1,7 @@
 package org.example.Backend.BytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.ColumnType.*;
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.ColumnType.*;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
 import org.example.Backend.Models.ColumnType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,19 +14,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class ColumnTypeBytesConverterFactoryTest {
 
     @ParameterizedTest
-    @MethodSource("caseForGetColumnTypeBytesConverters")
+    @MethodSource("provideTestData")
     void getColumnTypeBytesConverters(ColumnType columnType, Class<?> expectedClass) {
         assertInstanceOf(expectedClass, BytesConverterFactory.getColumnTypeBytesConverters(columnType));
     }
 
-    public static Stream<Arguments> caseForGetColumnTypeBytesConverters() {
+    public static Stream<Arguments> provideTestData() {
         return Stream.of(
-            Arguments.of(ColumnType.INT, BytesIntegerConverters.class),
-            Arguments.of(ColumnType.LONG, BytesLongConverters.class),
-            Arguments.of(ColumnType.DOUBLE, BytesDoubleConverters.class),
-            Arguments.of(ColumnType.VARCHAR, BytesStringConverters.class),
-            Arguments.of(ColumnType.DATE, BytesDateConverters.class),
-            Arguments.of(ColumnType.BOOLEAN, BytesBooleanConverters.class)
+            Arguments.of(ColumnType.INT, BytesIntegerConverter.class),
+            Arguments.of(ColumnType.LONG, BytesLongConverter.class),
+            Arguments.of(ColumnType.DOUBLE, BytesDoubleConverter.class),
+            Arguments.of(ColumnType.VARCHAR, BytesStringConverter.class),
+            Arguments.of(ColumnType.DATE, BytesDateConverter.class),
+            Arguments.of(ColumnType.BOOLEAN, BytesBooleanConverter.class)
         );
     }
 }

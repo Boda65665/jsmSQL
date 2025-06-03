@@ -1,21 +1,25 @@
 package org.example.Backend.BytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
-import org.example.Backend.DataToBytesConverters.ColumnType.BytesDateConverters;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverter.ColumnType.BytesDateConverter;
+import org.example.Backend.Exception.ValidationException;
 import org.example.Backend.Models.ColumnType;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Stream;
+
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.NULL_BYTES;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesDateConvertersTest {
-    private final BytesDateConverters converter = new BytesDateConverters();
-    private final static ColumnTypeBytesConverter<Long> longBytesConverters = (ColumnTypeBytesConverter<Long>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.LONG);
-    private static final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
+class BytesDateConverterTest {
+    private final BytesDateConverter converter = new BytesDateConverter();
+    private final static ColumnTypeBytesConverter<Long> longBytesConverters =
+            (ColumnTypeBytesConverter<Long>) BytesConverterFactory.getColumnTypeBytesConverters(ColumnType.LONG);
 
     @ParameterizedTest
     @MethodSource("provideTestToBytes")
@@ -30,7 +34,7 @@ class BytesDateConvertersTest {
                 Arguments.of(new Date(0)),
                 Arguments.of(new Date()),
                 Arguments.of(new Date(Long.MAX_VALUE)),
-                Arguments.of(new Date(1672531200000L)),
+                Arguments.of(new Date(Long.MIN_VALUE)),
                 Arguments.of((Object) null)
         );
     }
@@ -53,5 +57,11 @@ class BytesDateConvertersTest {
 
                 Arguments.of(NULL_BYTES)
         );
+    }
+
+    @Test
+    void nullOrEmptyArrayToData(){
+        assertThrows(ValidationException.class, () -> longBytesConverters.toData(null));
+        assertThrows(ValidationException.class, () -> longBytesConverters.toData(new byte[]{}));
     }
 }

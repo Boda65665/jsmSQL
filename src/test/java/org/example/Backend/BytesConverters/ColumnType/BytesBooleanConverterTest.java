@@ -1,18 +1,19 @@
 package org.example.Backend.BytesConverters.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.ColumnType.BytesBooleanConverters;
+import org.example.Backend.DataToBytesConverter.ColumnType.BytesBooleanConverter;
 import org.example.Backend.Exception.ValidationException;
 import org.junit.jupiter.api.Test;
+
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class BytesBooleanConvertersTest {
-    private final BytesBooleanConverters booleanConverters = new BytesBooleanConverters();
-    private final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
+class BytesBooleanConverterTest {
+    private final BytesBooleanConverter booleanConverters = new BytesBooleanConverter();
 
     @Test
     void toData() {
-        assertEquals(true, booleanConverters.toData(new byte[]{1}));
-        assertEquals(false, booleanConverters.toData(new byte[]{0}));
+        assertEquals(true, booleanConverters.toData(new byte[]{TRUE_BYTE}));
+        assertEquals(false, booleanConverters.toData(new byte[]{FALSE_BYTE}));
         assertNull(booleanConverters.toData(NULL_BYTES));
     }
 
@@ -24,8 +25,8 @@ class BytesBooleanConvertersTest {
 
     @Test
     void toBytes() {
-        assertArrayEquals(new byte[]{1}, booleanConverters.toBytes(true));
-        assertArrayEquals(new byte[]{0}, booleanConverters.toBytes(false));
+        assertArrayEquals(new byte[]{TRUE_BYTE}, booleanConverters.toBytes(true));
+        assertArrayEquals(new byte[]{FALSE_BYTE}, booleanConverters.toBytes(false));
         assertArrayEquals(NULL_BYTES, booleanConverters.toBytes(null));
     }
 }

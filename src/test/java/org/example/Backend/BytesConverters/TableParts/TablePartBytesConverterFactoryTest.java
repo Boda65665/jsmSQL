@@ -1,8 +1,8 @@
 package org.example.Backend.BytesConverters.TableParts;
 
-import org.example.Backend.DataToBytesConverters.TableParts.BytesMetaDataConverters;
-import org.example.Backend.DataToBytesConverters.TableParts.BytesRecordConverters;
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.TableParts.BytesMetaDataConverters;
+import org.example.Backend.DataToBytesConverter.TableParts.BytesRecordConverters;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
 import org.example.Backend.Models.TablePartType;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

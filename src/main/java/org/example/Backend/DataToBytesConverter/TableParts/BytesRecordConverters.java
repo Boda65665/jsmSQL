@@ -1,18 +1,18 @@
-package org.example.Backend.DataToBytesConverters.TableParts;
+package org.example.Backend.DataToBytesConverter.TableParts;
 
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
-import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
-import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverter.Interface.TablePartTypeConverter;
 import org.example.Backend.Models.Column;
 import org.example.Backend.Models.Record;
 import org.example.Backend.Models.ColumnType;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.LENGTH_INDICATOR_BYTE_COUNT;
-import static org.example.Backend.DataToBytesConverters.TableParts.ByteConversionConstants.LENGTH_TYPE_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.Utils.ByteUtils.*;
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.LENGTH_INDICATOR_BYTE_COUNT;
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.LENGTH_TYPE_INDICATOR_BYTE_COUNT;
 
 public class BytesRecordConverters implements TablePartTypeConverter<Record> {
 
@@ -44,21 +44,13 @@ public class BytesRecordConverters implements TablePartTypeConverter<Record> {
 
     private int getLenData(byte[] bytes, int indexByte) {
         byte[] lenData = Arrays.copyOfRange(bytes, indexByte, indexByte + LENGTH_INDICATOR_BYTE_COUNT);
-        return getIntFromBytes(lenData);
-    }
-
-    private int getIntFromBytes(byte[] bytes) {
-        ByteBuffer buffer = ByteBuffer.allocate(4);
-        buffer.position(4 - bytes.length);
-        buffer.put(bytes);
-        buffer.flip();
-        return buffer.getInt();
+        return getIntFromBytesWithPadZero(lenData);
     }
 
     private ColumnType getTypeFromBytes(byte[] bytes, int indexByte, int lenDataBytes) {
         int indexType = lenDataBytes + indexByte;
         byte[] typeBytes = Arrays.copyOfRange(bytes, indexType, indexType + LENGTH_TYPE_INDICATOR_BYTE_COUNT);
-        return ColumnType.values()[getIntFromBytes(typeBytes)];
+        return ColumnType.values()[getIntFromBytesWithPadZero(typeBytes)];
     }
 
     private Object getObjectFromBytes(byte[] bytes, ColumnType columnType, int indexByte, int lenDataBytes) {
@@ -87,26 +79,12 @@ public class BytesRecordConverters implements TablePartTypeConverter<Record> {
         ColumnTypeBytesConverter bytesConverters = BytesConverterFactory.getColumnTypeBytesConverters(column.getType());
 
         byte[] dataBytes = bytesConverters.toBytes(column.getData());
-        List<Byte> lenDataBytes = getBytesFromInt(dataBytes.length);
-        List<Byte> typeDataBytes = getBytesFromInt(column.getType().ordinal());
+        List<Byte> lenDataBytes = intToTwoByteList(dataBytes.length);
+        List<Byte> typeDataBytes = intToTwoByteList(column.getType().ordinal());
 
         ArrayList<Byte> bytesList = new ArrayList<>(lenDataBytes);
         addArrayToList(bytesList, dataBytes);
         bytesList.addAll(typeDataBytes);
         return bytesList;
-    }
-
-    private List<Byte> getBytesFromInt(int number) {
-        List<Byte> byteList = new ArrayList<>();
-
-        byteList.add((byte) ((number >> 8) & 0xFF));
-        byteList.add((byte) (number & 0xFF));
-        return byteList;
-    }
-
-    private void addArrayToList(List<Byte> bytes, byte[] columnNameBytes) {
-        for (byte b : columnNameBytes) {
-            bytes.add(b);
-        }
     }
 }

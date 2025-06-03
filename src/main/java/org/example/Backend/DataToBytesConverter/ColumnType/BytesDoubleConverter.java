@@ -1,12 +1,14 @@
-package org.example.Backend.DataToBytesConverters.ColumnType;
+package org.example.Backend.DataToBytesConverter.ColumnType;
 
-import org.example.Backend.DataToBytesConverters.Interface.ColumnTypeBytesConverter;
+import org.example.Backend.DataToBytesConverter.Interface.ColumnTypeBytesConverter;
 import org.example.Backend.Exception.ValidationException;
+
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-public class BytesDoubleConverters implements ColumnTypeBytesConverter<Double> {
-    private final byte[] NULL_BYTES = new byte[]{-1,-1,-1, -1,-1,-1, -1,-1,-1};
+import static org.example.Backend.DataToBytesConverter.ByteConversionConstants.NULL_BYTES;
+
+public class BytesDoubleConverter implements ColumnTypeBytesConverter<Double> {
 
     @Override
     public Double toData(byte[] bytes) {

@@ -1,7 +1,7 @@
 package org.example.Backend.TableStorageManager.FileManager.FileCreater;
 
-import org.example.Backend.DataToBytesConverters.Interface.TablePartTypeConverter;
-import org.example.Backend.DataToBytesConverters.factory.BytesConverterFactory;
+import org.example.Backend.DataToBytesConverter.Interface.TablePartTypeConverter;
+import org.example.Backend.DataToBytesConverter.factory.BytesConverterFactory;
 import org.example.Backend.Models.TableMetaData;
 import org.example.Backend.Models.TablePartType;
 import org.example.Backend.TableStorageManager.FileManager.FilePathProvider.FilePathProvider;
